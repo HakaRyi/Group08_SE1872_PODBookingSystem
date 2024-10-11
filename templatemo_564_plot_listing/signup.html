@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - Plotlist</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/templatemo-plot-listing.css">
+    <link rel="stylesheet" href="assets/css/animated.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="assets/css/custom-booking-signup-style.css">
+
+</head>
+
+<body>
+    <header class="header-area header-sticky">
+        <!-- Chèn mã header hiện có của bạn ở đây -->
+    </header>
+
+    <div class="container">
+        <div class="row justify-content-center" style="margin-top: 100px;">
+            <div class="col-lg-6">
+                <h2>Sign Up</h2>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Sign Up</button>
+                </form>
+                <div id="signupResult" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Chèn mã footer hiện có của bạn ở đây -->
+    </footer>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+
+            fetch('http://14.225.206.250:8080/POD_BookingSystem/api/auth/sign-up', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': '*/*'
+                },
+                body: JSON.stringify({ username: username, password: password, email: email })
+            })
+            .then(response => {
+                console.log(response);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Sign Up Response:', data);
+                if (data.success) {
+                    document.getElementById('signupResult').innerHTML = 'Đăng ký thành công!';
+                } else {
+                    document.getElementById('signupResult').innerHTML = 'Đăng ký thất bại: ' + (data.message || 'Unknown error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('signupResult').innerHTML = `Có lỗi xảy ra trong quá trình đăng ký. Error: ${error.message}`;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

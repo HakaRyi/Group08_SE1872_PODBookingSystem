@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile Page</title>
+  <link rel="stylesheet" href="assets/css/profile.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header Section -->
+    <header class="header">
+      <div class="logo-container">
+        <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
+      </div>
+      <div class="user-profile">
+        <img src="path/to/user-icon.png" alt="User Icon" class="user-icon">
+        <span>Nguyễn Văn A</span>
+        <span>Customer</span>
+      </div>
+    </header>
+
+    <!-- Horizontal Nav Section -->
+    <nav class="horizontal-nav">
+      <a href="#">Find your place</a>
+      <a href="#">Type of room</a>
+      <button class="search-btn">Search</button>
+    </nav>
+
+    <div class="content-wrapper">
+      <!-- Sidebar Section -->
+      <div class="sidebar">
+        <div class="user-info">
+          <img src="path/to/user-icon.png" alt="User Icon">
+          <p class="user-name">Nguyễn Văn A</p>
+          <button class="edit-profile-btn">✎ Edit Profile</button>
+        </div>
+        <button class="booking-history-btn">Booking History</button>
+      </div>
+
+      <!-- Main Content Section -->
+      <main class="main-content">
+        <div class="form-container">
+          <h2 class="form-title">My Profile</h2>
+          <p class="form-description">Manage profile information to keep your account secure</p>
+
+          <!-- Profile Form -->
+          <form id="profileForm">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" value="Nguyễn Văn A" disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" placeholder="Name">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" value="NguyenVanA123@gmail.com">
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="Phone Number">
+            </div>
+
+            <div class="form-group">
+              <label for="sex">Sex</label>
+              <div class="sex-options">
+                <input type="radio" id="male" name="sex" value="Male">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="sex" value="Female">
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="sex" value="Other">
+                <label for="other">Other</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="dob">Date of Birth</label>
+              <select id="day">
+                <option>Day</option>
+                <!-- Day options -->
+              </select>
+              <select id="month">
+                <option>Month</option>
+                <!-- Month options -->
+              </select>
+              <select id="year">
+                <option>Year</option>
+                <!-- Year options -->
+              </select>
+            </div>
+
+            <button type="submit" class="save-btn">Save</button>
+          </form>
+        </div>
+
+        <!-- Profile Picture Section -->
+        <div class="profile-picture">
+          <div class="user-picture">U</div>
+          <input type="file" id="upload" accept="image/jpeg, image/png">
+          <button class="upload-btn">Select Photo</button>
+          <p>Maximum file size 1 MB</p>
+          <p>Format: JPEG, PNG</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('profileForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const sex = document.querySelector('input[name="sex"]:checked').value;
+      const day = document.getElementById('day').value;
+      const month = document.getElementById('month').value;
+      const year = document.getElementById('year').value;
+
+      const profileData = {
+        name,
+        email,
+        phone,
+        sex,
+        dateOfBirth: `${day}/${month}/${year}`,
+      };
+
+      console.log('Profile Data:', profileData);
+    });
+  </script>
+
+</body>
+</html>

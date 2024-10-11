@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Service</title>
+    <link rel="stylesheet" href="assets/css/service.css"> <!-- Liên kết đến tệp service.css -->
+</head>
+<body>
+    <!-- Logo ở góc trên bên trái -->
+    <div class="logo-container">
+        <img src="assets/images/logoBD.jpg" alt="BD.COM Logo">
+    </div>
+
+    <!-- Thông tin user ở góc trên bên phải -->
+    <div class="user-info">
+        <img src="assets/images/user-icon.png" alt="User Icon">
+        <div class="user-details">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Customer</span>
+        </div>
+    </div>
+
+    <!-- Container chính -->
+    <div class="service-container">
+        <div class="service-list">
+            <div class="service-column">
+                <div class="service-item">
+                    <span>Printer</span>
+                    <div class="counter">
+                        <button onclick="changeQuantity('printer', -1)">−</button>
+                        <input type="number" id="printer" value="1" min="1">
+                        <button onclick="changeQuantity('printer', 1)">+</button>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span>Chair</span>
+                    <div class="counter">
+                        <button onclick="changeQuantity('chair', -1)">−</button>
+                        <input type="number" id="chair" value="1" min="1">
+                        <button onclick="changeQuantity('chair', 1)">+</button>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span>Table</span>
+                    <div class="counter">
+                        <button onclick="changeQuantity('table', -1)">−</button>
+                        <input type="number" id="table" value="1" min="1">
+                        <button onclick="changeQuantity('table', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="service-column">
+                <div class="service-item">
+                    <span>Board</span>
+                    <div class="counter">
+                        <button onclick="changeQuantity('board', -1)">−</button>
+                        <input type="number" id="board" value="1" min="1">
+                        <button onclick="changeQuantity('board', 1)">+</button>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <span>Coffee</span>
+                    <div class="counter">
+                        <button onclick="changeQuantity('coffee', -1)">−</button>
+                        <input type="number" id="coffee" value="1" min="1">
+                        <button onclick="changeQuantity('coffee', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="add-btn" onclick="submitServices()">Add</button>
+        </div>
+    </div>
+
+    <script>
+        // Thay đổi số lượng dịch vụ
+        function changeQuantity(serviceId, amount) {
+            const input = document.getElementById(serviceId);
+            let value = parseInt(input.value);
+            value += amount;
+            if (value < 1) value = 1; // Đảm bảo số lượng không nhỏ hơn 1
+            input.value = value;
+        }
+
+        // Gửi các dịch vụ với số lượng xuống backend
+        function submitServices() {
+            const services = {
+                printer: document.getElementById('printer').value,
+                chair: document.getElementById('chair').value,
+                table: document.getElementById('table').value,
+                board: document.getElementById('board').value,
+                coffee: document.getElementById('coffee').value
+            };
+
+            // Gửi các dịch vụ tới backend
+            fetch('http://14.225.206.250:8080/POD_BookingSystem/api/services', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(services),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Services have been added successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error adding the services!');
+            });
+        }
+    </script>
+</body>
+</html>

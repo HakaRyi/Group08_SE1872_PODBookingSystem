@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Plotlist</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/custom-booking-style.css">
+    <!-- Thêm Font Awesome nếu chưa có -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQdJ3yY4tP9fE7Y5JtD9xA0jE9yJf2CZ1tb2bE6jKQ1muj6qXg1/+8WV7PvKXH+X6Vy3N4h1aK6YxjUQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+</head>
+<body>
+    <header class="header-area header-sticky">
+        <!-- Add your header content here -->
+    </header>
+
+    <div class="container">
+        <div class="row justify-content-center" style="margin-top: 50px;">
+            <div class="col-lg-6">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" aria-label="Username" required>
+                        <small class="error-message" style="display: none;">Username is required.</small>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" aria-label="Password" required>
+                        <small class="error-message" style="display: none;">Password is required.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Login</button>
+                </form>
+                <div id="loginResult"></div>
+
+                <!-- Add Sign Up button -->
+                <div class="text-center" style="margin-top: 20px;">
+                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Insert your footer code here -->
+    </footer>
+
+    <!-- Include necessary JS files -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Your login logic here -->
+    <script>
+        // Define the showMessage function
+        function showMessage(elementId, message, isSuccess) {
+            const resultDiv = document.getElementById(elementId);
+            resultDiv.textContent = message;
+            if (isSuccess) {
+                resultDiv.classList.add('success');
+                resultDiv.classList.remove('error');
+            } else {
+                resultDiv.classList.add('error');
+                resultDiv.classList.remove('success');
+            }
+        }
+    
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent form reload
+
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    let valid = true;
+
+    // Reset previous error messages
+    document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+    // Validate input
+    if (username === '') {
+        document.querySelector('#username + .error-message').style.display = 'block';
+        valid = false;
+    }
+
+    if (password === '') {
+        document.querySelector('#password + .error-message').style.display = 'block';
+        valid = false;
+    }
+
+    if (!valid) {
+        showMessage('loginResult', 'Vui lòng nhập đầy đủ thông tin.', false);
+        return;
+    }
+
+    try {
+        // Create API URL
+        const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/api/auth/login`;
+
+        // Log the request details for debugging
+        console.log('Sending request to API:', apiUrl);
+        console.log('Request payload:', { username, password });
+
+        // Call API
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'
+            },
+            body: JSON.stringify({ username: username, password: password })
+        });
+
+        // Check if response is OK
+        if (!response.ok) {
+            console.error('Response not OK. Status:', response.status);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Login Response:', data);
+
+        // Handle successful login
+        if (data.success) {
+            // Store the token if provided
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+            }
+            // Redirect to index.html
+            window.location.href = 'index.html';
+        } else {
+            showMessage('loginResult', 'Đăng nhập thất bại: ' + (data.message || 'Unknown error'), false);
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        showMessage('loginResult', `Có lỗi xảy ra trong quá trình đăng nhập. Error: ${error.message}`, false);
+    }
+});
+
+
+    </script>
+    
+
+
+</body>
+
+</html>

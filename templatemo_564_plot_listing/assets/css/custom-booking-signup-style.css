@@ -1,0 +1,359 @@
+/* Định nghĩa các biến màu sắc và kích thước để dễ dàng quản lý */
+:root {
+    /* Màu sắc */
+    --primary-color: #6c63ff;
+    --secondary-color: #3b82f6;
+    --accent-color: #e74c3c;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --background-overlay: rgba(0, 0, 0, 0.6);
+    --container-bg: rgba(255, 255, 255, 0.85);
+    --input-bg: rgba(255, 255, 255, 0.9);
+    --text-color: #333;
+    --label-color: #555;
+    --link-color: #6c63ff;
+    --link-hover-color: #2d6feb;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --ripple-color: rgba(255, 255, 255, 0.3);
+    --dark-container-bg: rgba(0, 0, 0, 0.7);
+    --dark-input-bg: rgba(255, 255, 255, 0.1);
+    --dark-label-color: #d1d1d1;
+    --dark-shadow-color: rgba(0, 0, 0, 0.6);
+
+    /* Typography */
+    --font-family: 'Helvetica Neue', Arial, sans-serif;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.2rem;
+    --font-size-xl: 2rem;
+    --font-size-xxl: 2.5rem;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --line-height: 1.6;
+
+    /* Spacing */
+    --spacing-small: 8px;
+    --spacing-medium: 16px;
+    --spacing-large: 24px;
+
+    /* Transition */
+    --transition-speed: 0.3s;
+    --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Border Radius */
+    --border-radius-small: 5px;
+    --border-radius-medium: 10px;
+    --border-radius-pill: 50px;
+
+    /* Box Shadow */
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --box-shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Thiết lập chung cho body */
+body {  
+    font-family: var(--font-family);
+    background-image: url('assets/images/signup-background.jpg');
+    background-size: cover;
+    background-position: center;
+    color: var(--text-color);
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: background-color var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease);
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-image: url('assets/images/signup-background-dark.jpg'); /* Nền Dark Mode */
+    --container-bg: var(--dark-container-bg);
+    --input-bg: var(--dark-input-bg);
+    --label-color: var(--dark-label-color);
+    --shadow-color: var(--dark-shadow-color);
+    color: #fff;
+}
+
+/* Container cho form đăng ký */
+.container {
+    background: var(--container-bg);
+    border-radius: var(--border-radius-medium);
+    padding: var(--spacing-large);
+    box-shadow: var(--box-shadow);
+    max-width: 500px;
+    width: 90%;
+    transition: transform var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease), background var(--transition-speed) var(--transition-ease);
+    animation: fadeIn 0.8s var(--transition-ease) forwards;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+/* Animation cho container */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent 70%);
+    transform: rotate(0deg);
+    transition: transform var(--transition-speed) var(--transition-ease);
+    pointer-events: none;
+}
+
+.container:hover::before {
+    transform: rotate(360deg);
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-hover);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Tiêu đề form */
+h2 {
+    text-align: center;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+    margin-bottom: var(--spacing-large);
+    letter-spacing: 1px;
+    transition: color var(--transition-speed) var(--transition-ease), text-shadow var(--transition-speed) var(--transition-ease);
+}
+
+h2:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+}
+
+/* Nhãn biểu mẫu */
+label {
+    font-weight: var(--font-weight-medium);
+    color: var(--label-color);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    display: block;
+    transition: color var(--transition-speed) var(--transition-ease);
+}
+
+label:hover {
+    color: var(--primary-color);
+}
+
+/* Ô nhập liệu */
+.form-control {
+    border-radius: var(--border-radius-small);
+    border: 1px solid #ccc;
+    padding: 12px 16px;
+    font-size: var(--font-size-base);
+    width: 100%;
+    margin-bottom: var(--spacing-medium);
+    transition: border-color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease), background-color var(--transition-speed) var(--transition-ease);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(108, 99, 255, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+/* Nút bấm */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--primary-color);
+    border: none;
+    font-size: var(--font-size-lg);
+    padding: 12px 0;
+    border-radius: var(--border-radius-pill);
+    width: 100%;
+    transition: background-color var(--transition-speed) var(--transition-ease), transform var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease);
+    color: #fff;
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: var(--ripple-color);
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--transition-ease);
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
+}
+
+.btn-primary:active::after {
+    animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+    from {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Kết quả đăng ký */
+#signupResult {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--error-color);
+    margin-top: var(--spacing-medium);
+    transition: color var(--transition-speed) var(--transition-ease);
+}
+
+#signupResult.success {
+    color: var(--success-color);
+}
+
+#signupResult.error {
+    color: var(--error-color);
+}
+
+/* Liên kết đăng ký */
+.text-center p {
+    font-size: 1rem;
+    color: var(--label-color);
+    text-align: center;
+    margin-top: var(--spacing-medium);
+    transition: color var(--transition-speed) var(--transition-ease);
+}
+
+.text-center p a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    position: relative;
+    transition: color var(--transition-speed) var(--transition-ease);
+}
+
+.text-center p a::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--link-hover-color);
+    transition: width var(--transition-speed) var(--transition-ease);
+}
+
+.text-center p a:hover {
+    color: var(--link-hover-color);
+}
+
+.text-center p a:hover::after {
+    width: 100%;
+}
+
+/* Dark Mode Toggle Button */
+.toggle-dark-mode {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-pill);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease), transform var(--transition-speed) var(--transition-ease);
+    font-size: var(--font-size-base);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-dark-mode:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-medium);
+        margin: var(--spacing-small);
+    }
+
+    h2 {
+        font-size: var(--font-size-lg);
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    label, .form-control, .text-center p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .btn-primary {
+        font-size: 0.9rem;
+        padding: 8px 0;
+    }
+
+    label, .form-control, .text-center p {
+        font-size: 0.8rem;
+    }
+}
+
+/* Accessibility Enhancements */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(108, 99, 255, 0.5);
+    outline: none;
+    background-color: #fff;
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.4);
+}

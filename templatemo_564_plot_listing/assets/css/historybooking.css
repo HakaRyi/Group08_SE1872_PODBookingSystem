@@ -1,0 +1,167 @@
+.booking-history {
+    width: 100%;
+    padding: 20px;
+    background-color: #f9f9f9; /* Lighter background for contrast */
+}
+
+.header .search-bar {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tab {
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #666;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.tab:hover, .tab.active {
+    color: white;
+    background-color: #ff5722; /* Primary color for active tab */
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.booking-list {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.booking-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hotel-name {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.booking-status {
+    color: #ff5722;
+    font-weight: bold;
+    background-color: #ffebee;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.room-info {
+    display: flex;
+    margin-top: 15px;
+}
+
+.room-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.room-description p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.booking-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.action-button {
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    background-color: #e64a19; /* Darker hover state */
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 90px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.booking-price {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.booking-price p {
+    margin: 0;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .room-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .room-image {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .booking-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-button {
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: center;
+    }
+}

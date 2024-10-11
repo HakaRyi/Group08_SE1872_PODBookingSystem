@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History</title>
+    <link rel="stylesheet" href="assets/css/historybooking.css">
+</head>
+
+<body>
+
+    <div class="booking-history">
+      <div class="header">
+        <input type="text" placeholder="Search bookings, room names..." class="search-bar" />
+      </div>
+      <div class="logo-container">
+        <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
+      </div>
+      <div class="tabs">
+        <button class="tab">All</button>
+        <button class="tab">Awaiting Confirmation</button>
+        <button class="tab">Awaiting Check-in</button>
+        <button class="tab">Checked-in</button>
+        <button class="tab">Completed</button>
+        <button class="tab">Canceled</button>
+      </div>
+      
+      <div class="booking-list">
+        <div class="booking-item">
+          <div class="booking-header">
+            <div class="hotel-name">Sunset Resort</div>
+            <div class="booking-status">Awaiting Check-in</div>
+          </div>
+          <div class="booking-details">
+            <div class="room-info">
+              <img src="/path-to-room-image.jpg" alt="Room" class="room-image" />
+              <div class="room-description">
+                <p>Deluxe Suite - Sea View</p>
+                <p>Check-in Date: 2024-10-12</p>
+                <p>Guests: 2 Adults</p>
+              </div>
+            </div>
+            <div class="booking-actions">
+              <button class="action-button">Book Again</button>
+              <button class="action-button">View Details</button>
+              <button class="action-button">Rate Hotel</button>
+            </div>
+            <div class="booking-price">
+              <p>Total Price:</p>
+              <p>₫5,000,000</p>
+            </div>
+          </div>
+        </div>
+        <!-- Repeat for other bookings -->
+      </div>
+    </div>
+
+</body>
+</html>

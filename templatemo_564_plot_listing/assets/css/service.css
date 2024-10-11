@@ -1,0 +1,168 @@
+/* Đặt nền cho toàn bộ trang với gradient */
+body {
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Thêm thuộc tính này để hỗ trợ vị trí tuyệt đối cho logo */
+}
+
+/* Container chính với nội dung và khung màu xanh dương */
+.service-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ */
+    border: 2px solid #3b87b8; /* Khung màu xanh dương */
+    max-width: 1000px;
+    width: 80%;
+    margin-top: 50px; /* Tạo khoảng cách từ trên cùng để không bị chèn bởi logo */
+}
+
+/* Đặt logo sát bên trái màn hình và thu nhỏ */
+.logo-container {
+    position: fixed; /* Đặt logo ở góc trên và luôn cố định khi cuộn */
+    top: 20px;
+    left: 0; /* Sát mép trái màn hình */
+    padding-left: 10px; /* Thêm khoảng cách nhỏ từ mép màn hình */
+}
+
+.logo-container img {
+    width: 100px; /* Thu nhỏ logo lại */
+    height: auto;
+    z-index: 10; /* Đảm bảo logo luôn nằm trên cùng */
+}
+/* Thông tin user ở góc phải trên cùng */
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #2c6f85;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+}
+
+.user-info img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.user-role {
+    color: yellow;
+    font-size: 16px;
+}
+
+/* Danh sách dịch vụ */
+.service-list {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* Cột dịch vụ */
+.service-column {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Mục dịch vụ với nút điều chỉnh */
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.service-item span {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+}
+
+/* Vùng điều chỉnh số lượng */
+.counter {
+    display: flex;
+    align-items: center;
+}
+
+.counter button {
+    padding: 8px 12px;
+    font-size: 18px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.counter button:hover {
+    background-color: #ccc;
+}
+
+.counter input {
+    width: 50px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    margin: 0 10px;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+}
+
+/* Nút Add */
+.add-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.add-btn:hover {
+    background-color: #218838;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+    transform: translateY(-2px); /* Hiệu ứng nổi lên khi hover */
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 768px) {
+    .service-list {
+        flex-direction: column;
+        align-items: center;
+    }
+    .service-column {
+        width: 100%;
+    }
+}

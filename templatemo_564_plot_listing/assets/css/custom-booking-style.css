@@ -1,0 +1,566 @@
+/* Định nghĩa các biến màu sắc và kích thước để dễ dàng quản lý */
+:root {
+    /* Màu sắc */
+    --primary-color: #6c63ff;
+    --secondary-color: #3b82f6;
+    --accent-color: #e74c3c;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --background-overlay: rgba(0, 0, 0, 0.6);
+    --container-bg: rgba(255, 255, 255, 0.15);
+    --input-bg: rgba(255, 255, 255, 0.25);
+    --text-color: #ffffff;
+    --label-color: #f0f0f0;
+    --link-color: #6c63ff;
+    --link-hover-color: #2d6feb;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --ripple-color: rgba(255, 255, 255, 0.3);
+
+    /* Typography */
+    --font-family: 'Montserrat', sans-serif;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.2rem;
+    --font-size-xl: 2rem;
+    --font-size-xxl: 2.5rem;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --line-height: 1.6;
+
+    /* Spacing */
+    --spacing-small: 8px;
+    --spacing-medium: 16px;
+    --spacing-large: 24px;
+
+    /* Transition */
+    --transition-speed: 0.3s;
+    --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Border Radius */
+    --border-radius-small: 10px;
+    --border-radius-medium: 20px;
+    --border-radius-pill: 50px;
+
+    /* Box Shadow */
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    /* Dark Mode */
+    --dark-background-overlay: rgba(0, 0, 0, 0.8);
+    --dark-container-bg: rgba(0, 0, 0, 0.7);
+    --dark-input-bg: rgba(255, 255, 255, 0.1);
+    --dark-label-color: #d1d1d1;
+    --dark-shadow-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Thiết lập chung cho body */
+body {
+    font-family: var(--font-family);
+    background-image: linear-gradient(var(--background-overlay), var(--background-overlay)), url('assets/images/Room-Booking-Panels.jpeg');
+    background-size: cover;
+    background-position: center;
+    color: var(--text-color);
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: background-image var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease);
+    line-height: var(--line-height);
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-image: linear-gradient(var(--dark-background-overlay), var(--dark-background-overlay)), url('assets/images/Room-Booking-Panels.jpeg');
+    --container-bg: var(--dark-container-bg);
+    --input-bg: var(--dark-input-bg);
+    --label-color: var(--dark-label-color);
+    --shadow-color: var(--dark-shadow-color);
+    color: var(--text-color);
+}
+
+/* Container với hiệu ứng Glassmorphism cải tiến */
+.container {
+    background: var(--container-bg);
+    border-radius: var(--border-radius-medium);
+    padding: var(--spacing-large) var(--spacing-medium);
+    box-shadow: 0 10px 30px var(--shadow-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 400px;
+    width: 100%;
+    transition: transform var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease), background var(--transition-speed) var(--transition-ease);
+    animation: fadeIn 0.8s var(--transition-ease) forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent 70%);
+    transform: rotate(0deg);
+    transition: transform var(--transition-speed) var(--transition-ease);
+    pointer-events: none;
+}
+
+.container:hover::before {
+    transform: rotate(360deg);
+}
+
+.container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Tiêu đề */
+h2 {
+    text-align: center;
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+    margin-bottom: var(--spacing-large);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+    transition: color var(--transition-speed) var(--transition-ease), text-shadow var(--transition-speed) var(--transition-ease);
+}
+
+h2:hover {
+    color: #f1c40f; /* Thay đổi màu khi hover */
+    text-shadow: 2px 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Nhãn biểu mẫu */
+label {
+    font-weight: var(--font-weight-medium);
+    color: var(--label-color);
+    font-size: var(--font-size-lg);
+    margin-bottom: 5px;
+    display: block;
+    text-shadow: 1px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Ô nhập liệu với biểu tượng */
+.form-group {
+    position: relative;
+    margin-bottom: var(--spacing-medium);
+}
+
+.form-group .form-control {
+    border-radius: var(--border-radius-small);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 14px 14px 14px 40px; /* Khoảng cách cho icon */
+    font-size: var(--font-size-lg);
+    width: 100%;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    backdrop-filter: blur(6px);
+    transition: border-color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease), background-color var(--transition-speed) var(--transition-ease);
+}
+
+.form-group .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(108, 99, 255, 0.6);
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group .form-icon {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    color: var(--label-color);
+    font-size: 1.2rem;
+    pointer-events: none;
+    transition: color var(--transition-speed) var(--transition-ease);
+}
+
+.form-group .form-control:focus + .form-icon,
+.form-group .form-control:hover + .form-icon {
+    color: var(--primary-color);
+}
+
+/* Placeholder */
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+
+.form-control:focus::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Nút bấm với gradient và hiệu ứng ripple */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+    background-image: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    font-size: 1.4rem;
+    padding: 14px 0;
+    border-radius: var(--border-radius-pill);
+    width: 100%;
+    transition: background-image var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease), transform 0.2s var(--transition-ease);
+    color: var(--text-color);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    box-shadow: 0 6px 15px rgba(108, 99, 255, 0.5);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--transition-ease);
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
+}
+
+.btn-primary:hover {
+    background-image: linear-gradient(135deg, #5a5ad1 0%, #2d6feb 100%);
+    box-shadow: 0px 12px 24px rgba(108, 99, 255, 0.6);
+    transform: translateY(-4px);
+}
+
+.btn-primary:active {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.4);
+}
+
+/* Ripple Effect */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--transition-ease);
+}
+
+.btn-primary:active::before {
+    animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+    from {
+        transform: scale(0);
+        opacity: 0.7;
+    }
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Kết quả đăng nhập */
+#loginResult {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    margin-top: 20px;
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: color var(--transition-speed) var(--transition-ease), text-shadow var(--transition-speed) var(--transition-ease);
+}
+
+#loginResult.success {
+    color: var(--success-color); /* Màu xanh khi thành công */
+}
+
+#loginResult.error {
+    color: var(--accent-color);
+}
+
+/* Liên kết đăng ký */
+.text-center p {
+    font-size: 1.1rem;
+    color: #f1f1f1;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-center p a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--transition-speed) var(--transition-ease), text-decoration var(--transition-speed) var(--transition-ease);
+}
+
+.text-center p a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Thiết kế đáp ứng */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 30px;
+        margin: 15px;
+    }
+
+    h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    .btn-primary {
+        font-size: 1.2rem;
+        padding: 12px 0;
+    }
+
+    label, .form-control, .text-center p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: var(--font-size-lg);
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 10px 0;
+    }
+
+    label, .form-control, .text-center p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Hiệu ứng fadeIn */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Thêm hiệu ứng ripple khi nhấn nút */
+.btn-primary:active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius-pill);
+    animation: ripple 0.6s linear;
+}
+
+/* Thêm hiệu ứng hover cho các ô nhập liệu */
+.form-control:hover {
+    border-color: var(--secondary-color);
+}
+
+/* Thêm hiệu ứng chuyển động cho các liên kết */
+.text-center p a {
+    position: relative;
+    display: inline-block;
+}
+
+.text-center p a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--link-hover-color);
+    transform-origin: bottom right;
+    transition: transform var(--transition-speed) var(--transition-ease);
+}
+
+.text-center p a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Dark Mode Toggle Button */
+.toggle-dark-mode {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    border: none;
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius-pill);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease);
+    font-size: var(--font-size-base);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-dark-mode:hover {
+    background: var(--secondary-color);
+}
+
+/* Animation cho các phần tử khi chuyển đổi Dark Mode */
+body.dark-mode .container {
+    background: var(--dark-container-bg);
+}
+
+body.dark-mode .form-control {
+    background-color: var(--dark-input-bg);
+}
+
+body.dark-mode label {
+    color: var(--dark-label-color);
+}
+
+body.dark-mode .form-group .form-icon {
+    color: var(--dark-label-color);
+}
+
+/* Logo Container */
+.logo-container {
+    text-align: center;
+    margin-bottom: var(--spacing-large);
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: var(--spacing-small);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo-container:hover .logo {
+    transform: rotate(10deg) scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Validation Styles */
+.form-control.success {
+    border-color: var(--success-color);
+}
+
+.form-control.error {
+    border-color: var(--error-color);
+}
+
+.form-group .error-message {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.form-group .form-control.error + .error-message {
+    display: block;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: var(--dark-container-bg);
+    color: var(--text-color);
+    text-align: center;
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-small);
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the element */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--transition-ease);
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Additional Enhancements */
+
+/* Smooth transitions for all interactive elements */
+button, .form-control, .toggle-dark-mode, .text-center p a {
+    transition: all var(--transition-speed) var(--transition-ease);
+}
+
+/* Enhanced focus states for accessibility */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(108, 99, 255, 0.6);
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.4);
+}
+
+/* Improved Ripple Effect with CSS Only */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--transition-ease);
+}
+
+.btn-primary:active::before {
+    animation: ripple 0.6s linear;
+}
+
+/* Ensure responsiveness with Flexbox */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Adjust button width on smaller screens */
+@media (max-width: 480px) {
+    .btn-primary {
+        width: 100%;
+    }
+}
