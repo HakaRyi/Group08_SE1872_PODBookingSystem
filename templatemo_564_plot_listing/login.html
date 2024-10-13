@@ -1,147 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Login - Plotlist</title>
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/custom-booking-style.css">
-    <!-- Thêm Font Awesome nếu chưa có -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQdJ3yY4tP9fE7Y5JtD9xA0jE9yJf2CZ1tb2bE6jKQ1muj6qXg1/+8WV7PvKXH+X6Vy3N4h1aK6YxjUQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login & Register Form</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/login.css">
 </head>
 <body>
-    <header class="header-area header-sticky">
-        <!-- Add your header content here -->
-    </header>
 
-    <div class="container">
-        <div class="row justify-content-center" style="margin-top: 50px;">
-            <div class="col-lg-6">
-                <h2>Login</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" aria-label="Username" required>
-                        <small class="error-message" style="display: none;">Username is required.</small>
-                    </div>
-                    <div class="form-group" style="margin-top: 20px;">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" aria-label="Password" required>
-                        <small class="error-message" style="display: none;">Password is required.</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Login</button>
-                </form>
-                <div id="loginResult"></div>
-
-                <!-- Add Sign Up button -->
-                <div class="text-center" style="margin-top: 20px;">
-                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
-                </div>
-            </div>
-        </div>
+  <div class="form">
+    <div class="form-panel one">
+      <div class="form-header">
+        <h1>Account Login</h1>
+      </div>
+      <div class="form-content">
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <div class="form-group form-remember">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember Me</label>
+            <a href="#" class="form-recovery">Forgot Password?</a>
+          </div>
+          <div class="form-group">
+            <button type="submit" aria-label="Log In" id="loginButton">Log In</button>
+          </div>
+        </form>
+      </div>
+      <div class="form-footer">
+        <p>Don't have an account? <a href="signup.html" id="signup-link">Create an account</a></p>
+      </div>
     </div>
 
-    <footer>
-        <!-- Insert your footer code here -->
-    </footer>
+    <div class="form-panel two">
+      <div class="form-header">
+        <h1>Register Account</h1>
+      </div>
+      <div class="form-content">
+        <form>
+          <div class="form-group">
+            <label for="reg-username">Username</label>
+            <input type="text" id="reg-username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label for="cpassword">Confirm Password</label>
+            <input type="password" id="cpassword" name="cpassword" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <button type="submit" aria-label="Register">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="form-toggle" aria-label="Toggle Form">+</div>
+  </div>
 
-    <!-- Include necessary JS files -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var panelOneHeight = $('.form-panel.one').outerHeight(),
+          panelTwoHeight = $('.form-panel.two').outerHeight();
 
-    <!-- Your login logic here -->
-    <script>
-        // Define the showMessage function
-        function showMessage(elementId, message, isSuccess) {
-            const resultDiv = document.getElementById(elementId);
-            resultDiv.textContent = message;
-            if (isSuccess) {
-                resultDiv.classList.add('success');
-                resultDiv.classList.remove('error');
-            } else {
-                resultDiv.classList.add('error');
-                resultDiv.classList.remove('success');
-            }
-        }
-    
-        document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Prevent form reload
+      $('.form-panel.two').on('click', function(e) {
+        e.preventDefault();
+        $('.form-panel.two').addClass('active');
+        $('.form').animate({
+          'height': panelTwoHeight
+        }, 200);
+      });
 
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-    let valid = true;
+      $('.form-toggle').on('click', function(e) {
+        e.preventDefault();
+        $('.form-panel.two').removeClass('active');
+        $('.form').animate({
+          'height': panelOneHeight
+        }, 200);
+      });
+    });
+  </script>
 
-    // Reset previous error messages
-    document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+  <!-- Script để gọi API đăng nhập -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+  const loginButton = document.getElementById('loginButton');
 
-    // Validate input
-    if (username === '') {
-        document.querySelector('#username + .error-message').style.display = 'block';
-        valid = false;
-    }
+  if (loginButton) {
+    loginButton.addEventListener('click', async function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của form
 
-    if (password === '') {
-        document.querySelector('#password + .error-message').style.display = 'block';
-        valid = false;
-    }
+      // Lấy thông tin username và password từ form
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
-    if (!valid) {
-        showMessage('loginResult', 'Vui lòng nhập đầy đủ thông tin.', false);
-        return;
-    }
+      try {
+        // Tạo URL API đăng nhập
+        const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
 
-    try {
-        // Create API URL
-        const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/api/auth/login`;
+        // Cấu trúc dữ liệu gửi đi
+        const requestData = {
+          username: username,
+          password: password
+        };
 
-        // Log the request details for debugging
-        console.log('Sending request to API:', apiUrl);
-        console.log('Request payload:', { username, password });
+        console.log('Sending login request to:', apiUrl); // Log URL
+        console.log('Request Data:', requestData); // Log the data being sent
 
-        // Call API
+        // Gọi API bằng phương thức POST
         const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': '*/*'
-            },
-            body: JSON.stringify({ username: username, password: password })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData) // Chuyển requestData thành chuỗi JSON
         });
 
-        // Check if response is OK
+        console.log('Response received:', response); // Log the response details
+
+        // Kiểm tra nếu không có nội dung phản hồi
+        if (response.status === 204) {
+          console.error('No content returned from the server.');
+          return;
+        }
+
+        // Kiểm tra nếu phản hồi không hợp lệ
         if (!response.ok) {
-            console.error('Response not OK. Status:', response.status);
-            throw new Error(`HTTP error! Status: ${response.status}`);
+          console.error(`Login failed with status ${response.status}`);
+          return;
         }
 
-        const data = await response.json();
-        console.log('Login Response:', data);
+        // Lưu trữ phản hồi vào biến
+        const result = await response.json();
 
-        // Handle successful login
-        if (data.success) {
-            // Store the token if provided
-            if (data.token) {
-                localStorage.setItem('authToken', data.token);
-            }
-            // Redirect to index.html
-            window.location.href = 'index.html';
+        // Kiểm tra phản hồi
+        if (result.token) {
+          // Lưu token vào localStorage
+          localStorage.setItem('authToken', result.token);
+          // Chuyển hướng đến trang dashboard hoặc trang khác
+          window.location.href = 'dashboard.html';
         } else {
-            showMessage('loginResult', 'Đăng nhập thất bại: ' + (data.message || 'Unknown error'), false);
+          console.error('Login failed: Invalid credentials or server error.');
         }
-    } catch (error) {
-        console.error('Fetch error:', error);
-        showMessage('loginResult', `Có lỗi xảy ra trong quá trình đăng nhập. Error: ${error.message}`, false);
-    }
+      } catch (error) {
+        console.error('Error logging in:', error);
+      }
+    });
+  } else {
+    console.error("Không tìm thấy nút 'Log In'");
+  }
 });
 
 
-    </script>
-    
-
+  </script>
 
 </body>
-
 </html>

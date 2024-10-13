@@ -1,0 +1,168 @@
+/* General Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #003a6e;
+    padding: 20px 40px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid #0052cc;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 100px;
+    margin-right: 30px;
+}
+
+.site-nav {
+    display: flex;
+    gap: 40px;
+}
+
+.site-nav a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.site-nav a:hover {
+    color: #f0c14b;
+}
+
+/* Booking Section */
+.booking-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f9fafc;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.room-image {
+    width: 200px;
+    border-radius: 10px;
+}
+
+.room-features {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.room-features li {
+    background-color: #f0f2f5;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.room-features li:hover {
+    background-color: #cce7ff;
+}
+
+/* Service Section */
+.services-section {
+    background-color: #e6f7ff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+#servicesOptions label {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.details {
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.details label {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+input[type="date"], select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d9d9d9;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+input[type="date"]:focus, select:focus {
+    border-color: #0052cc;
+}
+
+/* Buttons */
+.primary-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+}
+
+.primary-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 18px rgba(0, 82, 204, 0.4);
+}
+
+.total {
+    font-size: 24px;
+    font-weight: 700;
+    color: #52c41a;
+    margin-top: 20px;
+}
+
+/* Footer */
+.site-footer {
+    background-color: #003a6e;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.site-footer p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
