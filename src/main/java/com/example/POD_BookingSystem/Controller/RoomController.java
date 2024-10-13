@@ -2,12 +2,9 @@ package com.example.POD_BookingSystem.Controller;
 
 import com.example.POD_BookingSystem.DTO.Request.Room.AddServiceRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.CreateRoomRequest;
-import com.example.POD_BookingSystem.DTO.Request.Building.UpdateBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.UpdateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
-import com.example.POD_BookingSystem.DTO.Response.BuildingResponse;
 import com.example.POD_BookingSystem.DTO.Response.RoomResponse;
-import com.example.POD_BookingSystem.Entity.Room;
 import com.example.POD_BookingSystem.Service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

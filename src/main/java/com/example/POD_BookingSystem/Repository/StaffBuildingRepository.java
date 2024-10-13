@@ -1,6 +1,6 @@
 package com.example.POD_BookingSystem.Repository;
 
-import com.example.POD_BookingSystem.Entity.Staff_Building;
+import com.example.POD_BookingSystem.Entity.EBuilding.Staff_Building;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

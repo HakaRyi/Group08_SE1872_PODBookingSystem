@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookingServiceRepository extends JpaRepository<Booking_service, String> {
-    @Query(value = "Select id from booking order by id DESC LIMIT 1;", nativeQuery = true)
+    @Query(value = "Select id from booking_service order by id DESC LIMIT 1;", nativeQuery = true)
     public String findLastId();
 
 }

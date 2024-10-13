@@ -2,7 +2,7 @@ package com.example.POD_BookingSystem.Service;
 
 import com.example.POD_BookingSystem.DTO.Request.RoomType.CreateRoomTypeRequest;
 import com.example.POD_BookingSystem.DTO.Response.RoomTypeResponse;
-import com.example.POD_BookingSystem.Entity.Room_Type;
+import com.example.POD_BookingSystem.Entity.ERoom.Room_Type;
 import com.example.POD_BookingSystem.Mapper.RoomTypeMapper;
 import com.example.POD_BookingSystem.Repository.BuildingRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomTypeRepository;

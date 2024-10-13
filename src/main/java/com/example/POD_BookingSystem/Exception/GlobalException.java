@@ -5,6 +5,7 @@ import com.example.POD_BookingSystem.Exception.ErrorCode;
 //import com.example.identity_service.dto.request.ApiResponse;
 //import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,22 +21,21 @@ public class GlobalException {
 
     private static final String MIN_ATTRIBUTE = "min";
 
-    @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlingException(RuntimeException exception){
-        ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
-        ApiResponse apiResponse = new ApiResponse<>();
-        apiResponse.setCode(9999);
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED.getMessage());
-        return ResponseEntity.badRequest().body(apiResponse);
-    }
+//    @ExceptionHandler(value = Exception.class)
+//    ResponseEntity<ApiResponse> handlingException(RuntimeException exception){
+//        ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
+//        ApiResponse apiResponse = new ApiResponse<>();
+//        apiResponse.setCode(9999);
+//        apiResponse.setMessage(ErrorCode.UNCATEGORIZED.getMessage());
+//        return ResponseEntity.badRequest().body(apiResponse);
+//    }
 
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(1001);
-        apiResponse.setMessage(exception.getMessage());
-        return ResponseEntity.badRequest().body(apiResponse);
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiResponse<String>> handlingException(RuntimeException ex) {
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = AppException.class)

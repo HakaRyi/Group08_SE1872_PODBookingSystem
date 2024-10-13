@@ -1,10 +1,9 @@
 package com.example.POD_BookingSystem.Mapper;
 
 import com.example.POD_BookingSystem.DTO.Request.Room.CreateRoomRequest;
-import com.example.POD_BookingSystem.DTO.Request.Building.UpdateBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.UpdateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Response.RoomResponse;
-import com.example.POD_BookingSystem.Entity.Room;
+import com.example.POD_BookingSystem.Entity.ERoom.Room;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

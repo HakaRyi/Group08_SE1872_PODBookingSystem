@@ -1,6 +1,7 @@
 package com.example.POD_BookingSystem.Entity;
 
 import com.example.POD_BookingSystem.Entity.EBooking.Booking;
+import com.example.POD_BookingSystem.Entity.ERoom.RoomSlot;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,13 +20,8 @@ public class Slot {
     String slot_id;
     String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Room_slot",
-            joinColumns = @JoinColumn(name = "slot_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_id")
-    )
-    List<Room> rooms;
+    @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL)
+    private List<RoomSlot> roomSlots;
 
     @ManyToMany
     @JoinTable(

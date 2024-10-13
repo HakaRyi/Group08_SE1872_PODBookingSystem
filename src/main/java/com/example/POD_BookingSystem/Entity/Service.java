@@ -1,7 +1,8 @@
 package com.example.POD_BookingSystem.Entity;
 
-import com.example.POD_BookingSystem.Entity.EBooking.Booking;
 import com.example.POD_BookingSystem.Entity.EBooking.Booking_service;
+import com.example.POD_BookingSystem.Entity.ERoom.Room;
+import com.example.POD_BookingSystem.Entity.ERoom.RoomService;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,6 +32,9 @@ public class Service {
     )
     List<Room> rooms;
 
-    @ManyToMany(mappedBy = "services")
-    private List<Booking> bookings;
+    @OneToMany(mappedBy = "service")
+    private List<Booking_service> bookingServices;
+
+    @OneToMany(mappedBy = "service")
+    private List<RoomService> serviceRooms;
 }

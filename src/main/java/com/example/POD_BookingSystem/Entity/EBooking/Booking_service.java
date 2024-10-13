@@ -17,15 +17,19 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "booking_service")
 public class Booking_service {
-    @Id
-    String id;
+    @EmbeddedId
+    private BookingServiceId id;
     String status;
+    int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", nullable = false)
+    @MapsId("booking_id")  // Ánh xạ booking_id từ EmbeddedId
+    @JoinColumn(name = "booking_id", insertable = false, updatable = false)
     private Booking booking;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_id", nullable = false)
+    @MapsId("service_id")  // Ánh xạ service_id từ EmbeddedId
+    @JoinColumn(name = "service_id", insertable = false, updatable = false)
     private Service service;
+
 }

@@ -12,4 +12,5 @@ import java.time.LocalDate;
 @Builder
 public class AddServiceRequest {
     String service_name;
+    int quantity;
 }

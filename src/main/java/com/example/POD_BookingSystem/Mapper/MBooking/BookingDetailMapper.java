@@ -12,10 +12,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BookingDetailMapper {
-    @Mapping(target = "booking_detail_id", ignore = true)
-    @Mapping(target = "booking_type", ignore = true)
-    @Mapping(target = "timestamp", ignore = true)
-    @Mapping(target = "status", ignore = true)
     BookingDetailResponse toBookingDetailResponse(BookingDetail bookingDetail);
 
     @Mapping(target = "slot_id", ignore = true)

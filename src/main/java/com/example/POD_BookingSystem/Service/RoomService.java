@@ -4,15 +4,16 @@ import com.example.POD_BookingSystem.DTO.Request.Room.AddServiceRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.CreateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.UpdateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Response.RoomResponse;
-import com.example.POD_BookingSystem.Entity.Building;
-import com.example.POD_BookingSystem.Entity.Room;
-import com.example.POD_BookingSystem.Entity.Room_Type;
+import com.example.POD_BookingSystem.Entity.EBuilding.Building;
+import com.example.POD_BookingSystem.Entity.ERoom.Room;
+import com.example.POD_BookingSystem.Entity.ERoom.Room_Type;
 import com.example.POD_BookingSystem.Exception.AppException;
 import com.example.POD_BookingSystem.Exception.ErrorCode;
 import com.example.POD_BookingSystem.Mapper.RoomMapper;
 import com.example.POD_BookingSystem.Repository.BuildingRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomTypeRepository;
+import com.example.POD_BookingSystem.Repository.RoomServiceRepository;
 import com.example.POD_BookingSystem.Repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,8 @@ public class RoomService {
     RoomMapper roomMapper;
     @Autowired
     ServiceRepository serviceRepository;
-
+    @Autowired
+    RoomServiceRepository roomServiceRepository;
     // Tao Ra 1 Room MOI
     public RoomResponse createRoom (CreateRoomRequest request){
         Building building = buildingRepository.findByName(request.getBuilding_name());
@@ -43,7 +45,7 @@ public class RoomService {
 
         Room room = Room.builder()
                 .room_id(GenerateId())
-                .room_name(request.getRoom_name())
+                .name(request.getRoom_name())
                 .availability(request.getAvailability())
                 .price(request.getPrice())
                 .available_Date(request.getAvailable_Date())
@@ -102,13 +104,39 @@ public class RoomService {
         if(service == null ) throw new RuntimeException("Service is not exist");
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
 
-        room.getServices().add(service);
+        com.example.POD_BookingSystem.Entity.ERoom.RoomService roomService =
+                roomServiceRepository.findByRoomAndService(roomId, service.getService_id());
+
+        if (roomService != null) {
+            // Nếu đã tồn tại, cập nhật quantity
+            roomService.setQuantity(roomService.getQuantity() + request.getQuantity());
+        } else {
+            // Nếu chưa có, tạo mới
+            com.example.POD_BookingSystem.Entity.ERoom.RoomService newRoomService =
+                    com.example.POD_BookingSystem.Entity.ERoom.RoomService.builder()
+                            .room(room)
+                            .service(service)
+                            .quantity(request.getQuantity())
+                            .build();
+
+            // Lưu entity RoomService
+            roomServiceRepository.save(roomService);
+        }
 
         // Thêm Room vào Service
-        service.getRooms().add(room);
+
 
         // Lưu cả hai thực thể
         roomRepository.save(room);
         serviceRepository.save(service);
+    }
+
+    private String GenerateRoomServiceId(){
+        String id = roomServiceRepository.findLastId();
+        if(!(id == null)){
+            int number = Integer.parseInt(id.substring(3))+1;
+            return String.format("RS-%02d", number);
+        }
+        return "RS-01";
     }
 }

@@ -1,5 +1,6 @@
-package com.example.POD_BookingSystem.Entity;
+package com.example.POD_BookingSystem.Entity.EBuilding;
 
+import com.example.POD_BookingSystem.Entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

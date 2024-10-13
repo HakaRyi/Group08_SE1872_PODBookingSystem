@@ -1,7 +1,7 @@
 package com.example.POD_BookingSystem.Repository.ReRoom;
 
-import com.example.POD_BookingSystem.Entity.Building;
-import com.example.POD_BookingSystem.Entity.Room;
+import com.example.POD_BookingSystem.Entity.EBuilding.Building;
+import com.example.POD_BookingSystem.Entity.ERoom.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +20,5 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     @Query(value = "SELECT * FROM Room WHERE room_name LIKE %:name%", nativeQuery = true)
     List<Room> findAllRoomByName(@Param("name") String name);
 
-    @Query(value = "SELECT * FROM Room WHERE room_name = %:name%", nativeQuery = true)
-    Room findRoomByName(@Param("name") String name);
+    Room findByName(String name);
 }

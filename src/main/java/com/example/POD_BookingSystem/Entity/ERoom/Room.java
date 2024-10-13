@@ -1,5 +1,6 @@
-package com.example.POD_BookingSystem.Entity;
+package com.example.POD_BookingSystem.Entity.ERoom;
 
+import com.example.POD_BookingSystem.Entity.EBuilding.Building;
 import com.example.POD_BookingSystem.Entity.EBooking.BookingDetail;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,7 @@ import java.util.List;
 public class Room {
     @Id
     String room_id;
-    String room_name;
+    String name;
     int capacity;
     String availability;
     double price;
@@ -36,12 +37,12 @@ public class Room {
     @JoinColumn(name = "type_id")
     private Room_Type roomType;
 
-    @ManyToMany(mappedBy = "rooms")
-    List<Service> services;
-
-    @ManyToMany(mappedBy = "rooms")
-    List<Slot> slots;
+    @OneToMany(mappedBy = "room")
+    private List<RoomService> roomServices;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingDetail> bookingDetails;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<RoomSlot> roomSlots;
 }

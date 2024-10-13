@@ -3,7 +3,7 @@ package com.example.POD_BookingSystem.Service;
 import com.example.POD_BookingSystem.DTO.Request.Building.CreateBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Building.UpdateBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Response.BuildingResponse;
-import com.example.POD_BookingSystem.Entity.Building;
+import com.example.POD_BookingSystem.Entity.EBuilding.Building;
 import com.example.POD_BookingSystem.Exception.AppException;
 import com.example.POD_BookingSystem.Exception.ErrorCode;
 import com.example.POD_BookingSystem.Mapper.BuildingMapper;

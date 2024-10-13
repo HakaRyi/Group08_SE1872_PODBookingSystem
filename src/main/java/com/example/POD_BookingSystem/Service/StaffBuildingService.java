@@ -1,8 +1,8 @@
 package com.example.POD_BookingSystem.Service;
 import com.example.POD_BookingSystem.DTO.Request.User.StaffBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Response.StaffBuildingResponse;
-import com.example.POD_BookingSystem.Entity.Building;
-import com.example.POD_BookingSystem.Entity.Staff_Building;
+import com.example.POD_BookingSystem.Entity.EBuilding.Building;
+import com.example.POD_BookingSystem.Entity.EBuilding.Staff_Building;
 import com.example.POD_BookingSystem.Entity.User;
 import com.example.POD_BookingSystem.Exception.AppException;
 import com.example.POD_BookingSystem.Exception.ErrorCode;

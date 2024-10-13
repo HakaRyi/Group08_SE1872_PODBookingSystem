@@ -15,9 +15,8 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class CreateBookingDetailRequest {
-    String room_id;
     Map<String, Integer> service;
     LocalDate start_time;
     LocalDate end_time;
-    List<String> slots;
+    Map<String, List<LocalDate>> slots;
 }

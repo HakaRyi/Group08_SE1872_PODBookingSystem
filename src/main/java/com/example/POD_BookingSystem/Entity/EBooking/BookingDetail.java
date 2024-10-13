@@ -1,7 +1,6 @@
 package com.example.POD_BookingSystem.Entity.EBooking;
 
-import com.example.POD_BookingSystem.Entity.Building;
-import com.example.POD_BookingSystem.Entity.Room;
+import com.example.POD_BookingSystem.Entity.ERoom.Room;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -31,14 +29,11 @@ public class BookingDetail {
     LocalDate end_time;
     String bookingVersion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "room_id", nullable = false) // Liên kết với Room
     private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
     private Booking booking;
-
-    @OneToMany(mappedBy = "bookingDetail", cascade = CascadeType.ALL)
-    private List<Booking_service> bookingServices;
 }

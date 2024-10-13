@@ -1,6 +1,8 @@
-package com.example.POD_BookingSystem.Entity;
+package com.example.POD_BookingSystem.Entity.ERoom;
 
 import com.example.POD_BookingSystem.Entity.EBooking.Booking;
+import com.example.POD_BookingSystem.Entity.Slot;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,23 +18,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "Room_slot")
 public class RoomSlot {
-
-    @EmbeddedId
-    private RoomSlotId id;
+    @Id
+    private String uId;
 
     @ManyToOne
-    @MapsId("room_id")
     @JoinColumn(name = "room_id")
+    @JsonIgnore
     private Room room;
 
     @ManyToOne
-    @MapsId("slot_id")
     @JoinColumn(name = "slot_id")
+    @JsonIgnore
     private Slot slot;
 
     @ManyToOne
-    @MapsId("booking_id")
     @JoinColumn(name = "booking_id")
+    @JsonIgnore
     private Booking booking;
 
     LocalDate booking_date;
