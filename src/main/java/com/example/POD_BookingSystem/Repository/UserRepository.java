@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,String> {
 
     boolean existsByUsername(String username);
+    boolean existsByPhone(String phone);
+    boolean existsByEmail(String email);
     Optional<User> findByUsername(String username);
     @Query(value = "Select * from User where name like %:name% and role_id='Role-03'", nativeQuery = true)
     public User findName(@Param("name") String name);

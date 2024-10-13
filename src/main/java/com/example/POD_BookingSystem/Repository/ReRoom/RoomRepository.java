@@ -15,8 +15,14 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     public String findLastId();
 
     @Query(value = "SELECT * FROM Room WHERE type_id LIKE %:id%", nativeQuery = true)
-    List<Building> findAllRoomByType(@Param("id") String typeId);
+    List<Room> findAllRoomByType(@Param("id") String typeId);
 
-    @Query(value = "SELECT * FROM Room WHERE room_name LIKE %:name%", nativeQuery = true)
+    @Query(value = "SELECT * FROM Room WHERE building_id LIKE %:id%", nativeQuery = true)
+    List<Room> findRoomByBuilding(@Param("id") String building);
+
+    @Query(value = "SELECT * FROM Room WHERE availability='Available'", nativeQuery = true)
+    List<Room> findRoomByStatus();
+
+    @Query(value = "SELECT * FROM Room WHERE name LIKE %:name%", nativeQuery = true)
     List<Room> findAllRoomByName(@Param("name") String name);
 }

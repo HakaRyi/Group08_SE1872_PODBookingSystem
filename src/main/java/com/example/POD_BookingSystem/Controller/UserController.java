@@ -24,12 +24,30 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping
+    @PostMapping("/customer")
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
 
         ApiResponse<UserResponse> apiResponse=new ApiResponse<>();
 
         apiResponse.setData(userService.createUser(request));
+
+        return apiResponse;
+    }
+    @PostMapping("/staff")
+    ApiResponse<UserResponse> createStaff(@RequestBody @Valid UserCreationRequest request){
+
+        ApiResponse<UserResponse> apiResponse=new ApiResponse<>();
+
+        apiResponse.setData(userService.createStaff(request));
+
+        return apiResponse;
+    }
+    @PostMapping("/manager")
+    ApiResponse<UserResponse> createManager(@RequestBody @Valid UserCreationRequest request){
+
+        ApiResponse<UserResponse> apiResponse=new ApiResponse<>();
+
+        apiResponse.setData(userService.createManager(request));
 
         return apiResponse;
     }

@@ -33,10 +33,17 @@ public class BuildingController {
     }
 
     //Get Building By Name API
-    @GetMapping("/{name}")
+        @GetMapping("/{name}")
     ApiResponse<List<BuildingResponse>> getBuilding(@PathVariable String name){
         return ApiResponse.<List<BuildingResponse>>builder()
                 .data(buildingService.getBuildings(name))
+                .build();
+    }
+    //Get Building By Location API
+    @GetMapping("/location/{name}")
+    ApiResponse<List<BuildingResponse>> getBuildingByLocation(@PathVariable("name") String name){
+        return ApiResponse.<List<BuildingResponse>>builder()
+                .data(buildingService.getBuildingsByLocation(name))
                 .build();
     }
 

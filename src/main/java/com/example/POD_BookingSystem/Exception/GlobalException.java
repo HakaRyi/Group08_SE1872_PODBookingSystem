@@ -6,7 +6,7 @@ import com.example.POD_BookingSystem.Exception.ErrorCode;
 //import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,10 +22,10 @@ public class GlobalException {
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingException(RuntimeException exception){
-        ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
         ApiResponse apiResponse = new ApiResponse<>();
         apiResponse.setCode(9999);
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED.getMessage());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
@@ -48,43 +48,41 @@ public class GlobalException {
 
         return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiResponse);
     }
-//
-//
-//    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-//    ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {
-//        String enumKey = exception.getFieldError().getDefaultMessage();
-//        log.info(enumKey);
-//        ErrorCode errorCode = null;
-//        Map<String,Object> constraintAttribute = null;
-//        errorCode = ErrorCode.INVALID_KEY;
-//        try {
-//            errorCode = ErrorCode.valueOf(enumKey);
-//
+
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {
+        String enumKey = exception.getFieldError().getDefaultMessage();
+        log.info(enumKey);
+        ErrorCode errorCode = null;
+        Map<String,Object> constraintAttribute = null;
+        errorCode = ErrorCode.INVALID_KEY;
+        try {
+            errorCode = ErrorCode.valueOf(enumKey);
+
 //            var constraintViolation = exception.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
 //            constraintAttribute = constraintViolation.getConstraintDescriptor().getAttributes();
 //            log.info(constraintAttribute.toString());
-//        } catch (Exception e) {
-//
-//        }
-//        ApiResponse apiResponse = new ApiResponse();
-//        apiResponse.setCode(errorCode.getCode());
-//        apiResponse.setMessage(Objects.nonNull(constraintAttribute)?
-//                mapAtribute(errorCode.getMessage(), constraintAttribute):
-//                errorCode.getMessage());
-//        return ResponseEntity.badRequest().body(apiResponse);
-//    }
-//
-//    @ExceptionHandler(AccessDeniedException.class)
-//    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
-//        System.out.println("Access denied: " + exception.getMessage());
-//        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-//        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
-//                ApiResponse.builder()
-//                        .code(errorCode.getCode())
-//                        .message(errorCode.getMessage())
-//                        .build()
-//        );
-//    }
+        } catch (Exception e) {
+
+        }
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException exception) {
+        System.out.println("Access denied: " + exception.getMessage());
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
+                ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build()
+        );
+    }
 //
 //    private String mapAtribute(String message, Map<String, Object> attribute){
 //        String minValue = String.valueOf(attribute.get(MIN_ATTRIBUTE));

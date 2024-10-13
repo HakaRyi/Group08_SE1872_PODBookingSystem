@@ -32,17 +32,37 @@ public class RoomController {
 
     //Get All Room API
     @GetMapping
-    ApiResponse<List<RoomResponse>> getBuildings(){
+    ApiResponse<List<RoomResponse>> getRooms(){
         return ApiResponse.<List<RoomResponse>>builder()
                 .data(roomService.getAllRooms())
                 .build();
     }
 
     //Get Room By Name API
-    @GetMapping("/{name}")
-    ApiResponse<List<RoomResponse>> getBuilding(@PathVariable String name){
+    @GetMapping("/name/{name}")
+    ApiResponse<List<RoomResponse>> getRoom(@PathVariable String name){
         return ApiResponse.<List<RoomResponse>>builder()
                 .data(roomService.getRoom(name))
+                .build();
+    }
+    @GetMapping("/building/{id}")
+    ApiResponse<List<RoomResponse>> getRoomByBuilding(@PathVariable("id") String building){
+        return ApiResponse.<List<RoomResponse>>builder()
+                .data(roomService.getRoomByBuilding(building))
+                .build();
+    }
+
+    @GetMapping("/type/{id}")
+    ApiResponse<List<RoomResponse>> getRoomByType(@PathVariable("id") String type){
+        return ApiResponse.<List<RoomResponse>>builder()
+                .data(roomService.getRoomByType(type))
+                .build();
+    }
+
+    @GetMapping("/status")
+    ApiResponse<List<RoomResponse>> getRoomByStatus(){
+        return ApiResponse.<List<RoomResponse>>builder()
+                .data(roomService.getRoomByStatus())
                 .build();
     }
 

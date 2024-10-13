@@ -1,7 +1,9 @@
 package com.example.POD_BookingSystem.Entity.EBooking;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.example.POD_BookingSystem.Entity.Role;
+import com.example.POD_BookingSystem.Entity.Room;
+import com.example.POD_BookingSystem.Entity.Service;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,11 +19,23 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "booking_detail")
 public class BookingDetail {
+    @Id
     String booking_detail_id;
-    String room_id;
-    String booking_id;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id",nullable = false, referencedColumnName = "room_id")
+    Room room_id;
+
+    @ManyToOne
+    @JoinColumn(name = "booking_id",nullable = false, referencedColumnName = "booking_id") // Thiết lập khóa ngoại
+    Booking booking_id;
+
     String booking_type;
-    String service_id;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id",nullable = false, referencedColumnName = "service_id")
+    Service service_id;
+
     int quantity;
     double total_price;
     LocalDateTime timestamp;

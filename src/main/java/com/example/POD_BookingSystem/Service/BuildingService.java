@@ -59,6 +59,12 @@ public class BuildingService {
         return  buildings.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
     }
 
+    //Get Building By Location
+    public List<BuildingResponse> getBuildingsByLocation(String name){
+        List<Building> buildings = buildingRepository.findAllByLocation(name);
+        return  buildings.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
+    }
+
     //Update Building
     public BuildingResponse updateBuilding(String id, UpdateBuildingRequest request){
         Building building = buildingRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));

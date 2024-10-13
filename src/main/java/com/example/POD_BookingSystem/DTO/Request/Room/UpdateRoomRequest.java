@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class UpdateRoomRequest {
-    String room_name;
+    String name;
     int capacity;
     String availability;
     double price;

@@ -43,7 +43,7 @@ public class RoomService {
 
         Room room = Room.builder()
                 .room_id(GenerateId())
-                .room_name(request.getRoom_name())
+                .name(request.getName())
                 .availability(request.getAvailability())
                 .price(request.getPrice())
                 .available_Date(request.getAvailable_Date())
@@ -82,6 +82,25 @@ public class RoomService {
         List<Room> rooms = roomRepository.findAllRoomByName(name);
         return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
     }
+    //Get Room By Building
+    public List<RoomResponse> getRoomByBuilding(String building){
+        List<Room> rooms = roomRepository.findRoomByBuilding(building);
+        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+
+    }
+    //Get Room By RoomType
+    public List<RoomResponse> getRoomByType(String type){
+        List<Room> rooms = roomRepository.findAllRoomByType(type);
+        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+
+    }
+    //Get Room By Status
+    public List<RoomResponse> getRoomByStatus(){
+        List<Room> rooms = roomRepository.findRoomByStatus();
+        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+
+    }
+
 
     //Update Room
     public RoomResponse updateRoom(String id, UpdateRoomRequest request){

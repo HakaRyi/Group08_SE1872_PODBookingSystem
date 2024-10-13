@@ -14,6 +14,10 @@ spring:
       show-sql: true
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 jwt:
   signKey: "XyoNeBIfTwb3rCdDFFnzcXQHcyaX7G+y/nTn5loDeYWuf4hPFMsfwEfjsM5qGz+i"
   valid-duration: 100

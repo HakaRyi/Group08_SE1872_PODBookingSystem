@@ -23,4 +23,7 @@ public class Building {
 
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
     private List<Room> rooms;
+
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
+    private List<ImageBuilding> imageBuildings;
 }

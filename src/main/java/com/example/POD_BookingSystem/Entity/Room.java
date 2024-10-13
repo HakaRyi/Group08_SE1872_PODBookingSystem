@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.Entity;
 
+import com.example.POD_BookingSystem.Entity.EBooking.BookingDetail;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,13 +18,16 @@ import java.util.List;
 public class Room {
     @Id
     String room_id;
-    String room_name;
+    String name;
     int capacity;
     String availability;
     double price;
     String description;
     @Column(name = "availeble_Date")
     LocalDate  available_Date;
+
+    @OneToMany(mappedBy = "room_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<BookingDetail> bookingDetails;
 
     //Quan He 1 Nhieu Voi BUILDING
     @ManyToOne(fetch = FetchType.LAZY)

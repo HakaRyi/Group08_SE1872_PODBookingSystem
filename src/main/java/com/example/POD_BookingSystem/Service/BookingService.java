@@ -24,6 +24,5 @@ public class BookingService {
     @Autowired
     BookingDetailRepository bookingDetailRepository;
 
-    @Autowired
 
 }

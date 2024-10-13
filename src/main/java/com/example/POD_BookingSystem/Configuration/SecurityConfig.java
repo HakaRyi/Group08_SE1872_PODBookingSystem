@@ -25,13 +25,19 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] AUTHORIZE_ENDPOINT = {"/api/users" , "/api/auth/log-in", "/api/auth/introspect","/swagger-ui.html"};
+    private final String[] AUTHORIZE_ENDPOINT = {"/api/users/customer" , "/api/auth/log-in", "/api/auth/introspect","/swagger-ui.html"};
     private final String[] AUTHORIZE_SWAGGER = {"/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**"};
-
+    private final String [] GET_ENDPOINT = {"/buildings",
+            "/buildings/{name}",
+            "/buildings/location/{name}",
+            "/rooms","/rooms/name/{name}",
+            "/rooms/building/{id}",
+            "/rooms/type/{id}",
+            "/rooms/status"};
     @Value("${jwt.signKey}")
     private String signerKey;
 
@@ -42,6 +48,7 @@ public class SecurityConfig {
                 request -> request.
                         requestMatchers(AUTHORIZE_SWAGGER).permitAll()
                         .requestMatchers(HttpMethod.POST, AUTHORIZE_ENDPOINT).permitAll()
+                        .requestMatchers(HttpMethod.GET, GET_ENDPOINT).permitAll()
                         .anyRequest().permitAll()
 
         );
@@ -77,8 +84,8 @@ public class SecurityConfig {
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
         corsConfiguration.addAllowedOriginPattern("*");
-        corsConfiguration.addAllowedMethod("");
-        corsConfiguration.addAllowedHeader("");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
 
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
