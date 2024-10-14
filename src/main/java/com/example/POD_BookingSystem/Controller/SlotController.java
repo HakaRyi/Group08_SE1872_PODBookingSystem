@@ -25,7 +25,7 @@ public class SlotController {
     @Autowired
     SlotService slotService;
 
-    //Create Room API
+    //Create Slot API
     @PostMapping
     ApiResponse<SlotResponse> createSlot(@RequestBody CreateSlotRequest request){
         log.info(request.getSlot_id());
@@ -56,9 +56,9 @@ public class SlotController {
         return ApiResponse.<SlotResponse>builder().data(slotService.updateSlot(id, request)).build();
     }
 
-    //Delete Room API
+    //Delete Slot API
     @DeleteMapping("/{id}")
-    ApiResponse<Void> deleteRoom(@PathVariable String id) {
+    ApiResponse<Void> deleteSlot(@PathVariable String id) {
         slotService.deleteSlot(id);
         return ApiResponse.<Void>builder().message("Delete Successfully !!!").build();
     }

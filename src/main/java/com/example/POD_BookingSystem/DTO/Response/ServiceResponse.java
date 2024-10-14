@@ -11,9 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class ServiceResponse {
-    String service_id;
     String name;
-    double fee;
     String description;
     double price;
 }

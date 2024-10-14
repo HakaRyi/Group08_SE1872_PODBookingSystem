@@ -7,6 +7,7 @@ import com.example.POD_BookingSystem.Entity.EBooking.BookingDetail;
 import com.example.POD_BookingSystem.Entity.EBooking.BookingServiceId;
 import com.example.POD_BookingSystem.Entity.EBooking.Booking_service;
 import com.example.POD_BookingSystem.Entity.ERoom.Room;
+import com.example.POD_BookingSystem.Entity.ERoom.RoomService;
 import com.example.POD_BookingSystem.Entity.ERoom.RoomSlot;
 import com.example.POD_BookingSystem.Entity.Slot;
 import com.example.POD_BookingSystem.Exception.AppException;
@@ -145,7 +146,7 @@ public class BookingService {
         // Tao Booking Detail cho List Service
         int number = Integer.parseInt(GenerateDetailId().substring(3));
         for(Map.Entry<String, Integer> entry : request.getService().entrySet()){
-            String serviceName = entry.getKey(); // Lấy serviceId
+            String serviceName = entry.getKey(); // Lấy service name
             Integer Quantity = entry.getValue();
             number += 1;
             String id = String.format("BD-%02d", number);
@@ -175,7 +176,6 @@ public class BookingService {
         }
 
         booking.setTotal(bookingTotalPrice);
-        log.info("Booking slots: {}", request.getSlots());
         booking.setBookingDate(request.getSlots());
         booking.setBookingDetails(bookingDetails);
         booking.setBookedService(request.getService());
@@ -198,9 +198,9 @@ public class BookingService {
         String bookingVersion = bookingDetailRepository.findLastVersion(bookingId);
 
         Map<String, List<LocalDate>> bookingSlot = booking.getBookingDate();
-        log.info("Booking slots: {}", bookingSlot);
 
         Room room = bookingDetailRepository.findDetailByVersion(bookingVersion).getFirst().getRoom();
+        room.setAvailability("BOOKED");
 
         //Tinh tien Thue Phòng
         List<RoomSlot> roomSlotList = new ArrayList<>();
@@ -227,30 +227,66 @@ public class BookingService {
             roomSlotRepository.save(roomSlot);
         }
 
+        //Kiem Tra Service Co san
+        List<RoomService> roomServices = room.getRoomServices();
+        List<String> roomBookedService = new ArrayList<>();
+
         if(booking.getBookedService()!=null) {
             for (Map.Entry<String, Integer> entry : booking.getBookedService().entrySet()) {
+                    //Tao Id cho BookingService
+                    BookingServiceId serviceId = new BookingServiceId();
+                    serviceId.setBooking_id(bookingId);
+                    serviceId.setService_id(serviceRepository.findByName(entry.getKey()).getService_id());
 
+                    Booking_service bookingService = Booking_service.builder()
+                            .id(serviceId)
+                            .booking(booking) // đối tượng Booking
+                            .service(serviceRepository.findByName(entry.getKey())) // đối tượng Service
+                            .quantity(entry.getValue())
+                            .status("INTACT")
+                            .build();
 
-                BookingServiceId serviceId = new BookingServiceId();
-                serviceId.setBooking_id(bookingId);
-                serviceId.setService_id(serviceRepository.findByName(entry.getKey()).getService_id());
+                for (RoomService roomService : roomServices) {
+                    if(roomService.getService().getService_id().equals(bookingService.getService().getService_id())){
+                        bookingService.setQuantity(bookingService.getQuantity() + roomService.getQuantity());
+                    }
+                }
 
-                Booking_service bookingService = Booking_service.builder()
-                        .id(serviceId)
-                        .booking(booking) // đối tượng Booking
-                        .service(serviceRepository.findByName(entry.getKey())) // đối tượng Service
-                        .quantity(entry.getValue())
-                        .status("INTACT")
-                        .build();
+                roomBookedService.add(bookingService.getService().getService_id());
                 bookingServiceRepository.save(bookingService);
             }
         }else {
             throw new RuntimeException("Service is not exist");
         }
+
+       for(RoomService roomService : roomServices){
+           if(!roomBookedService.contains(roomService.getService().getService_id())){
+               Booking_service service = Booking_service.builder()
+                       .id(BookingServiceId.builder()
+                               .booking_id(bookingId)
+                               .service_id(roomService.getService().getService_id())
+                               .build())
+                       .service(roomService.getService())
+                       .quantity(roomService.getQuantity())
+                       .status("INTACT")
+                       .booking(booking)
+                       .build();
+
+               bookingServiceRepository.save(service);
+           }
+       }
+
+        roomRepository.save(room);
+
         booking.setStatus("CONFIRM");
         booking.setBookingDate(null);
         booking.setBookingServices(null);
+
+        bookingRepository.resetBookingDate(bookingId);
+        bookingRepository.resetBookingService(bookingId);
+
         bookingRepository.save(booking);
+
     }
 
     //Tao ra 1 Id tang dan dua tren Id da co

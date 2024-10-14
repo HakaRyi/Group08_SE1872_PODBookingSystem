@@ -5,6 +5,7 @@ import com.example.POD_BookingSystem.DTO.Response.ServiceResponse;
 import com.example.POD_BookingSystem.Exception.AppException;
 import com.example.POD_BookingSystem.Exception.ErrorCode;
 import com.example.POD_BookingSystem.Mapper.ServiceMapper;
+import com.example.POD_BookingSystem.Repository.ReRoom.RoomRepository;
 import com.example.POD_BookingSystem.Repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class ServiceService {
     ServiceMapper serviceMapper;
     @Autowired
     ServiceRepository serviceRepository;
+    @Autowired
+    RoomRepository roomRepository;
 
     // Tao Ra 1 SERVICE MOI
     public ServiceResponse createService (CreateServiceRequest request){
@@ -70,4 +73,6 @@ public class ServiceService {
     public void deleteService(String id){
         serviceRepository.deleteById(id);
     }
+
+
 }

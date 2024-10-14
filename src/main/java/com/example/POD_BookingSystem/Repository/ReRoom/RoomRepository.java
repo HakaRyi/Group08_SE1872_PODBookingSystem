@@ -21,4 +21,7 @@ public interface RoomRepository extends JpaRepository<Room, String> {
     List<Room> findAllRoomByName(@Param("name") String name);
 
     Room findByName(String name);
+
+    @Query(value = "SELECT service_id FROM Room_service WHERE room_id = :roomId", nativeQuery = true)
+    List<String> findServiceByRoom(@Param("roomId") String roomId);
 }
