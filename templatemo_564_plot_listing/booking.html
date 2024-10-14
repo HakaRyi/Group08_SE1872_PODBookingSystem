@@ -6,117 +6,181 @@
   <title>Room Booking System</title>
   <!-- Import Ant Design CSS for basic styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.css">
-  <link rel="stylesheet" href="assets/css/booking.css"> <!-- Path to external CSS -->
+  <!-- External CSS -->
+  <link rel="stylesheet" href="assets/css/booking.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Header Section -->
   <header class="site-header">
     <div class="container">
-        <div class="logo-container">
-            <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
-        </div>
-        <nav class="site-nav">
-            <a href="#">Home</a>
-            <a href="#">Rooms</a>
-            <a href="#">Contact Us</a>
-            <a href="#">About</a>
-        </nav>
+      <div class="logo-container">
+        <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
+      </div>
+      <nav class="site-nav">
+        <a href="#">Home</a>
+        <a href="#">Rooms</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+        <a href="#">About Us</a>
+      </nav>
     </div>
   </header>
 
+ <!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="room-gallery">
+      <div class="room-card">
+        <img src="assets/images/Public-Room.jpg" alt="Room 101">
+        <h3>Room 101</h3>
+        <button class="primary-btn" onclick="selectRoom('Room 101')">View Details</button>
+      </div>
+      <div class="room-card">
+        <img src="assets/images/tabs-image-02.jpg" alt="Room 102">
+        <h3>Room 102</h3>
+        <button class="primary-btn" onclick="selectRoom('Room 102')">View Details</button>
+      </div>
+      <div class="room-card">
+        <img src="assets/images/tabs-image-03.jpg" alt="Room 103">
+        <h3>Room 103</h3>
+        <button class="primary-btn" onclick="selectRoom('Room 103')">View Details</button>
+      </div>
+      <!-- Add more room cards as needed -->
+    </div>
+  </div>
+</section>
+
   <!-- Booking Section -->
-  <section class="booking-section">
+  <section class="booking-section container">
     <div class="booking-header">
+      <div class="room-info">
         <h2>Room 101 - Meeting Room</h2>
-        <img src="assets/images/Public-Room.jpg" alt="Room 101 Image" class="room-image">
         <ul class="room-features">
-            <li>Air Condition</li>
-            <li>Projector</li>
-            <li>Table</li>
-            <li>Chair</li>
+          <li><i class="fas fa-snowflake"></i> Air Conditioning</li>
+          <li><i class="fas fa-video"></i> Projector</li>
+          <li><i class="fas fa-chalkboard"></i> Whiteboard</li>
+          <li><i class="fas fa-wifi"></i> Wi-Fi</li>
         </ul>
+      </div>
+      <img src="assets/images/Public-Room.jpg" alt="Room 101 Image" class="room-image">
     </div>
 
     <!-- Date & Time Slot Selection -->
     <div class="details">
-        <h3>Select Booking Date & Time</h3>
-        <label for="datePicker">Date:</label>
-        <input type="date" id="datePicker" class="date-input">
-        <br>
-        <label for="timeSlot">Time Slot:</label>
-        <select id="timeSlot" class="time-slot">
-            <option value="morning">Morning (8 AM - 12 PM)</option>
-            <option value="afternoon">Afternoon (1 PM - 5 PM)</option>
-            <option value="fullDay">Full Day</option>
-        </select>
+      <h3>Select Booking Date & Time</h3>
+      <label for="datePicker">Date:</label>
+      <input type="date" id="datePicker" class="date-input">
+      <label for="timeSlot">Time Slot:</label>
+      <select id="timeSlot" class="time-slot">
+        <option value="morning">Morning (8 AM - 12 PM)</option>
+        <option value="afternoon">Afternoon (1 PM - 5 PM)</option>
+        <option value="evening">Evening (6 PM - 10 PM)</option>
+        <option value="fullDay">Full Day</option>
+      </select>
+      <button id="checkAvailabilityBtn" class="primary-btn">Check Availability</button>
+      <p id="availabilityStatus"></p>
     </div>
 
     <!-- Services Section -->
     <div class="services-section">
-        <h3>Add More Services <span style="font-size: 12px;">(Hover for details)</span></h3>
-        <button id="addServicesBtn" class="primary-btn">Add Services</button>
-        <div id="servicesOptions" style="display:none;">
-            <label><input type="checkbox" class="service-checkbox" id="cafeService" data-price="15000" title="Refreshments provided"> Cafe Service - 15,000đ</label><br>
-            <label><input type="checkbox" class="service-checkbox" id="printService" data-price="20000" title="Printing and photocopying services"> Print Service - 20,000đ</label>
-        </div>
+      <h3>Add Services <span>(Hover for details)</span></h3>
+      <button id="addServicesBtn" class="primary-btn">Select Services</button>
+      <div id="servicesOptions" style="display:none;">
+        <label><input type="checkbox" class="service-checkbox" id="cafeService" data-price="15000" title="Beverages provided"> Cafe Service - 15,000đ</label>
+        <label><input type="checkbox" class="service-checkbox" id="printService" data-price="20000" title="Printing and photocopying"> Printing Service - 20,000đ</label>
+        <label><input type="checkbox" class="service-checkbox" id="snackService" data-price="25000" title="Snacks and light meals"> Snack Service - 25,000đ</label>
+        <label><input type="checkbox" class="service-checkbox" id="decorService" data-price="30000" title="Custom room decoration"> Decoration Service - 30,000đ</label>
+      </div>
     </div>
 
     <div class="total">
-        <p>Total: <span id="totalPrice">600</span>đ</p>
-        <button id="paymentBtn" class="primary-btn">Proceed to Payment</button>
+      <p>Total: <span id="totalPrice">600,000</span>đ</p>
+      <button id="paymentBtn" class="primary-btn">Proceed to Payment</button>
     </div>
   </section>
 
+  <!-- Map Section -->
+  <section class="map-section container">
+    <h3>Our Location</h3>
+    <div id="map"></div>
+       <!-- Google Maps iframe -->
+       <iframe src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="650px" frameborder="0" style="border:0" allowfullscreen></iframe>
+      </div>
+  </section>
+
   <!-- User Information Section -->
-  <section class="user-info-section">
-      <h3>User Information</h3>
-      <form id="userForm" class="user-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" required placeholder="Enter your full name">
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" required placeholder="Enter your email">
-        <br>
-        <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" required placeholder="Enter your phone number">
-        <br>
-        <button type="submit" class="primary-btn">Submit</button>
-      </form>
+  <section class="user-info-section container">
+    <h3>Customer Information</h3>
+    <form id="userForm" class="user-form">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" required placeholder="Enter your full name">
+      <label for="email">Email:</label>
+      <input type="email" id="email" required placeholder="Enter your email">
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" required placeholder="Enter your phone number">
+      <label for="notes">Notes:</label>
+      <textarea id="notes" placeholder="Enter any notes if applicable"></textarea>
+      <button type="submit" class="primary-btn">Submit Information</button>
+    </form>
   </section>
 
   <!-- Booking Summary Section -->
-  <section class="booking-summary">
-      <h3>Booking Summary</h3>
-      <p>Room: <span id="summaryRoom">Room 101 - Meeting Room</span></p>
-      <p>Date: <span id="summaryDate"></span></p>
-      <p>Time Slot: <span id="summaryTimeSlot"></span></p>
-      <p>Services: <span id="summaryServices"></span></p>
-      <p>Total Price: <span id="summaryTotalPrice">600</span>đ</p>
-      <button id="confirmBtn" class="primary-btn">Confirm Booking</button>
+  <section class="booking-summary container">
+    <h3>Booking Summary</h3>
+    <p>Room: <span id="summaryRoom">Room 101 - Meeting Room</span></p>
+    <p>Date: <span id="summaryDate"></span></p>
+    <p>Time Slot: <span id="summaryTimeSlot"></span></p>
+    <p>Services: <span id="summaryServices"></span></p>
+    <p>Total Price: <span id="summaryTotalPrice">600,000</span>đ</p>
+    <button id="confirmBtn" class="primary-btn">Confirm Booking</button>
   </section>
 
   <!-- Footer Section -->
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2024 BD.COM. All rights reserved.</p>
+      <p>&copy; 2024 BD.COM. All rights reserved by BD Company.</p>
+      <p>Hotline: 0123 456 789 | Email: support@bd.com</p>
+      <div class="social-media">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
     </div>
   </footer>
 
   <!-- JavaScript for service selection and calculations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.js"></script>
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+  <!-- Inline JavaScript -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const { Modal, notification } = antd;
       let selectedServices = [];
-      let totalPrice = 600;
+      let totalPrice = 600000;
 
       const totalPriceElement = document.getElementById('totalPrice');
       const summaryServicesElement = document.getElementById('summaryServices');
       const summaryTotalPriceElement = document.getElementById('summaryTotalPrice');
       const addServicesBtn = document.getElementById('addServicesBtn');
       const servicesSection = document.getElementById('servicesOptions');
+      const datePicker = document.getElementById('datePicker');
+      const timeSlot = document.getElementById('timeSlot');
+      const summaryDate = document.getElementById('summaryDate');
+      const summaryTimeSlot = document.getElementById('summaryTimeSlot');
+      const summaryRoom = document.getElementById('summaryRoom');
+      const availabilityStatus = document.getElementById('availabilityStatus');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const phoneInput = document.getElementById('phone');
 
-      // Open the service selection when "Add Services" is clicked
+      // Open the service selection when "Select Services" is clicked
       addServicesBtn.addEventListener('click', function () {
         servicesSection.style.display = servicesSection.style.display === 'none' ? 'block' : 'none';
       });
@@ -131,7 +195,7 @@
 
       // Update total price and selected services
       const updateTotal = () => {
-        totalPrice = 600; // Reset base price
+        totalPrice = 600000; // Reset base price
         selectedServices = [];
 
         serviceCheckboxes.forEach((checkbox) => {
@@ -147,25 +211,107 @@
         summaryTotalPriceElement.textContent = totalPrice.toLocaleString('vi-VN');
       };
 
+      // Update summary information
+      const updateSummary = () => {
+        summaryDate.textContent = datePicker.value;
+        summaryTimeSlot.textContent = timeSlot.options[timeSlot.selectedIndex].text;
+      };
+
+      datePicker.addEventListener('change', updateSummary);
+      timeSlot.addEventListener('change', updateSummary);
+
+      // Check room availability
+      document.getElementById('checkAvailabilityBtn').addEventListener('click', function () {
+        // Simulate an availability check (in real application, this would involve an API call)
+        const isAvailable = Math.random() > 0.2; // 80% chance the room is available
+
+        if (isAvailable) {
+          availabilityStatus.textContent = 'The room is available for booking.';
+          availabilityStatus.style.color = 'green';
+        } else {
+          availabilityStatus.textContent = 'The room is not available on the selected date and time.';
+          availabilityStatus.style.color = 'red';
+        }
+      });
+
       // Show confirmation modal when Proceed to Payment is clicked
       document.getElementById('paymentBtn').addEventListener('click', function () {
+        updateSummary();
         Modal.confirm({
-          title: 'Confirm Your Booking',
-          content: `You are about to book Room 101 for ${totalPrice.toLocaleString('vi-VN')}đ. Are you sure?`,
+          title: 'Confirm Booking',
+          content: `You are about to book ${summaryRoom.textContent} on ${summaryDate.textContent} with a total price of ${totalPrice.toLocaleString('vi-VN')}đ. Are you sure?`,
           onOk() {
             notification.success({
-              message: 'Booking Confirmed',
-              description: `Your booking for Room 101 has been confirmed!`
+              message: 'Booking Successful',
+              description: `Your booking has been confirmed!`
             });
           },
           onCancel() {
             notification.warning({
               message: 'Booking Canceled',
-              description: `Your booking process has been canceled.`
+              description: `The booking process has been canceled.`
             });
           }
         });
       });
+
+      // Handle user form submission with validation
+      const userForm = document.getElementById('userForm');
+      userForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (validateForm()) {
+          Modal.success({
+            title: 'Information Submitted',
+            content: 'We will contact you as soon as possible.'
+          });
+          userForm.reset();
+        }
+      });
+
+      // Form validation function
+      const validateForm = () => {
+        let isValid = true;
+        if (nameInput.value.trim() === '') {
+          isValid = false;
+          nameInput.style.borderColor = 'red';
+        } else {
+          nameInput.style.borderColor = '#d9d9d9';
+        }
+        if (emailInput.value.trim() === '' || !validateEmail(emailInput.value)) {
+          isValid = false;
+          emailInput.style.borderColor = 'red';
+        } else {
+          emailInput.style.borderColor = '#d9d9d9';
+        }
+        if (phoneInput.value.trim() === '') {
+          isValid = false;
+          phoneInput.style.borderColor = 'red';
+        } else {
+          phoneInput.style.borderColor = '#d9d9d9';
+        }
+        return isValid;
+      };
+
+      // Email validation function
+      const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      };
+
+      // Initialize Google Map
+      function initMap() {
+        const location = { lat: -34.397, lng: 150.644 };
+        const map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: location
+        });
+        const marker = new google.maps.Marker({
+          position: location,
+          map: map
+        });
+      }
+      initMap();
 
     });
   </script>
