@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Register Form</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
- <link rel="stylesheet" href="assets/css/signup.css">
+  <link rel="stylesheet" href="assets/css/signup.css">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
         <h1>Register Account</h1>
       </div>
       <div class="form-content">
-        <form>
+        <form id="signupForm">
           <div class="form-group">
             <label for="reg-username">Username</label>
             <input type="text" id="reg-username" name="username" required>
@@ -25,10 +25,7 @@
             <label for="reg-password">Password</label>
             <input type="password" id="reg-password" name="password" required>
           </div>
-          <div class="form-group">
-            <label for="cpassword">Confirm Password</label>
-            <input type="password" id="cpassword" name="cpassword" required>
-          </div>
+          
           <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" required>
@@ -37,11 +34,75 @@
             <button type="submit" aria-label="Register">Register</button>
           </div>
         </form>
+        <div class="form-group">
+          <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const signupForm = document.getElementById('signupForm');
+
+  signupForm.addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const username = document.getElementById('reg-username').value;
+    const password = document.getElementById('reg-password').value;
+    const email = document.getElementById('email').value;
+
+    try {
+      const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/users/customer';
+      const requestData = { username, password, email };
+
+      console.log('Sending signup request to:', apiUrl);
+      console.log('Request Data:', requestData);
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+      });
+
+      const responseText = await response.text(); // Get raw response text
+
+      // Log the full response for debugging
+      console.log(`Response status: ${response.status}`);
+      console.log(`Response body: ${responseText}`);
+
+      if (!response.ok) {
+        const errorDetails = responseText ? JSON.parse(responseText) : {};
+        console.error(`Signup failed with status ${response.status}`, errorDetails);
+        alert(`Signup failed: ${errorDetails.message || 'Unknown error'}`);
+        return;
+      }
+
+      const result = JSON.parse(responseText); // Parse the JSON response
+
+      console.log('Response received:', result);
+
+      // Check if the data object exists to confirm success
+      if (result.data) {
+        alert('Registration successful! You can now login.');
+        window.location.href = 'login.html';
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+
+    } catch (error) {
+      console.error('Error signing up:', error);
+      alert('An error occurred while trying to sign up. Please try again later.');
+    }
+  });
+});
+
+  </script>
+  
+  
 </body>
 </html>

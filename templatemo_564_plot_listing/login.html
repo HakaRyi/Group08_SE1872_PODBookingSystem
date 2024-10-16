@@ -25,11 +25,7 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
           </div>
-          <div class="form-group form-remember">
-            <input type="checkbox" id="remember">
-            <label for="remember">Remember Me</label>
-            <a href="#" class="form-recovery">Forgot Password?</a>
-          </div>
+          
           <div class="form-group">
             <button type="submit" aria-label="Log In" id="loginButton">Log In</button>
           </div>
@@ -97,76 +93,60 @@
 
   <!-- Script để gọi API đăng nhập -->
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
   const loginButton = document.getElementById('loginButton');
 
   if (loginButton) {
     loginButton.addEventListener('click', async function (event) {
-      event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+      event.preventDefault(); // Prevent default form submission
 
-      // Lấy thông tin username và password từ form
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
       try {
-        // Tạo URL API đăng nhập
         const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
+        const requestData = { username, password };
 
-        // Cấu trúc dữ liệu gửi đi
-        const requestData = {
-          username: username,
-          password: password
-        };
+        console.log('Sending login request to:', apiUrl);
+        console.log('Request Data:', requestData);
 
-        console.log('Sending login request to:', apiUrl); // Log URL
-        console.log('Request Data:', requestData); // Log the data being sent
-
-        // Gọi API bằng phương thức POST
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(requestData) // Chuyển requestData thành chuỗi JSON
+          body: JSON.stringify(requestData)
         });
 
-        console.log('Response received:', response); // Log the response details
-
-        // Kiểm tra nếu không có nội dung phản hồi
-        if (response.status === 204) {
-          console.error('No content returned from the server.');
-          return;
-        }
-
-        // Kiểm tra nếu phản hồi không hợp lệ
+        // Read the response JSON only once
         if (!response.ok) {
           console.error(`Login failed with status ${response.status}`);
           return;
         }
 
-        // Lưu trữ phản hồi vào biến
-        const result = await response.json();
+        const result = await response.json(); // Only read the body once
 
-        // Kiểm tra phản hồi
-        if (result.token) {
-          // Lưu token vào localStorage
-          localStorage.setItem('authToken', result.token);
-          // Chuyển hướng đến trang dashboard hoặc trang khác
-          window.location.href = 'dashboard.html';
+        console.log('Response received:', result); // Log the entire result
+
+        if (result.data.token) {
+          // Store the token in localStorage
+          localStorage.setItem('authToken', result.data.token);
+          // Redirect to the dashboard
+          window.location.href = 'index.html';
         } else {
           console.error('Login failed: Invalid credentials or server error.');
         }
+
       } catch (error) {
         console.error('Error logging in:', error);
       }
     });
   } else {
-    console.error("Không tìm thấy nút 'Log In'");
+    console.error("Login button not found");
   }
 });
-
 
   </script>
 
 </body>
-</html>
+</html> 
