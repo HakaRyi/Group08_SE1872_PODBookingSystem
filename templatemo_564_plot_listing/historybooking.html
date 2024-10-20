@@ -1,59 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking History</title>
+    <title>Lịch Sử Đặt Phòng - BD Booking</title>
+    <!-- Phông chữ Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- CSS tùy chỉnh -->
     <link rel="stylesheet" href="assets/css/historybooking.css">
+    <!-- Biểu tượng Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-
-    <div class="booking-history">
-      <div class="header">
-        <input type="text" placeholder="Search bookings, room names..." class="search-bar" />
-      </div>
-      <div class="logo-container">
-        <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
-      </div>
-      <div class="tabs">
-        <button class="tab">All</button>
-        <button class="tab">Awaiting Confirmation</button>
-        <button class="tab">Awaiting Check-in</button>
-        <button class="tab">Checked-in</button>
-        <button class="tab">Completed</button>
-        <button class="tab">Canceled</button>
-      </div>
-      
-      <div class="booking-list">
-        <div class="booking-item">
-          <div class="booking-header">
-            <div class="hotel-name">Sunset Resort</div>
-            <div class="booking-status">Awaiting Check-in</div>
-          </div>
-          <div class="booking-details">
-            <div class="room-info">
-              <img src="assets/images/Public-Room.jpg" alt="Room" class="room-image" />
-              <div class="room-description">
-                <p>Deluxe Suite - Sea View</p>
-                <p>Check-in Date: 2024-10-12</p>
-                <p>Guests: 2 Adults</p>
-              </div>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
+                <span class="site-title">BD Booking</span>
             </div>
-            <div class="booking-actions">
-              <button class="action-button">Book Again</button>
-              <button class="action-button">View Details</button>
-              <button class="action-button">Rate Hotel</button>
+            <nav class="site-nav">
+                <a href="#">Trang chủ</a>
+                <a href="#">Phòng</a>
+                <a href="#">Dịch vụ</a>
+                <a href="#">Liên hệ</a>
+                <a href="#">Giới thiệu</a>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
-            <div class="booking-price">
-              <p>Total Price:</p>
-              <p>₫5,000,000</p>
-            </div>
-          </div>
         </div>
-        <!-- Repeat for other bookings -->
-      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="booking-history container">
+        <!-- Search Bar -->
+        <div class="header">
+            <input type="text" placeholder="Tìm kiếm đặt phòng, tên phòng..." class="search-bar" />
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active">Tất Cả</button>
+            <button class="tab">Chờ Xác Nhận</button>
+            <button class="tab">Chờ Check-in</button>
+            <button class="tab">Đã Check-in</button>
+            <button class="tab">Hoàn Thành</button>
+            <button class="tab">Đã Hủy</button>
+        </div>
+
+        <!-- Booking List -->
+        <div class="booking-list">
+            <!-- Booking Item -->
+            <div class="booking-item">
+                <div class="booking-header">
+                    <div class="hotel-name">Sunset Resort</div>
+                    <div class="booking-status awaiting-checkin">Chờ Check-in</div>
+                </div>
+                <div class="booking-details">
+                    <div class="room-info">
+                        <img src="assets/images/Public-Room.jpg" alt="Room" class="room-image" />
+                        <div class="room-description">
+                            <p class="room-type">Phòng Deluxe - View Biển</p>
+                            <p class="checkin-date"><i class="fas fa-calendar-alt"></i> Ngày Check-in: 12/10/2024</p>
+                            <p class="guests"><i class="fas fa-user-friends"></i> Khách: 2 Người lớn</p>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="action-button primary-btn">Đặt Lại</button>
+                        <button class="action-button">Xem Chi Tiết</button>
+                        <button class="action-button">Đánh Giá</button>
+                    </div>
+                    <div class="booking-price">
+                        <p>Tổng Giá:</p>
+                        <p class="price">5.000.000đ</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Lặp lại cho các đặt phòng khác -->
+        </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2024 BD.COM. Mọi quyền được bảo lưu bởi Công ty BD.</p>
+            <p>Hotline: 0123 456 789 | Email: support@bd.com</p>
+            <div class="social-media">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript tùy chỉnh -->
+    <script src="assets/js/historybooking.js"></script>
 </body>
 </html>

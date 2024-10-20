@@ -1,139 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile Page</title>
+  <title>Trang Hồ Sơ Người Dùng - BD Booking</title>
+  <!-- Phông chữ Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- CSS tùy chỉnh -->
   <link rel="stylesheet" href="assets/css/profile.css">
+  <!-- Biểu tượng Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Header Section -->
-    <header class="header">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
       <div class="logo-container">
         <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
+        <span class="site-title">BD Booking</span>
       </div>
-      <div class="user-profile">
-        <img src="path/to/user-icon.png" alt="User Icon" class="user-icon">
-        <span>Nguyễn Văn A</span>
-        <span>Customer</span>
+      <nav class="site-nav">
+        <a href="#">Trang chủ</a>
+        <a href="#">Phòng</a>
+        <a href="#">Dịch vụ</a>
+        <a href="#">Liên hệ</a>
+        <a href="#">Giới thiệu</a>
+      </nav>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- Horizontal Nav Section -->
-    <nav class="horizontal-nav">
-      <a href="#">Find your place</a>
-      <a href="#">Type of room</a>
-      <button class="search-btn">Search</button>
-    </nav>
-
-    <div class="content-wrapper">
-      <!-- Sidebar Section -->
-      <div class="sidebar">
-        <div class="user-info">
-          <img src="path/to/user-icon.png" alt="User Icon">
-          <p class="user-name">Nguyễn Văn A</p>
-          <button class="edit-profile-btn">✎ Edit Profile</button>
-        </div>
-        <button class="booking-history-btn">Booking History</button>
+  <!-- Main Content -->
+  <div class="profile-container container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="user-info">
+        <img src="assets/images/user-icon.png" alt="User Icon" class="user-avatar">
+        <p class="user-name">Nguyễn Văn A</p>
+        <span class="user-role">Khách hàng</span>
+        <button class="primary-btn edit-profile-btn">✎ Chỉnh sửa hồ sơ</button>
       </div>
+      <button class="secondary-btn booking-history-btn"><i class="fas fa-history"></i> Lịch sử đặt phòng</button>
+    </aside>
 
-      <!-- Main Content Section -->
-      <main class="main-content">
-        <div class="form-container">
-          <h2 class="form-title">My Profile</h2>
-          <p class="form-description">Manage profile information to keep your account secure</p>
+    <!-- Main Profile Content -->
+    <main class="profile-content">
+      <div class="form-container">
+        <h2 class="form-title">Hồ Sơ Của Tôi</h2>
+        <p class="form-description">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
 
-          <!-- Profile Form -->
-          <form id="profileForm">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" value="Nguyễn Văn A" disabled>
+        <!-- Profile Form -->
+        <form id="profileForm">
+          <div class="form-group">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" value="Nguyễn Văn A" disabled>
+          </div>
+
+          <div class="form-group">
+            <label for="name">Họ và tên</label>
+            <input type="text" id="name" placeholder="Nhập họ và tên">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" value="NguyenVanA123@gmail.com">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="tel" id="phone" placeholder="Nhập số điện thoại">
+          </div>
+
+          <div class="form-group">
+            <label>Giới tính</label>
+            <div class="sex-options">
+              <label><input type="radio" name="sex" value="Nam"> Nam</label>
+              <label><input type="radio" name="sex" value="Nữ"> Nữ</label>
+              <label><input type="radio" name="sex" value="Khác"> Khác</label>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" placeholder="Name">
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" value="NguyenVanA123@gmail.com">
-            </div>
-
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" placeholder="Phone Number">
-            </div>
-
-            <div class="form-group">
-              <label for="sex">Sex</label>
-              <div class="sex-options">
-                <input type="radio" id="male" name="sex" value="Male">
-                <label for="male">Male</label>
-                <input type="radio" id="female" name="sex" value="Female">
-                <label for="female">Female</label>
-                <input type="radio" id="other" name="sex" value="Other">
-                <label for="other">Other</label>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="dob">Date of Birth</label>
+          <div class="form-group">
+            <label>Ngày sinh</label>
+            <div class="dob-select">
               <select id="day">
-                <option>Day</option>
-                <!-- Day options -->
+                <option>Ngày</option>
+                <!-- Các tùy chọn ngày -->
               </select>
               <select id="month">
-                <option>Month</option>
-                <!-- Month options -->
+                <option>Tháng</option>
+                <!-- Các tùy chọn tháng -->
               </select>
               <select id="year">
-                <option>Year</option>
-                <!-- Year options -->
+                <option>Năm</option>
+                <!-- Các tùy chọn năm -->
               </select>
             </div>
+          </div>
 
-            <button type="submit" class="save-btn">Save</button>
-          </form>
-        </div>
+          <button type="submit" class="primary-btn save-btn">Lưu</button>
+        </form>
+      </div>
 
-        <!-- Profile Picture Section -->
-        <div class="profile-picture">
-          <div class="user-picture">U</div>
-          <input type="file" id="upload" accept="image/jpeg, image/png">
-          <button class="upload-btn">Select Photo</button>
-          <p>Maximum file size 1 MB</p>
-          <p>Format: JPEG, PNG</p>
-        </div>
-      </main>
-    </div>
+      <!-- Profile Picture Section -->
+      <div class="profile-picture">
+        <img src="assets/images/user-icon.png" alt="User Avatar" class="user-avatar-large">
+        <input type="file" id="upload" accept="image/jpeg, image/png">
+        <button class="secondary-btn upload-btn">Chọn ảnh</button>
+        <p>Kích thước file tối đa 1 MB</p>
+        <p>Định dạng: JPEG, PNG</p>
+      </div>
+    </main>
   </div>
 
-  <script>
-    document.getElementById('profileForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2024 BD.COM. Mọi quyền được bảo lưu bởi Công ty BD.</p>
+      <p>Hotline: 0123 456 789 | Email: support@bd.com</p>
+      <div class="social-media">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
 
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('phone').value;
-      const sex = document.querySelector('input[name="sex"]:checked').value;
-      const day = document.getElementById('day').value;
-      const month = document.getElementById('month').value;
-      const year = document.getElementById('year').value;
-
-      const profileData = {
-        name,
-        email,
-        phone,
-        sex,
-        dateOfBirth: `${day}/${month}/${year}`,
-      };
-
-      console.log('Profile Data:', profileData);
-    });
-  </script>
-
+  <!-- JavaScript tùy chỉnh -->
+  <script src="assets/js/profile.js"></script>
 </body>
 </html>

@@ -1,79 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Service</title>
-    <link rel="stylesheet" href="assets/css/service.css"> <!-- Liên kết đến tệp service.css -->
+    <title>Thêm Dịch Vụ - BD Booking</title>
+    <!-- Phông chữ Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- CSS tùy chỉnh -->
+    <link rel="stylesheet" href="assets/css/service.css">
+    <!-- Biểu tượng Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Logo ở góc trên bên trái -->
-    <div class="logo-container">
-        <img src="assets/images/logoBD.jpg" alt="BD.COM Logo">
-    </div>
-
-    <!-- Thông tin user ở góc trên bên phải -->
-    <div class="user-info">
-        <img src="assets/images/user-icon.png" alt="User Icon">
-        <div class="user-details">
-            <span class="user-name">User Name</span>
-            <span class="user-role">Customer</span>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="assets/images/logoBD.jpg" alt="BD.COM Logo" class="logo">
+                <span class="site-title">BD Booking</span>
+            </div>
+            <!-- Thông tin người dùng -->
+            <div class="user-info">
+                <img src="assets/images/user-icon.png" alt="User Icon">
+                <div class="user-details">
+                    <span class="user-name">Nguyễn Văn A</span>
+                    <span class="user-role">Khách hàng</span>
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Container chính -->
-    <div class="service-container">
+    <!-- Nội dung chính -->
+    <div class="service-container container">
+        <h2>Thêm Dịch Vụ</h2>
         <div class="service-list">
-            <div class="service-column">
-                <div class="service-item">
-                    <span>Printer</span>
-                    <div class="counter">
-                        <button onclick="changeQuantity('printer', -1)">−</button>
-                        <input type="number" id="printer" value="1" min="1">
-                        <button onclick="changeQuantity('printer', 1)">+</button>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <span>Chair</span>
-                    <div class="counter">
-                        <button onclick="changeQuantity('chair', -1)">−</button>
-                        <input type="number" id="chair" value="1" min="1">
-                        <button onclick="changeQuantity('chair', 1)">+</button>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <span>Table</span>
-                    <div class="counter">
-                        <button onclick="changeQuantity('table', -1)">−</button>
-                        <input type="number" id="table" value="1" min="1">
-                        <button onclick="changeQuantity('table', 1)">+</button>
-                    </div>
+            <div class="service-item">
+                <span><i class="fas fa-print"></i> Máy in</span>
+                <div class="counter">
+                    <button onclick="changeQuantity('printer', -1)">−</button>
+                    <input type="number" id="printer" value="1" min="1">
+                    <button onclick="changeQuantity('printer', 1)">+</button>
                 </div>
             </div>
-            <div class="service-column">
-                <div class="service-item">
-                    <span>Board</span>
-                    <div class="counter">
-                        <button onclick="changeQuantity('board', -1)">−</button>
-                        <input type="number" id="board" value="1" min="1">
-                        <button onclick="changeQuantity('board', 1)">+</button>
-                    </div>
+            <div class="service-item">
+                <span><i class="fas fa-chair"></i> Ghế</span>
+                <div class="counter">
+                    <button onclick="changeQuantity('chair', -1)">−</button>
+                    <input type="number" id="chair" value="1" min="1">
+                    <button onclick="changeQuantity('chair', 1)">+</button>
                 </div>
-                <div class="service-item">
-                    <span>Coffee</span>
-                    <div class="counter">
-                        <button onclick="changeQuantity('coffee', -1)">−</button>
-                        <input type="number" id="coffee" value="1" min="1">
-                        <button onclick="changeQuantity('coffee', 1)">+</button>
-                    </div>
+            </div>
+            <div class="service-item">
+                <span><i class="fas fa-table"></i> Bàn</span>
+                <div class="counter">
+                    <button onclick="changeQuantity('table', -1)">−</button>
+                    <input type="number" id="table" value="1" min="1">
+                    <button onclick="changeQuantity('table', 1)">+</button>
+                </div>
+            </div>
+            <div class="service-item">
+                <span><i class="fas fa-chalkboard"></i> Bảng</span>
+                <div class="counter">
+                    <button onclick="changeQuantity('board', -1)">−</button>
+                    <input type="number" id="board" value="1" min="1">
+                    <button onclick="changeQuantity('board', 1)">+</button>
+                </div>
+            </div>
+            <div class="service-item">
+                <span><i class="fas fa-coffee"></i> Cà phê</span>
+                <div class="counter">
+                    <button onclick="changeQuantity('coffee', -1)">−</button>
+                    <input type="number" id="coffee" value="1" min="1">
+                    <button onclick="changeQuantity('coffee', 1)">+</button>
                 </div>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 20px;">
-            <button class="add-btn" onclick="submitServices()">Add</button>
-        </div>
+        <button class="primary-btn add-btn" onclick="submitServices()">Thêm Dịch Vụ</button>
     </div>
 
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2024 BD.COM. Mọi quyền được bảo lưu bởi Công ty BD.</p>
+            <p>Hotline: 0123 456 789 | Email: support@bd.com</p>
+            <div class="social-media">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
     <script>
         // Thay đổi số lượng dịch vụ
         function changeQuantity(serviceId, amount) {
@@ -104,13 +122,15 @@
             })
             .then(response => response.json())
             .then(data => {
-                alert('Services have been added successfully!');
+                alert('Dịch vụ đã được thêm thành công!');
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('There was an error adding the services!');
+                alert('Có lỗi xảy ra khi thêm dịch vụ!');
             });
         }
     </script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

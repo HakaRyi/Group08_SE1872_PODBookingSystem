@@ -1,319 +1,500 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Room Booking System</title>
-  <!-- Import Ant Design CSS for basic styles -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.css">
-  <!-- External CSS -->
-  <link rel="stylesheet" href="assets/css/booking.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>BD Booking - Hệ thống đặt phòng chuyên nghiệp</title>
+    <!-- Ant Design CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.css">
+    <!-- CSS tùy chỉnh -->
+    <link rel="stylesheet" href="assets/css/booking.css">
+    <!-- Phông chữ Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome cho biểu tượng -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <!-- Header Section -->
-  <header class="site-header">
-    <div class="container">
-      <div class="logo-container">
-        <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
-      </div>
-      <nav class="site-nav">
-        <a href="#">Home</a>
-        <a href="#">Rooms</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
-        <a href="#">About Us</a>
-      </nav>
-    </div>
-  </header>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="assets/images/logoBD.jpg" alt="BD Logo" class="logo">
+                <span class="site-title">BD Booking</span>
+            </div>
+            <nav class="site-nav">
+                <a href="#">Trang chủ</a>
+                <a href="#">Phòng</a>
+                <a href="#">Dịch vụ</a>
+                <a href="#">Liên hệ</a>
+                <a href="#">Giới thiệu</a>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
 
- <!-- Hero Section -->
-<section class="hero-section">
-  <div class="hero-content">
-    <div class="room-gallery">
-      <div class="room-card">
-        <img src="assets/images/Public-Room.jpg" alt="Room 101">
-        <h3>Room 101</h3>
-        <button class="primary-btn" onclick="selectRoom('Room 101')">View Details</button>
-      </div>
-      <div class="room-card">
-        <img src="assets/images/tabs-image-02.jpg" alt="Room 102">
-        <h3>Room 102</h3>
-        <button class="primary-btn" onclick="selectRoom('Room 102')">View Details</button>
-      </div>
-      <div class="room-card">
-        <img src="assets/images/tabs-image-03.jpg" alt="Room 103">
-        <h3>Room 103</h3>
-        <button class="primary-btn" onclick="selectRoom('Room 103')">View Details</button>
-      </div>
-      <!-- Add more room cards as needed -->
-    </div>
-  </div>
-</section>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content container">
+            <h1>Chào mừng đến với BD Booking</h1>
+            <p>Trải nghiệm đặt phòng dễ dàng và nhanh chóng với giao diện hiện đại.</p>
+            <a href="#roomGallery" class="primary-btn hero-btn">Khám phá ngay</a>
+        </div>
+    </section>
 
-  <!-- Booking Section -->
-  <section class="booking-section container">
-    <div class="booking-header">
-      <div class="room-info">
-        <h2>Room 101 - Meeting Room</h2>
-        <ul class="room-features">
-          <li><i class="fas fa-snowflake"></i> Air Conditioning</li>
-          <li><i class="fas fa-video"></i> Projector</li>
-          <li><i class="fas fa-chalkboard"></i> Whiteboard</li>
-          <li><i class="fas fa-wifi"></i> Wi-Fi</li>
-        </ul>
-      </div>
-      <img src="assets/images/Public-Room.jpg" alt="Room 101 Image" class="room-image">
-    </div>
+    <!-- Sorting Section -->
+    <section class="sorting-section container">
+        <div class="sorting-controls">
+            <label for="sort">Sắp xếp theo:</label>
+            <select id="sort">
+                <option value="price">Giá</option>
+                <option value="rating">Xếp hạng</option>
+            </select>
+            <label for="arrange">Hiển thị:</label>
+            <select id="arrange">
+                <option value="grid">Lưới</option>
+                <option value="list">Danh sách</option>
+            </select>
+        </div>
+    </section>
 
-    <!-- Date & Time Slot Selection -->
-    <div class="details">
-      <h3>Select Booking Date & Time</h3>
-      <label for="datePicker">Date:</label>
-      <input type="date" id="datePicker" class="date-input">
-      <label for="timeSlot">Time Slot:</label>
-      <select id="timeSlot" class="time-slot">
-        <option value="morning">Morning (8 AM - 12 PM)</option>
-        <option value="afternoon">Afternoon (1 PM - 5 PM)</option>
-        <option value="evening">Evening (6 PM - 10 PM)</option>
-        <option value="fullDay">Full Day</option>
-      </select>
-      <button id="checkAvailabilityBtn" class="primary-btn">Check Availability</button>
-      <p id="availabilityStatus"></p>
-    </div>
+    <!-- Room Gallery Section -->
+    <section class="room-section container">
+        <div id="roomGallery" class="room-gallery">
+            <!-- Các thẻ phòng sẽ được tạo động bởi JavaScript -->
+        </div>
+        <!-- Pagination Buttons -->
+        <div class="pagination">
+            <button class="pagination-btn" onclick="prevPage()">« Trước</button>
+            <span id="pageIndicator">Trang 1 / 1</span>
+            <button class="pagination-btn" onclick="nextPage()">Tiếp »</button>
+        </div>
+    </section>
 
-    <!-- Services Section -->
-    <div class="services-section">
-      <h3>Add Services <span>(Hover for details)</span></h3>
-      <button id="addServicesBtn" class="primary-btn">Select Services</button>
-      <div id="servicesOptions" style="display:none;">
-        <label><input type="checkbox" class="service-checkbox" id="cafeService" data-price="15000" title="Beverages provided"> Cafe Service - 15,000đ</label>
-        <label><input type="checkbox" class="service-checkbox" id="printService" data-price="20000" title="Printing and photocopying"> Printing Service - 20,000đ</label>
-        <label><input type="checkbox" class="service-checkbox" id="snackService" data-price="25000" title="Snacks and light meals"> Snack Service - 25,000đ</label>
-        <label><input type="checkbox" class="service-checkbox" id="decorService" data-price="30000" title="Custom room decoration"> Decoration Service - 30,000đ</label>
-      </div>
-    </div>
+    <!-- Booking Section -->
+    <section id="bookingSection" class="booking-section container">
+        <div class="booking-header">
+            <div class="room-info">
+                <h2 id="selectedRoomName">Phòng 101</h2>
+                <ul class="room-features">
+                    <li><i class="fas fa-snowflake"></i> Điều hòa không khí</li>
+                    <li><i class="fas fa-video"></i> Máy chiếu</li>
+                    <li><i class="fas fa-chalkboard"></i> Bảng trắng</li>
+                    <li><i class="fas fa-wifi"></i> Wi-Fi</li>
+                </ul>
+            </div>
+            <img id="selectedRoomImage" src="assets/images/Public-Room.jpg" alt="Phòng 101" class="room-image">
+        </div>
+        <div class="details">
+            <h3>Chọn Ngày & Giờ Đặt Phòng</h3>
+            <label for="datePicker">Ngày:</label>
+            <input type="date" id="datePicker" class="date-input">
+            <label for="timeSlot">Khoảng thời gian:</label>
+            <select id="timeSlot" class="time-slot">
+                <option value="morning">Buổi sáng (8h - 12h)</option>
+                <option value="afternoon">Buổi chiều (13h - 17h)</option>
+                <option value="evening">Buổi tối (18h - 22h)</option>
+                <option value="fullDay">Cả ngày</option>
+            </select>
+            <button id="checkAvailabilityBtn" class="primary-btn check-btn">Kiểm tra tính khả dụng</button>
+            <p id="availabilityStatus"></p>
+        </div>
+        <div class="services-section">
+            <h3>Thêm Dịch Vụ <span>(Di chuột để biết chi tiết)</span></h3>
+            <button id="addServicesBtn" class="primary-btn">Chọn dịch vụ</button>
+            <div id="servicesOptions" style="display:none;">
+                <label title="Đồ uống được cung cấp"><input type="checkbox" class="service-checkbox" id="cafeService" data-price="15000"> Dịch vụ Cafe - 15.000đ</label>
+                <label title="In ấn và photocopy"><input type="checkbox" class="service-checkbox" id="printService" data-price="20000"> Dịch vụ In ấn - 20.000đ</label>
+                <label title="Đồ ăn nhẹ và bữa ăn nhẹ"><input type="checkbox" class="service-checkbox" id="snackService" data-price="25000"> Dịch vụ Snack - 25.000đ</label>
+                <label title="Trang trí phòng theo yêu cầu"><input type="checkbox" class="service-checkbox" id="decorService" data-price="30000"> Dịch vụ Trang trí - 30.000đ</label>
+            </div>
+        </div>
+        <div class="total">
+            <p>Tổng cộng: <span id="totalPrice">0</span>đ</p>
+            <button id="paymentBtn" class="primary-btn">Tiến hành thanh toán</button>
+        </div>
+    </section>
 
-    <div class="total">
-      <p>Total: <span id="totalPrice">600,000</span>đ</p>
-      <button id="paymentBtn" class="primary-btn">Proceed to Payment</button>
-    </div>
-  </section>
+    <!-- User Information Section -->
+    <section class="user-info-section container">
+        <h3>Thông Tin Khách Hàng</h3>
+        <form id="userForm" class="user-form">
+            <label for="name">Họ và tên đầy đủ:</label>
+            <input type="text" id="name" required placeholder="Nhập họ và tên đầy đủ của bạn">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required placeholder="Nhập email của bạn">
+            <label for="phone">Số điện thoại:</label>
+            <input type="text" id="phone" required placeholder="Nhập số điện thoại của bạn">
+            <label for="notes">Ghi chú:</label>
+            <textarea id="notes" placeholder="Nhập bất kỳ ghi chú nào nếu có"></textarea>
+            <button type="submit" class="primary-btn">Gửi Thông Tin</button>
+        </form>
+    </section>
 
-  <!-- Map Section -->
-  <section class="map-section container">
-    <h3>Our Location</h3>
-    <div id="map"></div>
-       <!-- Google Maps iframe -->
-       <iframe src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="650px" frameborder="0" style="border:0" allowfullscreen></iframe>
-      </div>
-  </section>
+    <!-- Booking Summary Section -->
+    <section class="booking-summary container">
+        <h3>Tóm Tắt Đặt Phòng</h3>
+        <p>Phòng: <span id="summaryRoom">Phòng 101</span></p>
+        <p>Ngày: <span id="summaryDate"></span></p>
+        <p>Khoảng thời gian: <span id="summaryTimeSlot"></span></p>
+        <p>Dịch vụ: <span id="summaryServices"></span></p>
+        <p>Tổng giá: <span id="summaryTotalPrice">0</span>đ</p>
+        <button id="confirmBtn" class="primary-btn">Xác Nhận Đặt Chỗ</button>
+    </section>
 
-  <!-- User Information Section -->
-  <section class="user-info-section container">
-    <h3>Customer Information</h3>
-    <form id="userForm" class="user-form">
-      <label for="name">Full Name:</label>
-      <input type="text" id="name" required placeholder="Enter your full name">
-      <label for="email">Email:</label>
-      <input type="email" id="email" required placeholder="Enter your email">
-      <label for="phone">Phone Number:</label>
-      <input type="text" id="phone" required placeholder="Enter your phone number">
-      <label for="notes">Notes:</label>
-      <textarea id="notes" placeholder="Enter any notes if applicable"></textarea>
-      <button type="submit" class="primary-btn">Submit Information</button>
-    </form>
-  </section>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2024 BD.COM. Mọi quyền được bảo lưu bởi Công ty BD.</p>
+            <p>Hotline: 0123 456 789 | Email: support@bd.com</p>
+            <div class="social-media">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
 
-  <!-- Booking Summary Section -->
-  <section class="booking-summary container">
-    <h3>Booking Summary</h3>
-    <p>Room: <span id="summaryRoom">Room 101 - Meeting Room</span></p>
-    <p>Date: <span id="summaryDate"></span></p>
-    <p>Time Slot: <span id="summaryTimeSlot"></span></p>
-    <p>Services: <span id="summaryServices"></span></p>
-    <p>Total Price: <span id="summaryTotalPrice">600,000</span>đ</p>
-    <button id="confirmBtn" class="primary-btn">Confirm Booking</button>
-  </section>
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.js"></script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-  <!-- Footer Section -->
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; 2024 BD.COM. All rights reserved by BD Company.</p>
-      <p>Hotline: 0123 456 789 | Email: support@bd.com</p>
-      <div class="social-media">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-      </div>
-    </div>
-  </footer>
+    <!-- JavaScript tùy chỉnh -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const { Modal, notification } = antd;
 
-  <!-- JavaScript for service selection and calculations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.js"></script>
-  <!-- Font Awesome for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-  <!-- Inline JavaScript -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const { Modal, notification } = antd;
-      let selectedServices = [];
-      let totalPrice = 600000;
+            const roomsPerPage = 6; // Số phòng hiển thị trên mỗi trang
+            let currentPage = 1;
+            let totalPages = 1;
 
-      const totalPriceElement = document.getElementById('totalPrice');
-      const summaryServicesElement = document.getElementById('summaryServices');
-      const summaryTotalPriceElement = document.getElementById('summaryTotalPrice');
-      const addServicesBtn = document.getElementById('addServicesBtn');
-      const servicesSection = document.getElementById('servicesOptions');
-      const datePicker = document.getElementById('datePicker');
-      const timeSlot = document.getElementById('timeSlot');
-      const summaryDate = document.getElementById('summaryDate');
-      const summaryTimeSlot = document.getElementById('summaryTimeSlot');
-      const summaryRoom = document.getElementById('summaryRoom');
-      const availabilityStatus = document.getElementById('availabilityStatus');
-      const nameInput = document.getElementById('name');
-      const emailInput = document.getElementById('email');
-      const phoneInput = document.getElementById('phone');
+            // Danh sách phòng (thêm nhiều phòng để thử nghiệm phân trang)
+            const rooms = [
+                { id: 'Phòng 101', price: 1000000, image: 'Public-Room.jpg', rating: 4.5 },
+                { id: 'Phòng 102', price: 1100000, image: 'Public-Room.jpg', rating: 4.0 },
+                { id: 'Phòng 103', price: 1200000, image: 'Public-Room.jpg', rating: 4.2 },
+                { id: 'Phòng 104', price: 1300000, image: 'Public-Room.jpg', rating: 4.3 },
+                { id: 'Phòng 105', price: 1400000, image: 'Public-Room.jpg', rating: 4.1 },
+                { id: 'Phòng 106', price: 1500000, image: 'Public-Room.jpg', rating: 5.0 },
+                { id: 'Phòng 107', price: 1600000, image: 'Public-Room.jpg', rating: 3.9 },
+                { id: 'Phòng 108', price: 1700000, image: 'Public-Room.jpg', rating: 4.7 },
+                { id: 'Phòng 109', price: 1800000, image: 'Public-Room.jpg', rating: 4.6 },
+                { id: 'Phòng 110', price: 1900000, image: 'Public-Room.jpg', rating: 4.8 },
+                { id: 'Phòng 111', price: 2000000, image: 'Public-Room.jpg', rating: 4.9 },
+                { id: 'Phòng 112', price: 2100000, image: 'Public-Room.jpg', rating: 5.0 },
+                // Thêm các phòng khác nếu cần
+            ];
 
-      // Open the service selection when "Select Services" is clicked
-      addServicesBtn.addEventListener('click', function () {
-        servicesSection.style.display = servicesSection.style.display === 'none' ? 'block' : 'none';
-      });
+            totalPages = Math.ceil(rooms.length / roomsPerPage);
 
-      // Handle service checkbox changes and update total price
-      const serviceCheckboxes = document.querySelectorAll('.service-checkbox');
-      serviceCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener('change', function () {
-          updateTotal();
-        });
-      });
+            const roomGallery = document.getElementById('roomGallery');
+            const sortSelect = document.getElementById('sort');
+            const arrangeSelect = document.getElementById('arrange');
+            const pageIndicator = document.getElementById('pageIndicator');
 
-      // Update total price and selected services
-      const updateTotal = () => {
-        totalPrice = 600000; // Reset base price
-        selectedServices = [];
+            function displayRooms(page) {
+                roomGallery.innerHTML = '';
+                const startIndex = (page - 1) * roomsPerPage;
+                const endIndex = startIndex + roomsPerPage;
+                const roomsToDisplay = rooms.slice(startIndex, endIndex);
 
-        serviceCheckboxes.forEach((checkbox) => {
-          if (checkbox.checked) {
-            const serviceName = checkbox.parentNode.textContent.trim();
-            selectedServices.push(serviceName);
-            totalPrice += parseInt(checkbox.dataset.price, 10);
-          }
-        });
+                roomsToDisplay.forEach(createRoomCard);
+                pageIndicator.innerText = `Trang ${currentPage} / ${totalPages}`;
+            }
 
-        totalPriceElement.textContent = totalPrice.toLocaleString('vi-VN');
-        summaryServicesElement.textContent = selectedServices.join(', ');
-        summaryTotalPriceElement.textContent = totalPrice.toLocaleString('vi-VN');
-      };
+            // Hàm tạo thẻ phòng
+            function createRoomCard(room) {
+                const roomCard = document.createElement('div');
+                roomCard.classList.add('room-card');
 
-      // Update summary information
-      const updateSummary = () => {
-        summaryDate.textContent = datePicker.value;
-        summaryTimeSlot.textContent = timeSlot.options[timeSlot.selectedIndex].text;
-      };
+                roomCard.innerHTML = `
+                    <img src="assets/images/${room.image}" alt="${room.id}">
+                    <div class="card-content">
+                        <h3>${room.id}</h3>
+                        <p class="room-price">${room.price.toLocaleString('vi-VN')}đ/ngày</p>
+                        <button class="primary-btn view-details-btn">Xem chi tiết</button>
+                    </div>
+                    <div class="hover-icons">
+                        <button class="add-favorite-btn"><i class="fas fa-heart"></i></button>
+                        <button class="view-gallery-btn"><i class="fas fa-eye"></i></button>
+                    </div>
+                `;
 
-      datePicker.addEventListener('change', updateSummary);
-      timeSlot.addEventListener('change', updateSummary);
+                // Thêm sự kiện cho các nút
+                roomCard.querySelector('.view-details-btn').addEventListener('click', function () {
+                    selectRoom(room.id);
+                });
 
-      // Check room availability
-      document.getElementById('checkAvailabilityBtn').addEventListener('click', function () {
-        // Simulate an availability check (in real application, this would involve an API call)
-        const isAvailable = Math.random() > 0.2; // 80% chance the room is available
+                roomCard.querySelector('.add-favorite-btn').addEventListener('click', function () {
+                    addToFavorite(room.id);
+                });
 
-        if (isAvailable) {
-          availabilityStatus.textContent = 'The room is available for booking.';
-          availabilityStatus.style.color = 'green';
-        } else {
-          availabilityStatus.textContent = 'The room is not available on the selected date and time.';
-          availabilityStatus.style.color = 'red';
-        }
-      });
+                roomCard.querySelector('.view-gallery-btn').addEventListener('click', function () {
+                    viewRoomGallery(room.id);
+                });
 
-      // Show confirmation modal when Proceed to Payment is clicked
-      document.getElementById('paymentBtn').addEventListener('click', function () {
-        updateSummary();
-        Modal.confirm({
-          title: 'Confirm Booking',
-          content: `You are about to book ${summaryRoom.textContent} on ${summaryDate.textContent} with a total price of ${totalPrice.toLocaleString('vi-VN')}đ. Are you sure?`,
-          onOk() {
-            notification.success({
-              message: 'Booking Successful',
-              description: `Your booking has been confirmed!`
+                roomGallery.appendChild(roomCard);
+            }
+
+            // Các hàm phân trang
+            function nextPage() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayRooms(currentPage);
+                }
+            }
+
+            function prevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayRooms(currentPage);
+                }
+            }
+
+            // Sắp xếp phòng
+            function sortRooms() {
+                const sortValue = sortSelect.value;
+                if (sortValue === 'price') {
+                    rooms.sort((a, b) => a.price - b.price);
+                } else if (sortValue === 'rating') {
+                    rooms.sort((a, b) => b.rating - a.rating);
+                }
+                currentPage = 1;
+                totalPages = Math.ceil(rooms.length / roomsPerPage);
+                displayRooms(currentPage);
+            }
+
+            // Thay đổi chế độ hiển thị
+            function arrangeRooms() {
+                const arrangeValue = arrangeSelect.value;
+                if (arrangeValue === 'list') {
+                    roomGallery.classList.add('list-view');
+                } else {
+                    roomGallery.classList.remove('list-view');
+                }
+            }
+
+            // Thêm các hàm vào phạm vi toàn cục để có thể gọi từ HTML
+            window.nextPage = nextPage;
+            window.prevPage = prevPage;
+            window.sortRooms = sortRooms;
+            window.arrangeRooms = arrangeRooms;
+
+            // Hàm thêm vào Yêu thích
+            function addToFavorite(roomName) {
+                notification.success({
+                    message: 'Đã thêm vào mục Yêu thích',
+                    description: `${roomName} đã được thêm vào mục yêu thích của bạn!`
+                });
+            }
+
+            // Hàm xem thư viện ảnh
+            function viewRoomGallery(roomName) {
+                Modal.info({
+                    title: `Thư viện ảnh của ${roomName}`,
+                    content: `<div><img src="assets/images/${roomName.replace(/ /g, "-")}.jpg" alt="${roomName}" style="width: 100%"></div>`,
+                });
+            }
+
+            // Hàm chọn phòng
+            function selectRoom(roomId) {
+                // Cập nhật thông tin phòng đã chọn
+                document.getElementById('selectedRoomName').innerText = roomId;
+                document.getElementById('selectedRoomImage').src = `assets/images/${roomId.replace(/ /g, "-")}.jpg`;
+                document.getElementById('summaryRoom').innerText = roomId;
+                // Cuộn đến phần đặt phòng
+                document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth' });
+                // Cập nhật giá tổng
+                updateTotalPrice();
+            }
+
+            // Dữ liệu để đặt dịch vụ
+            let selectedServices = {};
+            let bookingDetails = {
+                start_time: null,
+                end_time: null,
+                slots: {}
+            };
+
+            // Các phần tử trong trang đặt chỗ
+            const datePicker = document.getElementById('datePicker');
+            const timeSlot = document.getElementById('timeSlot');
+            const serviceCheckboxes = document.querySelectorAll('.service-checkbox');
+            const confirmBookingBtn = document.getElementById('confirmBtn');
+
+            // Khi hộp kiểm dịch vụ được chọn
+            serviceCheckboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', function () {
+                    if (checkbox.checked) {
+                        selectedServices[checkbox.id] = parseInt(checkbox.dataset.price, 10);
+                    } else {
+                        delete selectedServices[checkbox.id];
+                    }
+                    updateTotalPrice();
+                    updateSummaryServices();
+                });
             });
-          },
-          onCancel() {
-            notification.warning({
-              message: 'Booking Canceled',
-              description: `The booking process has been canceled.`
+
+            function updateTotalPrice() {
+                let totalPrice = 0;
+                // Tính giá phòng
+                const selectedRoomName = document.getElementById('selectedRoomName').innerText;
+                const selectedRoom = rooms.find(room => room.id === selectedRoomName);
+                if (selectedRoom) {
+                    totalPrice += selectedRoom.price;
+                }
+                // Tính giá dịch vụ
+                for (let price of Object.values(selectedServices)) {
+                    totalPrice += price;
+                }
+                document.getElementById('totalPrice').innerText = totalPrice.toLocaleString('vi-VN');
+                document.getElementById('summaryTotalPrice').innerText = totalPrice.toLocaleString('vi-VN');
+            }
+
+            function updateSummaryServices() {
+                const serviceNames = Object.keys(selectedServices).map(serviceId => {
+                    switch (serviceId) {
+                        case 'cafeService':
+                            return 'Dịch vụ Cafe';
+                        case 'printService':
+                            return 'Dịch vụ In ấn';
+                        case 'snackService':
+                            return 'Dịch vụ Snack';
+                        case 'decorService':
+                            return 'Dịch vụ Trang trí';
+                        default:
+                            return '';
+                    }
+                });
+                document.getElementById('summaryServices').innerText = serviceNames.join(', ');
+            }
+
+            // Cập nhật chi tiết đặt phòng
+            function updateBookingDetails() {
+                const selectedDate = datePicker.value;
+                const selectedTimeSlot = timeSlot.value;
+                if (selectedDate && selectedTimeSlot) {
+                    bookingDetails.start_time = selectedDate;
+                    bookingDetails.end_time = calculateEndTime(selectedDate, selectedTimeSlot);
+                    bookingDetails.slots = { [selectedTimeSlot]: [selectedDate] };
+                    document.getElementById('summaryDate').innerText = selectedDate;
+                    document.getElementById('summaryTimeSlot').innerText = timeSlot.options[timeSlot.selectedIndex].text;
+                }
+            }
+
+            datePicker.addEventListener('change', updateBookingDetails);
+            timeSlot.addEventListener('change', updateBookingDetails);
+
+            // Hàm tính thời gian kết thúc
+            function calculateEndTime(startDate, selectedTimeSlot) {
+                let endTime;
+                switch (selectedTimeSlot) {
+                    case 'morning':
+                        endTime = new Date(startDate);
+                        endTime.setHours(12, 0, 0);
+                        break;
+                    case 'afternoon':
+                        endTime = new Date(startDate);
+                        endTime.setHours(17, 0, 0);
+                        break;
+                    case 'evening':
+                        endTime = new Date(startDate);
+                        endTime.setHours(22, 0, 0);
+                        break;
+                    default:
+                        endTime = new Date(startDate);
+                        endTime.setHours(23, 59, 59);
+                }
+                return endTime.toISOString().split('T')[0];
+            }
+
+            // Xác thực thông tin đặt phòng
+            function validateBookingDetails() {
+                return datePicker.value && timeSlot.value;
+            }
+
+            // Xử lý việc gửi biểu mẫu người dùng cho đặt phòng
+            confirmBookingBtn.addEventListener('click', function () {
+                if (!validateBookingDetails()) {
+                    notification.error({
+                        message: 'Nhập không hợp lệ',
+                        description: 'Vui lòng điền chính xác tất cả các trường bắt buộc.'
+                    });
+                    return;
+                }
+
+                // Giá trị giả cho bookingId và roomName
+                const bookingId = "123456";
+                const roomName = document.getElementById('selectedRoomName').innerText;
+
+                // Chuẩn bị dữ liệu cho API
+                const dataToSend = {
+                    service: selectedServices,
+                    start_time: bookingDetails.start_time,
+                    end_time: bookingDetails.end_time,
+                    slots: bookingDetails.slots
+                };
+
+                // Gửi dữ liệu đến backend
+                sendBookingDataToBackend(bookingId, roomName, dataToSend);
             });
-          }
+
+            // Hàm gửi dữ liệu đặt phòng đến API backend
+            async function sendBookingDataToBackend(bookingId, roomName, data) {
+                const url = `/api/${bookingId}/${roomName}/bookingdetails`;
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (response.ok) {
+                        const responseData = await response.json();
+                        notification.success({
+                            message: 'Đã xác nhận đặt phòng',
+                            description: `Booking ID: ${responseData.data.bookingVersion}`
+                        });
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Yêu cầu đặt phòng không thành công');
+                    }
+                } catch (error) {
+                    notification.error({
+                        message: 'Lỗi đặt phòng',
+                        description: error.message
+                    });
+                }
+            }
+
+            // Hiển thị/Ẩn danh sách dịch vụ
+            const addServicesBtn = document.getElementById('addServicesBtn');
+            const servicesOptions = document.getElementById('servicesOptions');
+            addServicesBtn.addEventListener('click', function () {
+                if (servicesOptions.style.display === 'none' || servicesOptions.style.display === '') {
+                    servicesOptions.style.display = 'block';
+                } else {
+                    servicesOptions.style.display = 'none';
+                }
+            });
+
+            // Khởi tạo hiển thị phòng
+            displayRooms(currentPage);
+
+            // Thêm sự kiện cho sắp xếp và hiển thị
+            sortSelect.addEventListener('change', sortRooms);
+            arrangeSelect.addEventListener('change', arrangeRooms);
+
+            // Menu di động
+            const mobileMenu = document.getElementById('mobile-menu');
+            const nav = document.querySelector('.site-nav');
+            mobileMenu.addEventListener('click', function () {
+                nav.classList.toggle('active');
+                mobileMenu.classList.toggle('is-active');
+            });
         });
-      });
-
-      // Handle user form submission with validation
-      const userForm = document.getElementById('userForm');
-      userForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        if (validateForm()) {
-          Modal.success({
-            title: 'Information Submitted',
-            content: 'We will contact you as soon as possible.'
-          });
-          userForm.reset();
-        }
-      });
-
-      // Form validation function
-      const validateForm = () => {
-        let isValid = true;
-        if (nameInput.value.trim() === '') {
-          isValid = false;
-          nameInput.style.borderColor = 'red';
-        } else {
-          nameInput.style.borderColor = '#d9d9d9';
-        }
-        if (emailInput.value.trim() === '' || !validateEmail(emailInput.value)) {
-          isValid = false;
-          emailInput.style.borderColor = 'red';
-        } else {
-          emailInput.style.borderColor = '#d9d9d9';
-        }
-        if (phoneInput.value.trim() === '') {
-          isValid = false;
-          phoneInput.style.borderColor = 'red';
-        } else {
-          phoneInput.style.borderColor = '#d9d9d9';
-        }
-        return isValid;
-      };
-
-      // Email validation function
-      const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      };
-
-      // Initialize Google Map
-      function initMap() {
-        const location = { lat: -34.397, lng: 150.644 };
-        const map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 15,
-          center: location
-        });
-        const marker = new google.maps.Marker({
-          position: location,
-          map: map
-        });
-      }
-      initMap();
-
-    });
-  </script>
+    </script>
 </body>
 </html>

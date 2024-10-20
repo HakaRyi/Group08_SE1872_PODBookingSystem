@@ -18,14 +18,13 @@
       <div class="form-content">
         <form id="loginForm">
           <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
-          </div>
+            <label for="reg-phone">Phone Number</label>
+            <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}" title="Please enter a valid phone number with 10-15 digits.">
+          </div>          
           <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
           </div>
-          
           <div class="form-group">
             <button type="submit" aria-label="Log In" id="loginButton">Log In</button>
           </div>
@@ -41,11 +40,7 @@
         <h1>Register Account</h1>
       </div>
       <div class="form-content">
-        <form>
-          <div class="form-group">
-            <label for="reg-username">Username</label>
-            <input type="text" id="reg-username" name="username" required>
-          </div>
+        <form id="signupForm">
           <div class="form-group">
             <label for="reg-password">Password</label>
             <input type="password" id="reg-password" name="password" required>
@@ -59,7 +54,11 @@
             <input type="email" id="email" name="email" required>
           </div>
           <div class="form-group">
-            <button type="submit" aria-label="Register">Register</button>
+            <label for="reg-phone">Phone Number</label>
+            <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}" title="Please enter a valid phone number with 10-15 digits.">
+          </div>
+          <div class="form-group">
+            <button type="submit" aria-label="Register" id="registerButton">Register</button>
           </div>
         </form>
       </div>
@@ -91,23 +90,74 @@
     });
   </script>
 
-  <!-- Script để gọi API đăng nhập -->
+  <!-- Script to handle Login API call -->
   <script>
- document.addEventListener('DOMContentLoaded', function () {
-  const loginButton = document.getElementById('loginButton');
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginButton = document.getElementById('loginButton');
 
-  if (loginButton) {
-    loginButton.addEventListener('click', async function (event) {
-      event.preventDefault(); // Prevent default form submission
+    if (loginButton) {
+      loginButton.addEventListener('click', async function (event) {
+        event.preventDefault(); // Prevent default form submission
 
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+        const phone = document.getElementById('reg-phone').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
+          const requestData = { phone, password };
+
+          console.log('Sending login request to:', apiUrl);
+          console.log('Request Data:', requestData);
+
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+          });
+
+          if (!response.ok) {
+            console.error(`Login failed with status ${response.status}`);
+            return;
+          }
+
+          const result = await response.json(); 
+
+          console.log('Response received:', result);
+
+          if (result.data && result.data.token) {
+            localStorage.setItem('authToken', result.data.token);
+            window.location.href = 'index.html';
+          } else {
+            console.error('Login failed: Invalid credentials or server error.');
+          }
+
+        } catch (error) {
+          console.error('Error logging in:', error);
+        }
+      });
+    }
+
+    const signupForm = document.getElementById('signupForm');
+    signupForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const password = document.getElementById('reg-password').value;
+      const cpassword = document.getElementById('cpassword').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('reg-phone').value;
+
+      if (password !== cpassword) {
+        alert('Passwords do not match.');
+        return;
+      }
 
       try {
-        const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
-        const requestData = { username, password };
+        const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/users/customer';
+        const requestData = { password, email, phone };
 
-        console.log('Sending login request to:', apiUrl);
+        console.log('Sending signup request to:', apiUrl);
         console.log('Request Data:', requestData);
 
         const response = await fetch(apiUrl, {
@@ -118,35 +168,30 @@
           body: JSON.stringify(requestData)
         });
 
-        // Read the response JSON only once
         if (!response.ok) {
-          console.error(`Login failed with status ${response.status}`);
+          console.error(`Signup failed with status ${response.status}`);
+          const errorText = await response.text();
+          alert(`Signup failed: ${errorText}`);
           return;
         }
 
-        const result = await response.json(); // Only read the body once
+        const result = await response.json();
+        console.log('Response received:', result);
 
-        console.log('Response received:', result); // Log the entire result
-
-        if (result.data.token) {
-          // Store the token in localStorage
-          localStorage.setItem('authToken', result.data.token);
-          // Redirect to the dashboard
-          window.location.href = 'index.html';
+        if (result.data) {
+          alert('Registration successful! You can now login.');
+          window.location.href = 'signup.html';
         } else {
-          console.error('Login failed: Invalid credentials or server error.');
+          alert('Registration failed. Please try again.');
         }
 
       } catch (error) {
-        console.error('Error logging in:', error);
+        console.error('Error signing up:', error);
+        alert('An error occurred while trying to sign up. Please try again later.');
       }
     });
-  } else {
-    console.error("Login button not found");
-  }
-});
-
+  });
   </script>
 
 </body>
-</html> 
+</html>
