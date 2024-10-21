@@ -31,7 +31,7 @@ public class RoomController {
 
     //Get All Room API
     @GetMapping
-    ApiResponse<List<RoomResponse>> getBuildings(){
+    ApiResponse<List<RoomResponse>> getRooms(){
         return ApiResponse.<List<RoomResponse>>builder()
                 .data(roomService.getAllRooms())
                 .build();
@@ -39,13 +39,13 @@ public class RoomController {
 
     //Get Room By Name API
     @GetMapping("/{name}")
-    ApiResponse<List<RoomResponse>> getBuilding(@PathVariable String name){
+    ApiResponse<List<RoomResponse>> getRoom(@PathVariable String name){
         return ApiResponse.<List<RoomResponse>>builder()
                 .data(roomService.getRoom(name))
                 .build();
     }
 
-    //Update Building API
+    //Update Room API
     @PutMapping("/{id}")
     ApiResponse<RoomResponse> updateRoom(@PathVariable String id, @RequestBody UpdateRoomRequest request) {
         return ApiResponse.<RoomResponse>builder().data(roomService.updateRoom(id, request)).build();
@@ -70,6 +70,28 @@ public class RoomController {
     ApiResponse<List<ServiceResponse>> getServiceInRoom(@PathVariable String id){
         return ApiResponse.<List<ServiceResponse>>builder()
                 .data(roomService.getServicesInRoom(id))
+                .build();
+    }
+
+    @GetMapping("/building/{id}")
+    ApiResponse<List<RoomResponse>> getRoomByBuilding(@PathVariable("id") String building){
+        return ApiResponse.<List<RoomResponse>>builder()
+                .data(roomService.getRoomByBuilding(building))
+                .build();
+    }
+
+    @GetMapping("/type/{id}")
+    ApiResponse<List<RoomResponse>> getRoomByType(@PathVariable("id") String type){
+        return ApiResponse.<List<RoomResponse>>builder()
+                .data(roomService.getRoomByType(type))
+                .build();
+    }
+
+    //Get Room By Status
+    @GetMapping("/status")
+    ApiResponse<List<RoomResponse>> getRoomByStatus(){
+        return ApiResponse.<List<RoomResponse>>builder()
+                .data(roomService.getRoomByStatus())
                 .build();
     }
 }

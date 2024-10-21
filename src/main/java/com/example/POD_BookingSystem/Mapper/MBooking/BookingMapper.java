@@ -12,9 +12,5 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BookingMapper {
-
-    BookingResponse toSlotResponse(Booking booking);
-
-    @Mapping(target = "slot_id", ignore = true)
-    void updateSlot(@MappingTarget Slot slot, UpdateSlotRequest request);
+    BookingResponse toBookingResponse(Booking booking);
 }

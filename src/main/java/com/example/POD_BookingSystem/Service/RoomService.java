@@ -153,6 +153,27 @@ public class RoomService {
 
     }
 
+    //Get Room By Building
+    public List<RoomResponse> getRoomByBuilding(String building){
+        List<Room> rooms = roomRepository.findRoomByBuilding(building);
+        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+
+    }
+
+    //Get Room By RoomType
+    public List<RoomResponse> getRoomByType(String type){
+        List<Room> rooms = roomRepository.findAllRoomByType(type);
+        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+
+    }
+
+    //Get Room By Status
+    public List<RoomResponse> getRoomByStatus(){
+        List<Room> rooms = roomRepository.findRoomByStatus();
+        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+
+    }
+
     private String GenerateRoomServiceId() {
         String id = roomServiceRepository.findLastId();
         if (!(id == null)) {

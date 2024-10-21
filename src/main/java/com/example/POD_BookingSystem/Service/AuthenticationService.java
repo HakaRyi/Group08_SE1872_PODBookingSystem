@@ -146,8 +146,8 @@ public class AuthenticationService {
 
     }
 
-    public String getUsernameFromToken(GetUserInfoRequest request) throws ParseException, JOSEException {
-        SignedJWT signedJWT = verifyToken(request.getToken()); // Xác thực token
+    public String getUsernameFromToken(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = verifyToken(token); // Xác thực token
 
         // Lấy username từ claims
         String username = signedJWT.getJWTClaimsSet().getSubject();
@@ -158,6 +158,5 @@ public class AuthenticationService {
 
         return username; // Trả về username
     }
-
 
 }

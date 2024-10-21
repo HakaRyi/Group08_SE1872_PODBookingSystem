@@ -1,7 +1,7 @@
 package com.example.POD_BookingSystem.Service;
 
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
-import com.example.POD_BookingSystem.DTO.Response.BookingDetailResponse;
+import com.example.POD_BookingSystem.DTO.Response.*;
 import com.example.POD_BookingSystem.Entity.EBooking.Booking;
 import com.example.POD_BookingSystem.Entity.EBooking.BookingDetail;
 import com.example.POD_BookingSystem.Entity.EBooking.BookingServiceId;
@@ -12,6 +12,9 @@ import com.example.POD_BookingSystem.Entity.ERoom.RoomSlot;
 import com.example.POD_BookingSystem.Entity.Slot;
 import com.example.POD_BookingSystem.Exception.AppException;
 import com.example.POD_BookingSystem.Exception.ErrorCode;
+import com.example.POD_BookingSystem.Mapper.MBooking.BookingMapper;
+import com.example.POD_BookingSystem.Mapper.ServiceMapper;
+import com.example.POD_BookingSystem.Mapper.SlotMapper;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingDetailRepository;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingRepository;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingServiceRepository;
@@ -20,8 +23,7 @@ import com.example.POD_BookingSystem.Repository.ReRoom.RoomSlotRepository;
 import com.example.POD_BookingSystem.Repository.ServiceRepository;
 import com.example.POD_BookingSystem.Repository.SlotRepository;
 import com.example.POD_BookingSystem.Repository.UserRepository;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,9 @@ import java.util.*;
 public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
+
+    @Autowired
+    BookingMapper bookingMapper;
 
     @Autowired
     BookingDetailRepository bookingDetailRepository;
@@ -58,6 +63,68 @@ public class BookingService {
     @Autowired
     BookingServiceRepository bookingServiceRepository;
 
+    @Autowired
+    ServiceMapper serviceMapper;
+
+    @Autowired
+    SlotMapper slotMapper;
+
+    //GET BOOKING BY USERNAME
+    public List<BookingResponse> getBookingByUsername(String username){
+        String userId = userRepository.findByUsername(username).
+                orElseThrow(() -> new RuntimeException("User does not Exist")).getUserid_id();
+        List<Booking> listBooking  = bookingRepository.getBookingByUser(userId);
+        List<BookingResponse> result = new ArrayList<>();
+        if(listBooking != null){
+            for(Booking booking : listBooking){
+                result.add(bookingMapper.toBookingResponse(booking));
+            }
+        }else{
+            throw new RuntimeException("You have not book any office");
+        }
+        return result;
+    }
+
+    //GET BOOKING INFORMATION
+    public BookingInformationResponse getBookingInformation(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
+        BookingInformationResponse bookingInformationResponse = new BookingInformationResponse();
+
+        List<BookingDetail> listBookingDetail = booking.getBookingDetails();
+
+        Set<Room> roomSet = new HashSet<>();
+
+        for (BookingDetail bookingDetail : listBookingDetail){
+            roomSet.add(bookingDetail.getRoom());
+        }
+        List<RoomInformationResponse> roomInformationResponses = new ArrayList<>();
+        List<ServiceResponse> services = new ArrayList<>();
+
+        for(Room room : roomSet){
+            List<com.example.POD_BookingSystem.Entity.Service> listServices = new ArrayList<>();
+            for(String serviceId : serviceRepository.getServiceByRoom(bookingId, room.getRoom_id())){
+                listServices.add(serviceRepository.findById(serviceId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
+            }
+
+            List<Slot> listSlots = new ArrayList<>();
+            for(String slotId : slotRepository.getSlotsInRoom(bookingId,room.getRoom_id())){
+                listSlots.add(slotRepository.findById(slotId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
+            }
+
+            roomInformationResponses.add(RoomInformationResponse.builder()
+                            .amount(bookingDetailRepository.getRoomTotalAmount(room.getRoom_id()))
+                            .endTime(bookingDetailRepository.getRoomEndTime(room.getRoom_id()))
+                            .services(listServices.stream().map(service -> serviceMapper.toServiceResponse(service)).toList())
+                            .startTime(bookingDetailRepository.getRoomStartTime(room.getRoom_id()))
+                            .slots(listSlots.stream().map(slot -> slotMapper.toSlotResponse(slot)).toList())
+                            .build());
+        }
+        bookingInformationResponse.setRoomInfo(roomInformationResponses);
+        bookingInformationResponse.setAmount(booking.getTotal());
+        bookingInformationResponse.setStatus(booking.getStatus());
+
+        return bookingInformationResponse;
+    }
 
 //     CREATE BOOKING
     public Booking createBooking (String userName){
@@ -111,6 +178,7 @@ public class BookingService {
             timeBooking = numberOfSlot;
             bookingPrice = room.getPrice()*timeBooking;
         }
+
         versionPrice += bookingPrice;
 
         //Lay Slot Thue Cho Booking Detail
@@ -148,7 +216,6 @@ public class BookingService {
         for(Map.Entry<String, Integer> entry : request.getService().entrySet()){
             String serviceName = entry.getKey(); // Lấy service name
             Integer Quantity = entry.getValue();
-            number += 1;
             String id = String.format("BD-%02d", number);
 
             com.example.POD_BookingSystem.Entity.Service bookedService = serviceRepository.findByName(serviceName);
@@ -171,10 +238,9 @@ public class BookingService {
             versionPrice += (bookedService.getPrice() * Quantity);
             bookingDetails.add(serviceBookingDetail);
             bookingDetailRepository.save(serviceBookingDetail);
-            bookingTotalPrice += versionPrice;
             service.put(bookedService.getService_id(),Quantity);
         }
-
+        bookingTotalPrice += versionPrice;
         booking.setTotal(bookingTotalPrice);
         booking.setBookingDate(request.getSlots());
         booking.setBookingDetails(bookingDetails);

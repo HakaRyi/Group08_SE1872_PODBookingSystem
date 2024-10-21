@@ -16,6 +16,9 @@ public interface BuildingRepository  extends JpaRepository<Building, String> {
     @Query(value = "SELECT * FROM Building WHERE name LIKE %:name%", nativeQuery = true)
     List<Building> findAllBuildingByName(@Param("name") String name);
 
+    @Query(value = "SELECT * FROM Building WHERE location LIKE %:location%", nativeQuery = true)
+    List<Building> findAllByLocation(@Param("location") String name);
+
     Building findByName(String name);
 
     boolean existsByName(String name);

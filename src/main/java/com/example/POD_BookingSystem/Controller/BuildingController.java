@@ -40,6 +40,14 @@ public class BuildingController {
                 .build();
     }
 
+    //Get Building By Location API
+    @GetMapping("/location/{name}")
+    ApiResponse<List<BuildingResponse>> getBuildingByLocation(@PathVariable("name") String name){
+        return ApiResponse.<List<BuildingResponse>>builder()
+                .data(buildingService.getBuildingsByLocation(name))
+                .build();
+    }
+
     //Update Building API
     @PutMapping("/{id}")
     ApiResponse<BuildingResponse> updateBuilding(@PathVariable String id, @RequestBody UpdateBuildingRequest request) {

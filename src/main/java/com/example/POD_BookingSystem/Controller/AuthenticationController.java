@@ -51,9 +51,4 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/getUserInfo")
-    ApiResponse<String> getUserInfo(@RequestBody GetUserInfoRequest request) throws ParseException, JOSEException {
-        var result = authenticationService.getUsernameFromToken(request);
-        return ApiResponse.<String>builder().data(result).build();
-    }
 }

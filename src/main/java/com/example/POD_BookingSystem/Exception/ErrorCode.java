@@ -17,7 +17,15 @@ public enum ErrorCode {
     ID_NOT_FOUND(1008, "ID is not existed or not available", HttpStatus.NOT_FOUND),
     NAME_NOT_FOUND(1009, "Wrong name or name is not existed", HttpStatus.NOT_FOUND),
     INVALID_DATE_RANGE(1010,"Invalid date range",HttpStatus.NOT_FOUND),
-//    ROOM_NOT_AVAILABLE(1011,"Room not available",HttpStatus.NOT_FOUND)
+
+    NAME_CANNOT_BE_BLANK(1011, "Name cannot be blank",HttpStatus.BAD_REQUEST),
+    USERNAME_CANNOT_BE_BLANK(1012, "Username cannot be blank",HttpStatus.BAD_REQUEST),
+    PASSWORD_CANNOT_BE_BLANK(1013, "Password cannot be blank",HttpStatus.BAD_REQUEST),
+    PHONE_INVALID(1014, "Invalid phone number",HttpStatus.BAD_REQUEST),
+    EMAIL_CANNOT_BE_BLANK(1015, "Email cannot be blank",HttpStatus.BAD_REQUEST),
+    EMAIL_INVALID(1016, "Invalid email",HttpStatus.BAD_REQUEST),
+    PHONE_EXISTED(1017, "Phone existed",HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTED(1018, "Email existed",HttpStatus.BAD_REQUEST)
     ;
 
     private int code;

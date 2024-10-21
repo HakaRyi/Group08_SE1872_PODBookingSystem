@@ -67,6 +67,12 @@ public class BuildingService {
         return buildingMapper.toBuildingResponse(building);
     }
 
+    //Get Building By Location
+    public List<BuildingResponse> getBuildingsByLocation(String name){
+        List<Building> buildings = buildingRepository.findAllByLocation(name);
+        return  buildings.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
+    }
+
     //Delete Building
     public void deleteBuilding(String id){
         buildingRepository.deleteById(id);

@@ -35,9 +35,15 @@ public class UserService {
     UserMapper userMapper;
 
     public UserResponse createUser(UserCreationRequest request){
-            Role role=roleRepository.findById("Role-04").orElseThrow();
+        Role role=roleRepository.findById("Role-04").orElseThrow();
         if(userRepository.existsByUsername(request.getUsername()))   //kiểm tra user tồn tại hay ko
             throw new AppException(ErrorCode.USER_EXISTED);
+
+        if(request.getPhone() != null && userRepository.existsByPhone(request.getPhone()))   //kiểm tra phone tồn tại hay ko
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+
+        if(userRepository.existsByEmail(request.getEmail()))   //kiểm tra email tồn tại hay ko
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         User user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -47,6 +53,42 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
 
     }
+
+    public UserResponse createStaff(UserCreationRequest request){
+        Role role=roleRepository.findById("Role-03").orElseThrow();
+        if(userRepository.existsByUsername(request.getUsername()))   //kiểm tra user tồn tại hay ko
+            throw new AppException(ErrorCode.USER_EXISTED);
+        if(request.getPhone() != null && userRepository.existsByPhone(request.getPhone()))   //kiểm tra phone tồn tại hay ko
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+        if(userRepository.existsByEmail(request.getEmail()))   //kiểm tra email tồn tại hay ko
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        User user = userMapper.toUser(request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUserid_id(GenerateId());
+        user.setRole_id(role);
+        user.setVIP(VIP.INACTIVE.name());
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public UserResponse createManager(UserCreationRequest request){
+        Role role=roleRepository.findById("Role-02").orElseThrow();
+        if(userRepository.existsByUsername(request.getUsername()))   //kiểm tra user tồn tại hay ko
+            throw new AppException(ErrorCode.USER_EXISTED);
+        if(request.getPhone() != null && userRepository.existsByPhone(request.getPhone()))   //kiểm tra phone tồn tại hay ko
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+        if(userRepository.existsByEmail(request.getEmail()))   //kiểm tra email tồn tại hay ko
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        User user = userMapper.toUser(request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUserid_id(GenerateId());
+        user.setRole_id(role);
+        user.setVIP(VIP.INACTIVE.name());
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+
     public List<UserResponse> getUsers() {
         log.info("In method get Users");
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();

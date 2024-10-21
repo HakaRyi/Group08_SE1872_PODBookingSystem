@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class BookingResponse {
     String booking_id;
-    String userName;
     String booking_date;
     double total;
 }

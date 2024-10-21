@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class RoomResponse {
     String room_id;
     String building_id;
-    String room_name;
+    String name;
     int capacity;
     String availability;
     double price;

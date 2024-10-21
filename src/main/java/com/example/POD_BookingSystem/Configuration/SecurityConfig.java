@@ -31,6 +31,13 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**"};
+    private final String [] GET_ENDPOINT = {"/buildings",
+            "/buildings/{name}",
+            "/buildings/location/{name}",
+            "/rooms","/rooms/name/{name}",
+            "/rooms/building/{id}",
+            "/rooms/type/{id}",
+            "/rooms/status"};
 
     @Value("${jwt.signKey}")
     private String signerKey;
@@ -42,6 +49,7 @@ public class SecurityConfig {
                 request -> request.
                         requestMatchers(AUTHORIZE_SWAGGER).permitAll()
                         .requestMatchers(HttpMethod.POST, AUTHORIZE_ENDPOINT).permitAll()
+                        .requestMatchers(HttpMethod.GET, GET_ENDPOINT).permitAll()
                         .anyRequest().permitAll()
 
         );
