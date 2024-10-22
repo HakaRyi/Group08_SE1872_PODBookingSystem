@@ -69,6 +69,9 @@ public class BookingService {
     @Autowired
     SlotMapper slotMapper;
 
+    @Autowired
+    MailService mailService;
+
     //GET BOOKING BY USERNAME
     public List<BookingResponse> getBookingByUsername(String username){
         String userId = userRepository.findByUsername(username).
@@ -347,6 +350,13 @@ public class BookingService {
         booking.setStatus("CONFIRM");
         booking.setBookingDate(null);
         booking.setBookingServices(null);
+
+        //SEND EMAIL
+        String userName = userRepository.findById(booking.getUser_id()).
+                orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)).getName();
+        String address = room.getBuilding().getAddress();
+        mailService.sendMail("khanghxse180105@fpt.edu.vn", "XÁC NHẬN ĐẶT PHÒNG",
+                userName,room.getName(),booking.getBooking_date().toString(),address);
 
         bookingRepository.resetBookingDate(bookingId);
         bookingRepository.resetBookingService(bookingId);

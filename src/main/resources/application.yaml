@@ -14,6 +14,14 @@ spring:
       show-sql: true
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: haxuankhang194@gmail.com
+    password: riukttjkajzztrra
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 jwt:
   signKey: "XyoNeBIfTwb3rCdDFFnzcXQHcyaX7G+y/nTn5loDeYWuf4hPFMsfwEfjsM5qGz+i"
   valid-duration: 3600
@@ -29,11 +37,12 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
 
-payment:
-  vnPay:
-    url: ${PAY_URL}
-    tmnCode: ${TMN_CODE}
-    secretKey: ${SECRET_KEY}
-    returnUrl: ${RETURN_URL}
-    version: ${VERSION}
-    command: ${COMMAND}
+
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: your-email@example.com
+    password: your-email-password
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true

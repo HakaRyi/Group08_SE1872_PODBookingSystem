@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email Template</title>
+</head>
+<body>
+<h1>Xin chào, <span th:text="${name}">[Tên Khách Hàng]</span></h1>
+<p>Cảm ơn bạn đã đặt phòng với chúng tôi!</p>
+<p>Chi tiết đặt phòng của bạn:</p>
+<ul>
+    <li>Phòng: <span th:text="${roomName}">[Tên Phòng]</span></li>
+    <li>Ngày đặt: <span th:text="${bookingDate}">[Ngày Đặt]</span></li>
+    <li>Địa chỉ văn phòng: <span th:text="${address}">[Tổng Tiền]</span></li>
+</ul>
+<p>Chúng tôi mong sớm được gặp bạn!</p>
+</body>
+</html>
