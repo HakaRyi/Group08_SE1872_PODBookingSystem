@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class RoomInformationResponse {
+    String roomName;
     double amount;
     List<SlotResponse> slots;
     List<ServiceResponse> services;

@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.DTO.Response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookingDetailResponse {
     Map<String, Integer> service;
     String  roomName;

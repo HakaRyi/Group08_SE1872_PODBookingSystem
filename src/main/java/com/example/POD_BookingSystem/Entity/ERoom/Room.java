@@ -2,6 +2,7 @@ package com.example.POD_BookingSystem.Entity.ERoom;
 
 import com.example.POD_BookingSystem.Entity.EBuilding.Building;
 import com.example.POD_BookingSystem.Entity.EBooking.BookingDetail;
+import com.example.POD_BookingSystem.Entity.FeedBack;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -45,4 +46,8 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<RoomSlot> roomSlots;
+
+    @OneToMany(mappedBy = "room")
+    private List<FeedBack> feedbacks;
+
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Data
 @Builder
@@ -22,5 +24,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id",nullable = false, referencedColumnName = "role_id") // Thiết lập khóa ngoại
     Role role_id;
+
+    @OneToMany(mappedBy = "user")
+    private List<FeedBack> feedbacks;
     String VIP;
 }

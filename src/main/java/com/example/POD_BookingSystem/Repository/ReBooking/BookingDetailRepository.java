@@ -14,13 +14,13 @@ import java.util.List;
 public interface BookingDetailRepository extends JpaRepository<BookingDetail, String> {
 //    @Query("Select * from booking_detail where booking_id = :booking_id")
 //    List<BookingDetail> findByBooking(@Param("booking_id") String id);
-    @Query(value = "Select total_price from booking_detail where room_id = :roomId and booking_type = \"ROOM\"", nativeQuery = true)
+    @Query(value = "Select total_price from booking_detail where room_id = :roomId and booking_type = ROOM", nativeQuery = true)
     double getRoomTotalAmount(@Param("roomId") String roomId);
 
-    @Query(value = "Select end_time from booking_detail where room_id = :roomId and booking_type = \"ROOM\"", nativeQuery = true)
+    @Query(value = "Select end_time from booking_detail where room_id = :roomId and booking_type = ROOM", nativeQuery = true)
     LocalDate getRoomEndTime(@Param("roomId") String roomId);
 
-    @Query(value = "Select start_time from booking_detail where room_id = :roomId and booking_type = \"ROOM\"", nativeQuery = true)
+    @Query(value = "Select start_time from booking_detail where room_id = :roomId and booking_type = ROOM", nativeQuery = true)
     LocalDate getRoomStartTime(@Param("roomId") String roomId);
 
     @Query(value = "SELECT * FROM booking_detail WHERE booking_id = :bookingId", nativeQuery = true)
@@ -31,6 +31,9 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, St
 
     @Query(value = "Select bookingVersion from booking_detail WHERE booking_id =:bookingId order by bookingVersion DESC LIMIT 1;", nativeQuery = true)
     public String findLastVersion(@Param("bookingId") String bookingId);
+
+    @Query(value = "SELECT bookingVersion FROM booking_detail WHERE room_id=:roomId order by bookingVersion DESC Limit 1;", nativeQuery = true)
+    String bookingVersion(@Param("roomId") String roomId);
 
     @Query(value = "SELECT * from booking_detail WHERE bookingVersion = :version", nativeQuery = true)
     List<BookingDetail> findDetailByVersion(@Param("version") String version);

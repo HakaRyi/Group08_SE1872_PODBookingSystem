@@ -2,6 +2,7 @@ package com.example.POD_BookingSystem.Controller;
 
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingRequest;
+import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
 import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
 import com.example.POD_BookingSystem.DTO.Response.BookingDetailResponse;
 import com.example.POD_BookingSystem.DTO.Response.BookingInformationResponse;
@@ -60,6 +61,14 @@ public class BookingController {
             (@PathVariable String bookingId, @PathVariable String roomName, @RequestBody CreateBookingDetailRequest request){
         return ApiResponse.<BookingDetailResponse>builder()
                 .data(bookingService.createBookingDetail(bookingId,roomName,request))
+                .build();
+    }
+
+    @PostMapping("/{bookingId}/{roomName}/addServices")
+    ApiResponse<BookingDetailResponse> addServices
+            (@PathVariable String bookingId, @PathVariable String roomName, @RequestBody AddServiceToBookingRequest request){
+        return ApiResponse.<BookingDetailResponse>builder()
+                .data(bookingService.addServiceToBooking(request,bookingId,roomName))
                 .build();
     }
 
