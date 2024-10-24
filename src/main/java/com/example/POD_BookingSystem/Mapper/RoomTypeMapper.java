@@ -2,7 +2,7 @@ package com.example.POD_BookingSystem.Mapper;
 
 import com.example.POD_BookingSystem.DTO.Request.Building.UpdateBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Response.RoomTypeResponse;
-import com.example.POD_BookingSystem.Entity.Room_Type;
+import com.example.POD_BookingSystem.Entity.ERoom.Room_Type;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

@@ -2,7 +2,7 @@ server:
   port: 8080
   servlet:
     context-path: /POD_BookingSystem
-
+#14.225.206.250
 spring:
   datasource:
     url: "jdbc:mysql://14.225.206.250:3306/POD_BookingSystem"
@@ -33,3 +33,11 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
 
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: your-email@example.com
+    password: your-email-password
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true

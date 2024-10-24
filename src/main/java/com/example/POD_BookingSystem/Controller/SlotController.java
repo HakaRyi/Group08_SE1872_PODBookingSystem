@@ -58,7 +58,7 @@ public class SlotController {
 
     //Delete Room API
     @DeleteMapping("/{id}")
-    ApiResponse<Void> deleteRoom(@PathVariable String id) {
+    ApiResponse<Void> deleteSlot(@PathVariable String id) {
         slotService.deleteSlot(id);
         return ApiResponse.<Void>builder().message("Delete Successfully !!!").build();
     }

@@ -2,12 +2,10 @@ package com.example.POD_BookingSystem.Controller;
 
 import com.example.POD_BookingSystem.DTO.Request.Room.AddServiceRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.CreateRoomRequest;
-import com.example.POD_BookingSystem.DTO.Request.Building.UpdateBuildingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.UpdateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
-import com.example.POD_BookingSystem.DTO.Response.BuildingResponse;
 import com.example.POD_BookingSystem.DTO.Response.RoomResponse;
-import com.example.POD_BookingSystem.Entity.Room;
+import com.example.POD_BookingSystem.DTO.Response.ServiceResponse;
 import com.example.POD_BookingSystem.Service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ public class RoomController {
     }
 
     //Get Room By Name API
-    @GetMapping("/name/{name}")
+    @GetMapping("/{name}")
     ApiResponse<List<RoomResponse>> getRoom(@PathVariable String name){
         return ApiResponse.<List<RoomResponse>>builder()
                 .data(roomService.getRoom(name))
@@ -84,6 +82,12 @@ public class RoomController {
         roomService.addService(request, id);
         return ApiResponse.<Void>builder()
                 .message("Add new service Successfully !!!")
+                .build();
+    }
+    @GetMapping("/{id}/service/get")
+    ApiResponse<List<ServiceResponse>> getServiceInRoom(@PathVariable String id){
+        return ApiResponse.<List<ServiceResponse>>builder()
+                .data(roomService.getServicesInRoom(id))
                 .build();
     }
 

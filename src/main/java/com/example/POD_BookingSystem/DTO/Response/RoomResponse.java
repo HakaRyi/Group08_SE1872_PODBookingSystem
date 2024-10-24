@@ -18,7 +18,7 @@ public class RoomResponse {
     int capacity;
     String availability;
     double price;
-    String type_id;
+    String type_name;
     String description;
     LocalDate available_Date;
 }

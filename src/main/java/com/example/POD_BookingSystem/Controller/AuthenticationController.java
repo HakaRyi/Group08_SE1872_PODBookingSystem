@@ -2,6 +2,7 @@ package com.example.POD_BookingSystem.Controller;
 
 
 import com.example.POD_BookingSystem.DTO.Request.Authentication.AuthenticationRequest;
+import com.example.POD_BookingSystem.DTO.Request.Authentication.GetUserInfoRequest;
 import com.example.POD_BookingSystem.DTO.Request.Authentication.IntrospectRequest;
 import com.example.POD_BookingSystem.DTO.Request.Authentication.LogoutRequest;
 import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
@@ -10,6 +11,7 @@ import com.example.POD_BookingSystem.DTO.Response.IntrospectResponse;
 import com.example.POD_BookingSystem.Service.AuthenticationService;
 
 import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -37,8 +39,10 @@ public class AuthenticationController {
                 .build();
     }
     @PostMapping("/log-out")
-    ApiResponse<Void> authenticate(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
-        authenticationService.logout(request);
+    ApiResponse<Void> authenticate(HttpServletRequest request) throws ParseException, JOSEException {
+        String token = request.getHeader("Authorization").substring(7);
+       // String username = authenticationService.getUsernameFromToken(token);
+        authenticationService.logout(token);
         return ApiResponse.<Void>builder()
                 .build();
     }
@@ -49,4 +53,5 @@ public class AuthenticationController {
                 .data(result)
                 .build();
     }
+
 }

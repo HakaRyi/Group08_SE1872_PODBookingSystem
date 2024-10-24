@@ -1,6 +1,6 @@
 package com.example.POD_BookingSystem.Repository.ReRoom;
 
-import com.example.POD_BookingSystem.Entity.Room_Type;
+import com.example.POD_BookingSystem.Entity.ERoom.Room_Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

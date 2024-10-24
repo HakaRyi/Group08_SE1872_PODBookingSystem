@@ -26,7 +26,9 @@ NAME_CANNOT_BE_BLANK(1011, "Name cannot be blank",HttpStatus.BAD_REQUEST),
     EMAIL_CANNOT_BE_BLANK(1015, "Email cannot be blank",HttpStatus.BAD_REQUEST),
     EMAIL_INVALID(1016, "Invalid email",HttpStatus.BAD_REQUEST),
     PHONE_EXISTED(1017, "Phone existed",HttpStatus.BAD_REQUEST),
-    EMAIL_EXISTED(1018, "Email existed",HttpStatus.BAD_REQUEST)
+    EMAIL_EXISTED(1018, "Email existed",HttpStatus.BAD_REQUEST),
+    CONFIRM_PASSWORD_CANNOT_BE_BLANK(1019, "Confirm password cannot be blank",HttpStatus.BAD_REQUEST),
+    PASSWORDS_DO_NOT_MATCH(1020, "Password do not match",HttpStatus.BAD_REQUEST),
     ;
 
     private int code;

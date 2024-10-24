@@ -1,4 +1,4 @@
-package com.example.POD_BookingSystem.Entity;
+package com.example.POD_BookingSystem.Entity.ERoom;
 
 import jakarta.persistence.*;
 import lombok.*;

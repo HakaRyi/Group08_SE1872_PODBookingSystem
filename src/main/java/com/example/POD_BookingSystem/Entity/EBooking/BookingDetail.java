@@ -1,8 +1,6 @@
 package com.example.POD_BookingSystem.Entity.EBooking;
 
-import com.example.POD_BookingSystem.Entity.Role;
-import com.example.POD_BookingSystem.Entity.Room;
-import com.example.POD_BookingSystem.Entity.Service;
+import com.example.POD_BookingSystem.Entity.ERoom.Room;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,25 +19,19 @@ import java.time.LocalDateTime;
 public class BookingDetail {
     @Id
     String booking_detail_id;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id",nullable = false, referencedColumnName = "room_id")
-    Room room_id;
-
-    @ManyToOne
-    @JoinColumn(name = "booking_id",nullable = false, referencedColumnName = "booking_id") // Thiết lập khóa ngoại
-    Booking booking_id;
-
     String booking_type;
-
-    @ManyToOne
-    @JoinColumn(name = "service_id",nullable = false, referencedColumnName = "service_id")
-    Service service_id;
-
+    String service_id;
     int quantity;
     double total_price;
     LocalDateTime timestamp;
     String status;
     LocalDate start_time;
     LocalDate end_time;
+    String bookingVersion;
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "room_id", nullable = false) // Liên kết với Room
+    private Room room;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
 }

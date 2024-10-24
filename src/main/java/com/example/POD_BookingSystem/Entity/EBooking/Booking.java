@@ -1,6 +1,6 @@
 package com.example.POD_BookingSystem.Entity.EBooking;
 
-import com.example.POD_BookingSystem.Entity.ETransaction.Transaction;
+import com.example.POD_BookingSystem.Entity.ERoom.RoomSlot;
 import com.example.POD_BookingSystem.Entity.Slot;
 import com.example.POD_BookingSystem.Entity.User;
 import jakarta.persistence.*;
@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -19,24 +20,35 @@ import java.util.List;
 @Table(name = "booking")
 public class Booking {
     @Id
-
     String booking_id;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "userid_id")
-    User user_id;
+    @JoinColumn(name = "user_id",referencedColumnName = "userid_id")
+    User user;
     LocalDate booking_date;
     double total;
+    String status;
 
-    @OneToMany(mappedBy = "booking_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<BookingDetail> bookingDetails;
-    @OneToMany(mappedBy = "booking_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Transaction> transaction;
+    @ElementCollection
+    Map<String, Integer> bookedService;
+
+    @ElementCollection
+    Map<String, List<LocalDate>> bookingDate;
 
     @ManyToMany
     @JoinTable(
             name = "Room_slot",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "slot_id")
+            joinColumns = @JoinColumn(name = "booking_id"),  // khóa chính của Booking
+            inverseJoinColumns = @JoinColumn(name = "slot_id")  // khóa chính của Slot
     )
     List<Slot> slots;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<BookingDetail> bookingDetails;
+
+    @OneToMany(mappedBy = "booking")
+    private List<Booking_service> bookingServices;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<RoomSlot> roomSlots;
+
 }

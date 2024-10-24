@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.Service;
 
+import com.example.POD_BookingSystem.DTO.Request.Authentication.GetUserInfoRequest;
 import com.example.POD_BookingSystem.DTO.Request.Authentication.IntrospectRequest;
 import com.example.POD_BookingSystem.DTO.Request.Authentication.LogoutRequest;
 import com.example.POD_BookingSystem.DTO.Response.AuthenticationResponse;
@@ -50,7 +51,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        var user = userRepository.findByUsername(request.getUsername())
+        var user = userRepository.findByPhone(request.getPhone())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
 
@@ -60,7 +61,7 @@ public class AuthenticationService {
         if (!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token = generateToken(request.getUsername());
+        var token = generateToken(request.getPhone());
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -112,8 +113,8 @@ public class AuthenticationService {
         }
     }
 
-    public void logout(LogoutRequest request) throws ParseException, JOSEException {
-        var signToken = verifyToken(request.getToken());
+    public void logout(String token) throws ParseException, JOSEException {
+        var signToken = verifyToken(token);
 
         String jit = signToken.getJWTClaimsSet().getJWTID();
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
@@ -142,6 +143,18 @@ public class AuthenticationService {
 
         return signedJWT;
 
+    }
+    public String getUsernameFromToken(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = verifyToken(token); // Xác thực token
+
+        // Lấy username từ claims
+        String username = signedJWT.getJWTClaimsSet().getSubject();
+
+        if (username == null || username.isEmpty()) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED); // Nếu không tìm thấy username, throw exception
+        }
+
+        return username; // Trả về username
     }
 
 

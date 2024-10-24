@@ -4,7 +4,10 @@ import com.example.POD_BookingSystem.DTO.Request.User.UserCreationRequest;
 import com.example.POD_BookingSystem.DTO.Request.User.UserUpdateRequest;
 import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
 import com.example.POD_BookingSystem.DTO.Response.UserResponse;
+import com.example.POD_BookingSystem.Service.AuthenticationService;
 import com.example.POD_BookingSystem.Service.UserService;
+import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    AuthenticationService authenticationService;
 
     @PostMapping("/customer")
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
@@ -80,7 +86,9 @@ public class UserController {
     }
 
     @GetMapping("/myinfo")
-    ApiResponse<UserResponse> getMyInfo() {
+    ApiResponse<UserResponse> getMyInfo(){
+//        String token = request.getHeader("Authorization").substring(7);
+//        String username = authenticationService.getUsernameFromToken(token);
         return ApiResponse.<UserResponse>builder()
                 .data(userService.getMyInfo())
                 .build();

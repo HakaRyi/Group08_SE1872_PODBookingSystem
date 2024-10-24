@@ -32,15 +32,15 @@ public class ServiceController {
 
     //Get All Service API
     @GetMapping
-    ApiResponse<List<ServiceResponse>> getBuildings(){
+    ApiResponse<List<ServiceResponse>> getServices(){
         return ApiResponse.<List<ServiceResponse>>builder()
                 .data(serviceService.getAllService())
                 .build();
     }
 
-    //Get Room By Name API
+    //Get Service By Name API
     @GetMapping("/{name}")
-    ApiResponse<List<ServiceResponse>> getBuilding(@PathVariable String name){
+    ApiResponse<List<ServiceResponse>> getService(@PathVariable String name){
         return ApiResponse.<List<ServiceResponse>>builder()
                 .data(serviceService.getServices(name))
                 .build();
@@ -48,13 +48,13 @@ public class ServiceController {
 
     //Update Service API
     @PutMapping("/{id}")
-    ApiResponse<ServiceResponse> updateRoom(@PathVariable String id, @RequestBody UpdateServiceRequest request) {
+    ApiResponse<ServiceResponse> updateService(@PathVariable String id, @RequestBody UpdateServiceRequest request) {
         return ApiResponse.<ServiceResponse>builder().data(serviceService.updateService(id, request)).build();
     }
 
-    //Delete Room API
+    //Delete Service API
     @DeleteMapping("/{id}")
-    ApiResponse<Void> deleteRoom(@PathVariable String id) {
+    ApiResponse<Void> deleteService(@PathVariable String id) {
         serviceService.deleteService(id);
         return ApiResponse.<Void>builder().message("Delete Successfully !!!").build();
     }

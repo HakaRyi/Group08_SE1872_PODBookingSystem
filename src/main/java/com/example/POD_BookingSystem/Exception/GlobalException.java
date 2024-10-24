@@ -5,11 +5,13 @@ import com.example.POD_BookingSystem.Exception.ErrorCode;
 //import com.example.identity_service.dto.request.ApiResponse;
 //import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Map;
 import java.util.Objects;
@@ -83,6 +85,17 @@ public class GlobalException {
                         .build()
         );
     }
+//    @ExceptionHandler(RuntimeException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException ex) {
+//        ApiResponse<String> response = ApiResponse.<String>builder()
+//                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                .message("An error occurred: " + ex.getMessage())
+//                .build();
+//
+//        // Trả về phản hồi với mã trạng thái 500
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//    }
 //
 //    private String mapAtribute(String message, Map<String, Object> attribute){
 //        String minValue = String.valueOf(attribute.get(MIN_ATTRIBUTE));
