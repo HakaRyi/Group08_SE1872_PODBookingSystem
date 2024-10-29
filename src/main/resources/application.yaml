@@ -46,3 +46,13 @@ springdoc:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+
+twilio:
+  account_sid: ACb64fbab279b730b3ccf1980937c6db19
+  auth_token: 4246a8f66efb5b11ba5358d528a827c8
+  verify_sid: VA3db9a978e959f96b9b8a9e4684675398
+  verified-number: "+84357732955"
+
+sms:
+  url : "https://api.speedsms.vn/index.php"
+  token: rey0QssUXchxOL9p3u3dkp1LVah8VVYP

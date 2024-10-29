@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.Entity;
 
+import com.example.POD_BookingSystem.Entity.EBooking.Booking;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,9 +24,13 @@ public class User {
     String email;
     @ManyToOne
     @JoinColumn(name = "role_id",nullable = false, referencedColumnName = "role_id") // Thiết lập khóa ngoại
-    Role role_id;
+    Role role;
 
     @OneToMany(mappedBy = "user")
     private List<FeedBack> feedbacks;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Booking> bookings;
+
     String VIP;
 }

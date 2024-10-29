@@ -1,0 +1,99 @@
+body {
+    background-color: #f7f1e3; /* Màu nền nhẹ */
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%2Fimages%3Fk%3D%2522christmas%2Bbackgrounds%2522&psig=AOvVaw38dHMKi1yJ2k29XzXmEeV_&ust=1730044163019000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMDntv6yrIkDFQAAAAAdAAAAABAE'); /* Đường dẫn đến ảnh nền Giáng Sinh */
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow-y: auto;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* Nền trắng mờ */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: auto;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #e74c3c; /* Màu đỏ đậm */
+    text-shadow: 2px 2px #c0392b;
+}
+
+h2 {
+    color: #27ae60; /* Màu xanh lá cây */
+    margin: 10px 0;
+}
+
+button {
+    background-color: #27ae60; /* Màu xanh lá cây đậm */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2ecc71; /* Màu xanh lá cây sáng hơn */
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Hiệu ứng tuyết rơi */
+@keyframes snow {
+    0% { top: -10px; opacity: 1; }
+    100% { top: 90vh; opacity: 0; }
+}
+
+.snowflake {
+    position: absolute;
+    top: -10px;
+    font-size: 1.2rem;
+    color: white;
+    opacity: 0.8;
+    animation: snow 5s linear infinite;
+    animation-delay: calc(-1s * var(--i)); /* Thay đổi thời gian bắt đầu */
+}
+
+.snowflake:nth-child(1) { --i: 1; left: 10%; animation-duration: 12s; }
+.snowflake:nth-child(2) { --i: 2; left: 20%; animation-duration: 10s; }
+.snowflake:nth-child(3) { --i: 3; left: 30%; animation-duration: 14s; }
+.snowflake:nth-child(4) { --i: 4; left: 40%; animation-duration: 8s; }
+.snowflake:nth-child(5) { --i: 5; left: 50%; animation-duration: 16s; }
+.snowflake:nth-child(6) { --i: 6; left: 60%; animation-duration: 9s; }
+.snowflake:nth-child(7) { --i: 7; left: 70%; animation-duration: 13s; }
+.snowflake:nth-child(8) { --i: 8; left: 80%; animation-duration: 11s; }
+.snowflake:nth-child(9) { --i: 9; left: 90%; animation-duration: 10s; }
+.snowflake:nth-child(10) { --i: 10; left: 5%; animation-duration: 15s; }
+.snowflake:nth-child(11) { --i: 11; left: 15%; animation-duration: 12s; }
+.snowflake:nth-child(12) { --i: 12; left: 25%; animation-duration: 14s; }
+.snowflake:nth-child(13) { --i: 13; left: 35%; animation-duration: 11s; }
+.snowflake:nth-child(14) { --i: 14; left: 45%; animation-duration: 8s; }
+.snowflake:nth-child(15) { --i: 15; left: 55%; animation-duration: 9s; }

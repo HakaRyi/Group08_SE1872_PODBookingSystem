@@ -3,6 +3,7 @@ package com.example.POD_BookingSystem.Entity.EBooking;
 import com.example.POD_BookingSystem.Entity.ERoom.RoomSlot;
 import com.example.POD_BookingSystem.Entity.FeedBack;
 import com.example.POD_BookingSystem.Entity.Slot;
+import com.example.POD_BookingSystem.Entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,10 +22,11 @@ import java.util.Map;
 public class Booking {
     @Id
     String booking_id;
-    String user_id;
+
     LocalDate booking_date;
     double total;
     String status;
+    String TxnRef;
 
     @ElementCollection
     Map<String, Integer> bookedService;
@@ -39,6 +41,10 @@ public class Booking {
             inverseJoinColumns = @JoinColumn(name = "slot_id")  // khóa chính của Slot
     )
     List<Slot> slots;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "userid_id")
+    User user;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<BookingDetail> bookingDetails;

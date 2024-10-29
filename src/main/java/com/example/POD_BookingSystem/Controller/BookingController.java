@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.Controller;
 
+import com.example.POD_BookingSystem.DTO.Request.Booking.CancelPaymentRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
@@ -49,7 +50,7 @@ public class BookingController {
     }
 
     @PostMapping("/book")
-    Booking createBooking (HttpServletRequest request) throws ParseException, JOSEException {
+    BookingResponse createBooking (HttpServletRequest request) throws ParseException, JOSEException {
         //Lay username tu JWT token
         String token = request.getHeader("Authorization").substring(7); // Bỏ qua "Bearer " trong token
         String username = authenticationService.getUsernameFromToken(token);
@@ -72,16 +73,73 @@ public class BookingController {
                 .build();
     }
 
-    @PostMapping("/{bookingId}/confirm")
-    ApiResponse<Void> confirmBooking(@PathVariable String bookingId){
-        bookingService.confirmBooking(bookingId);
+    @PostMapping("/{bookingId}/{bookingDate}/confirm")
+    ApiResponse<Void> confirmBooking(@PathVariable String bookingId, @PathVariable String bookingDate){
+        bookingService.confirmBooking(bookingId, bookingDate);
         return ApiResponse.<Void>builder().message("Book SuccessFully !!!").build();
     }
 
+    @PostMapping("/{bookingId}/cancelPayment")
+    ApiResponse<Void> cancelPayment(@RequestBody CancelPaymentRequest request, @PathVariable String bookingId){
+        bookingService.cancelPayment(request.getAmount(), bookingId);
+        return ApiResponse.<Void>builder()
+                .message("Cancel Successfully")
+                .build();
+    }
 //    @PostMapping({"/{}/booking"})
 //    public ResponseEntity<BookingDetail> createBookingDetail(@PathVariable String roomName,
 //                                                             @RequestBody CreateBookingDetailRequest request){
 //
 //
 //    }
+@PostMapping("/request-checkin/{bookingId}")
+ApiResponse<String> requestCheckin(@PathVariable String bookingId) {
+    bookingService.requestCheckin(bookingId);
+    return ApiResponse.<String>builder()
+            .data("Request submitted successfully")
+            .build();
+
+}
+    @PostMapping("/approve-checkin/{bookingId}")
+    ApiResponse<String> approveCheckin(@PathVariable String bookingId){
+        bookingService.approveCheckin(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-in approved successfully")
+                .build();
+
+    }
+    @PostMapping("/reject-checkin/{bookingId}")
+    ApiResponse<String> rejectCheckin(@PathVariable String bookingId){
+        bookingService.rejectCheckin(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-in rejected successfully")
+                .build();
+
+    }
+
+    @PostMapping("/request-checkout/{bookingId}")
+    ApiResponse<String> requestCheckout(@PathVariable String bookingId) {
+        bookingService.requestCheckout(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Request submitted successfully")
+                .build();
+
+    }
+    @PostMapping("/approve-checkout/{bookingId}")
+    ApiResponse<String> approveCheckout(@PathVariable String bookingId){
+        bookingService.approveCheckout(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-out approved successfully")
+                .build();
+
+    }
+    @PostMapping("/reject-checkout/{bookingId}")
+    ApiResponse<String> rejectCheckout(@PathVariable String bookingId){
+        bookingService.rejectCheckout(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-out rejected successfully")
+                .build();
+
+    }
+
 }

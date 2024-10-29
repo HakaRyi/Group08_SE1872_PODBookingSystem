@@ -48,7 +48,7 @@ public class UserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setUserid_id(GenerateId());
-        user.setRole_id(role);
+        user.setRole(role);
         user.setVIP(VIP.INACTIVE.name());
         return userMapper.toUserResponse(userRepository.save(user));
 
@@ -66,7 +66,7 @@ public class UserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setUserid_id(GenerateId());
-        user.setRole_id(role);
+        user.setRole(role);
         user.setVIP(VIP.INACTIVE.name());
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -83,7 +83,7 @@ public class UserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setUserid_id(GenerateId());
-        user.setRole_id(role);
+        user.setRole(role);
         user.setVIP(VIP.INACTIVE.name());
         return userMapper.toUserResponse(userRepository.save(user));
     }

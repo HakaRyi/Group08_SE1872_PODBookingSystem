@@ -1,6 +1,5 @@
 package com.example.POD_BookingSystem.Service;
 
-import com.example.POD_BookingSystem.DTO.Request.Authentication.GetUserInfoRequest;
 import com.example.POD_BookingSystem.DTO.Request.Authentication.IntrospectRequest;
 import com.example.POD_BookingSystem.DTO.Request.Authentication.LogoutRequest;
 import com.example.POD_BookingSystem.DTO.Response.AuthenticationResponse;
@@ -61,7 +60,7 @@ public class AuthenticationService {
         if (!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token = generateToken(request.getUsername());
+        var token = generateToken(user.getUsername(),user.getRole().getRoleName());
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -85,7 +84,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String username) {
+    private String generateToken(String username, String roleName) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);  //build header
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()  // build payload
@@ -96,7 +95,7 @@ public class AuthenticationService {
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("customClaim", "Custom")
+                .claim("Role", roleName)
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -157,6 +156,19 @@ public class AuthenticationService {
         }
 
         return username; // Trả về username
+    }
+
+    public String getRoleFromToken(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = verifyToken(token); // Xác thực token
+
+        // Lấy role từ claims
+        String roleName = (String) signedJWT.getJWTClaimsSet().getClaim("Role");
+
+        if (roleName == null || roleName.isEmpty()) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        return roleName; // Trả về role
     }
 
 }

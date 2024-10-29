@@ -20,7 +20,7 @@ public class Role {
     String role_id;
     String roleName;
     // Mối quan hệ 1-nhiều với bảng User
-    @OneToMany(mappedBy = "role_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     List<User> users;
 
 

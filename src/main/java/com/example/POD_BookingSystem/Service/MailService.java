@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -46,5 +47,14 @@ public class MailService {
             }
         };
         mailSender.send(preparator);
+    }
+
+    public void sendOtpEmail(String to, int otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Your OTP Code");
+        message.setText("Your OTP code is: " + otp);
+
+        mailSender.send(message);
     }
 }
