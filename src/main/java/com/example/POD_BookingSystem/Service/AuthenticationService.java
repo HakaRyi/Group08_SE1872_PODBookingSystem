@@ -61,7 +61,7 @@ public class AuthenticationService {
         if (!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token = generateToken(request.getPhone());
+        var token = generateToken(user.getUsername(),user.getRole_id().getRoleName());
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -85,7 +85,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String username) {
+    private String generateToken(String username, String roleName) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);  //build header
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()  // build payload
@@ -96,7 +96,7 @@ public class AuthenticationService {
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("customClaim", "Custom")
+                .claim("Role", roleName) //chèn role vào token
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -155,6 +155,18 @@ public class AuthenticationService {
         }
 
         return username; // Trả về username
+    }
+    public String getRoleFromToken(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = verifyToken(token); // Xác thực token
+
+        // Lấy role từ claims
+        String roleName = (String) signedJWT.getJWTClaimsSet().getClaim("Role");
+
+        if (roleName == null || roleName.isEmpty()) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        return roleName; // Trả về role
     }
 
 

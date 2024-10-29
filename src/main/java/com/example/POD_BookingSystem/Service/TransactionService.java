@@ -62,58 +62,39 @@ public class TransactionService {
     public TransactionDetailResponse createTransactionDetail(Booking booking){
 
         Transaction transaction = transactionRepository.findBookingId(booking.getBooking_id());
-        List<BookingDetail> bookingDetails = bookingDetailRepository.findByBookingId(booking.getBooking_id());
 
-        // Biến kiểm tra xem đã có bản ghi transaction_detail cho giao dịch đã xác nhận chưa
-        boolean hasConfirmedTransactionDetail = false;
+        String transactionType = determineTransactionType(booking.getStatus());
+        double amount = calculateAmount(booking, transactionType); // Calculate amount
 
-        // Duyệt qua từng bookingDetail để kiểm tra trạng thái và tạo bản ghi tương ứng trong transaction_detail
-        for (BookingDetail bookingDetail : bookingDetails) {
-            String transactionType = determineTransactionType(bookingDetail.getStatus());
-
-            // Nếu trạng thái là CONFIRM và chưa có bản ghi transaction_detail thì tạo mới
-            if ("CONFIRM".equals(bookingDetail.getStatus()) && !hasConfirmedTransactionDetail) {
-                TransactionDetail transactionDetail = TransactionDetail.builder()
-                        .transaction_detail_id(GenerateTransactionDetailId())
-                        .transaction_id(transaction)
-                        .transaction_type("PAYMENT")
-                        .description(generateDescription("PAYMENT"))
-                        .amount(booking.getTotal()) // Tổng số tiền của cả booking
-                        .bank_name(" ")
-                        .bank_account_number(" ")
-                        .payment_status("Success")
-                        .transaction_date(LocalDateTime.now())
-                        .build();
-                transactionDetailRepository.save(transactionDetail);
-                hasConfirmedTransactionDetail = true; // Đánh dấu đã tạo bản ghi cho giao dịch đã xác nhận
-            }
-
-            // Chỉ tạo transaction detail nếu là dịch vụ mới
-            if ("ADD_SERVICE".equals(transactionType)) {
-                TransactionDetail transactionDetail = TransactionDetail.builder()
-                        .transaction_detail_id(GenerateTransactionDetailId())
-                        .transaction_id(transaction)
-                        .transaction_type(transactionType)
-                        .description(generateDescription(transactionType))
-                        .amount(calculateAmount(booking, bookingDetail, transactionType))
-                        .bank_name(" ")
-                        .bank_account_number(" ")
-                        .payment_status("Success")
-                        .transaction_date(LocalDateTime.now())
-                        .build();
-                transactionDetailRepository.save(transactionDetail);
-            }
+        if (transactionType != null) {
+            saveTransactionDetail(transaction, transactionType, generateDescription(transactionType), amount);
         }
         return TransactionDetailResponse.builder()
                 .transaction_detail_id(GenerateTransactionDetailId())
                 .transaction_id(transaction.getTransaction_id())
                 .transaction_type("Payment")  // Mặc định là thanh toán
                 .description("Payment for deposit and services")
-                .amount(booking.getTotal())   // Tổng số tiền của cả booking
+                .amount(amount)   // Tổng số tiền của cả booking
                 .payment_status("Success")
                 .transaction_date(LocalDateTime.now())
                 .build();
     }
+
+    private void saveTransactionDetail(Transaction transaction, String transactionType, String description, double amount) {
+        TransactionDetail transactionDetail = TransactionDetail.builder()
+                .transaction_detail_id(GenerateTransactionDetailId())
+                .transaction_id(transaction)
+                .transaction_type(transactionType)
+                .description(description)
+                .amount(amount)
+                .bank_name(" ")
+                .bank_account_number(" ")
+                .payment_status("Success")
+                .transaction_date(LocalDateTime.now())
+                .build();
+        transactionDetailRepository.save(transactionDetail);
+    }
+
     // Xác định loại giao dịch (Payment, Checkin, Checkout, Add Service)
     private String determineTransactionType(String bookingDetailStatus) {
         switch (bookingDetailStatus) {
@@ -145,14 +126,14 @@ public class TransactionService {
         }
     }
 
-    private double calculateAmount(Booking booking, BookingDetail bookingDetail, String transactionType) {
+    private double calculateAmount(Booking booking, String transactionType) {
         if ("CHECK IN".equals(transactionType) || "CHECK OUT".equals(transactionType)) {
             return 0.0;
         }
-        String currentBookingVersion = bookingDetail.getBookingVersion();
-        if ("SERVICE".equals(bookingDetail.getBooking_type()) && bookingDetail.getBookingVersion().equals(currentBookingVersion)) {
-            return bookingDetail.getTotal_price();
-        }
+//        String currentBookingVersion = bookingDetail.getBookingVersion();
+//        if ("SERVICE".equals(bookingDetail.getBooking_type()) && bookingDetail.getBookingVersion().equals(currentBookingVersion)) {
+//            return bookingDetail.getTotal_price();
+//        }
         return booking.getTotal();
     }
 
@@ -164,7 +145,7 @@ public class TransactionService {
         }
         return "T-01";
     }
-    private String GenerateTransactionDetailId(){
+    public String GenerateTransactionDetailId(){
         String id = transactionDetailRepository.findLastId();
         if(!(id == null)){
             int number = Integer.parseInt(id.substring(3))+1;

@@ -63,6 +63,55 @@ public class BookingController {
                 .build();
 
     }
+    @PostMapping("/request-checkin/{bookingId}")
+    ApiResponse<String> requestCheckin(@PathVariable String bookingId) {
+        bookingService.requestCheckin(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Request submitted successfully")
+                .build();
+
+    }
+    @PostMapping("/approve-checkin/{bookingId}")
+    ApiResponse<String> approveCheckin(@PathVariable String bookingId){
+        bookingService.approveCheckin(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-in approved successfully")
+                .build();
+
+    }
+    @PostMapping("/reject-checkin/{bookingId}")
+    ApiResponse<String> rejectCheckin(@PathVariable String bookingId){
+        bookingService.rejectCheckin(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-in rejected successfully")
+                .build();
+
+    }
+
+    @PostMapping("/request-checkout/{bookingId}")
+    ApiResponse<String> requestCheckout(@PathVariable String bookingId) {
+        bookingService.requestCheckout(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Request submitted successfully")
+                .build();
+
+    }
+    @PostMapping("/approve-checkout/{bookingId}")
+    ApiResponse<String> approveCheckout(@PathVariable String bookingId){
+        bookingService.approveCheckout(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-out approved successfully")
+                .build();
+
+    }
+    @PostMapping("/reject-checkout/{bookingId}")
+    ApiResponse<String> rejectCheckout(@PathVariable String bookingId){
+        bookingService.rejectCheckout(bookingId);
+        return ApiResponse.<String>builder()
+                .data("Check-out rejected successfully")
+                .build();
+
+    }
 
     @PostMapping("/{bookingId}/{roomName}/bookingdetails")
     ApiResponse<BookingDetailResponse> createBookingDetail

@@ -382,12 +382,18 @@ public class BookingService {
                 userName,room.getName(),booking.getBooking_date().toString(),address);
 
         bookingRepository.resetBookingDate(bookingId);
-        bookingRepository.resetBookingService(bookingId );
+        bookingRepository.resetBookingService(bookingId);
 
         bookingRepository.save(booking);
+        log.info("go to createPayment");
+
         paymentService.createPayment(booking);
+        log.info("go to createPaymentDetail");
+
         paymentService.createPaymentDetail(booking);
+        log.info("go to Transaction");
         transactionService.createTransaction(booking,booking.getUser());
+        log.info("go to TransactionDetail");
         transactionService.createTransactionDetail(booking);
     }
 
@@ -422,5 +428,83 @@ public class BookingService {
 
     private String GenerateRoomSlotId() {
         return UUID.randomUUID().toString(); // Tạo ID ngẫu nhiên
+    }
+    //CHECKIN
+    public void requestCheckin(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if(!"CONFIRM".equals(booking.getStatus())){
+            throw new RuntimeException("Request check in can only be made for booking with status 'CONFIRM'");
+        }
+      booking.setStatus("CHECK_IN_REQUEST");
+        bookingRepository.save(booking);
+    }
+    public void approveCheckin(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if(!"CHECK_IN_REQUEST".equals(booking.getStatus())){
+            throw new RuntimeException("Check in can only be approved for booking with status 'CHECK_IN_REQUEST'");
+        }
+        booking.setStatus("CHECK_IN");
+        bookingRepository.save(booking);
+
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findByBookingId(bookingId);
+        for (BookingDetail detail : bookingDetails) {
+            if (!"CHECK_IN".equals(detail.getStatus())) {
+                detail.setStatus("CHECK_IN");
+                bookingDetailRepository.save(detail);
+            }
+        }
+        transactionService.createTransactionDetail(booking);
+    }
+    public void rejectCheckin(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if(!"CHECK_IN_REQUEST".equals(booking.getStatus())){
+            throw new RuntimeException("Reject check in can only be rejected for booking with status 'CHECK_IN_REQUEST'");
+        }
+        booking.setStatus("CONFIRM");
+        bookingRepository.save(booking);
+    }
+
+
+    //CHECK OUT
+    public void requestCheckout(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if(!"CHECK_IN".equals(booking.getStatus())){
+            throw new RuntimeException("Request check out can only be made for booking with status 'CHECK_IN'");
+        }
+
+        booking.setStatus("CHECK_OUT_REQUEST");
+        bookingRepository.save(booking);
+    }
+    public void approveCheckout(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if(!"CHECK_OUT_REQUEST".equals(booking.getStatus())){
+            throw new RuntimeException("Check out can only be approved for booking with status 'CHECK_OUT_REQUEST'");
+        }
+
+        booking.setStatus("CHECK_OUT");
+        bookingRepository.save(booking);
+
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findByBookingId(bookingId);
+        for (BookingDetail detail : bookingDetails) {
+            if (!"CHECK_OUT".equals(detail.getStatus())) {
+                detail.setStatus("CHECK_OUT");
+                bookingDetailRepository.save(detail);
+            }
+        }
+        transactionService.createTransactionDetail(booking);
+    }
+    public void rejectCheckout(String bookingId){
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        if(!"CHECK_OUT_REQUEST".equals(booking.getStatus())){
+            throw new RuntimeException("Reject check out can only be rejected for booking with status 'CHECK_OUT_REQUEST'");
+        }
+        booking.setStatus("CHECK_IN");
+        bookingRepository.save(booking);
     }
 }
