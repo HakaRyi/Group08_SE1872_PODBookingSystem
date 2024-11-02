@@ -1,197 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Login & Register Form</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/login.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Form</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/login.css">
 </head>
 <body>
 
-  <div class="form">
-    <div class="form-panel one">
-      <div class="form-header">
-        <h1>Account Login</h1>
-      </div>
-      <div class="form-content">
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="reg-phone">Phone Number</label>
-            <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}" title="Please enter a valid phone number with 10-15 digits.">
-          </div>          
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-          </div>
-          <div class="form-group">
-            <button type="submit" aria-label="Log In" id="loginButton">Log In</button>
-          </div>
-        </form>
-      </div>
-      <div class="form-footer">
-        <p>Don't have an account? <a href="signup.html" id="signup-link">Create an account</a></p>
-      </div>
+    <!-- Modal Structure -->
+    <div id="messageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
     </div>
 
-    <div class="form-panel two">
-      <div class="form-header">
-        <h1>Register Account</h1>
-      </div>
-      <div class="form-content">
-        <form id="signupForm">
-          <div class="form-group">
-            <label for="reg-password">Password</label>
-            <input type="password" id="reg-password" name="password" required>
-          </div>
-          <div class="form-group">
-            <label for="cpassword">Confirm Password</label>
-            <input type="password" id="cpassword" name="cpassword" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-          <div class="form-group">
-            <label for="reg-phone">Phone Number</label>
-            <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}" title="Please enter a valid phone number with 10-15 digits.">
-          </div>
-          <div class="form-group">
-            <button type="submit" aria-label="Register" id="registerButton">Register</button>
-          </div>
-        </form>
-      </div>
+    <div class="form">
+        <div class="form-panel one">
+            <div class="form-header">
+                <h1>Account Login</h1>
+            </div>
+            <div class="form-content">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" aria-label="Log In" id="loginButton">Log In</button>
+                    </div>
+                </form>
+            </div>
+            <div class="form-footer">
+                <p>Don't have an account? <a href="signup.html" id="signup-link">Create an account</a></p>
+            </div>
+        </div>
     </div>
-    <div class="form-toggle" aria-label="Toggle Form">+</div>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      var panelOneHeight = $('.form-panel.one').outerHeight(),
-          panelTwoHeight = $('.form-panel.two').outerHeight();
+    <button type="button" class="google-sign-in-button" >
+        Sign in with Google
+      </button>
+      
+      <button type="button" class="google-sign-in-button" disabled>
+        Sign in with Google
+      </button>
 
-      $('.form-panel.two').on('click', function(e) {
-        e.preventDefault();
-        $('.form-panel.two').addClass('active');
-        $('.form').animate({
-          'height': panelTwoHeight
-        }, 200);
-      });
+    <script>
+        // Modal Script
+        function showModal(message) {
+            var modal = document.getElementById("messageModal");
+            var modalMessage = document.getElementById("modalMessage");
+            var closeModalBtn = document.getElementById("closeModal");
 
-      $('.form-toggle').on('click', function(e) {
-        e.preventDefault();
-        $('.form-panel.two').removeClass('active');
-        $('.form').animate({
-          'height': panelOneHeight
-        }, 200);
-      });
-    });
-  </script>
+            modalMessage.textContent = message;
+            modal.style.display = "block";
 
-  <!-- Script to handle Login API call -->
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const loginButton = document.getElementById('loginButton');
+            closeModalBtn.onclick = function () {
+                modal.style.display = "none";
+            };
 
-    if (loginButton) {
-      loginButton.addEventListener('click', async function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const phone = document.getElementById('reg-phone').value;
-        const password = document.getElementById('password').value;
-
-        try {
-          const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
-          const requestData = { phone, password };
-
-          console.log('Sending login request to:', apiUrl);
-          console.log('Request Data:', requestData);
-
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestData)
-          });
-
-          if (!response.ok) {
-            console.error(`Login failed with status ${response.status}`);
-            return;
-          }
-
-          const result = await response.json(); 
-
-          console.log('Response received:', result);
-
-          if (result.data && result.data.token) {
-            localStorage.setItem('authToken', result.data.token);
-            window.location.href = 'index.html';
-          } else {
-            console.error('Login failed: Invalid credentials or server error.');
-          }
-
-        } catch (error) {
-          console.error('Error logging in:', error);
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
         }
-      });
-    }
 
-    const signupForm = document.getElementById('signupForm');
-    signupForm.addEventListener('submit', async function (event) {
-      event.preventDefault();
+        // Event listener for login button
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginButton = document.getElementById('loginButton');
 
-      const password = document.getElementById('reg-password').value;
-      const cpassword = document.getElementById('cpassword').value;
-      const email = document.getElementById('email').value;
-      const phone = document.getElementById('reg-phone').value;
+            loginButton.addEventListener('click', async function (event) {
+                event.preventDefault(); // Ngăn form tự động submit và tải lại trang
 
-      if (password !== cpassword) {
-        alert('Passwords do not match.');
-        return;
-      }
+                const phone = document.getElementById('reg-phone').value;
+                const password = document.getElementById('password').value;
 
-      try {
-        const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/users/customer';
-        const requestData = { password, email, phone };
+                try {
+                    const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
+                    const requestData = { phone, password };
 
-        console.log('Sending signup request to:', apiUrl);
-        console.log('Request Data:', requestData);
+                    // Thực hiện yêu cầu POST tới API đăng nhập
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
 
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestData)
+                    if (!response.ok) {
+                        const errorMessage = `Đăng nhập thất bại với mã trạng thái ${response.status}`;
+                        console.error(errorMessage);
+                        showModal(errorMessage);
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('API Response:', result);  // Kiểm tra phản hồi từ API
+
+                    if (result.data && result.data.token) {
+                        // Lưu token và username vào localStorage nếu đăng nhập thành công
+                        localStorage.setItem('authToken', result.data.token);
+
+                        if (result.data.username) {
+                            localStorage.setItem('username', result.data.username);
+                            console.log('Username stored:', localStorage.getItem('username'));
+                            console.log("Username stored: " + result.data.username);
+                        }
+
+                        // Điều hướng tới trang index sau khi đăng nhập thành công
+                        window.location.href = 'index.html';
+                    } else {
+                        // Hiển thị thông báo thất bại nếu có lỗi từ phía server
+                        const failMessage = result.message || 'Đăng nhập thất bại: Sai thông tin hoặc lỗi máy chủ.';
+                        console.error(failMessage);
+                        showModal(failMessage);
+                    }
+
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    showModal('Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại sau.');
+                }
+            });
         });
-
-        if (!response.ok) {
-          console.error(`Signup failed with status ${response.status}`);
-          const errorText = await response.text();
-          alert(`Signup failed: ${errorText}`);
-          return;
-        }
-
-        const result = await response.json();
-        console.log('Response received:', result);
-
-        if (result.data) {
-          alert('Registration successful! You can now login.');
-          window.location.href = 'signup.html';
-        } else {
-          alert('Registration failed. Please try again.');
-        }
-
-      } catch (error) {
-        console.error('Error signing up:', error);
-        alert('An error occurred while trying to sign up. Please try again later.');
-      }
-    });
-  });
-  </script>
-
+    </script>
 </body>
 </html>

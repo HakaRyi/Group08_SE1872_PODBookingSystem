@@ -1,15 +1,15 @@
-/* Định nghĩa biến màu sắc */
+/* Define Color Variables */
 :root {
-    --primary-color: #ff5722;
-    --secondary-color: #ffffff;
+    --primary-color: #ff6f61; /* Brighter primary color */
+    --secondary-color: #ffffff; /* White background for contrast */
     --text-color: #333333;
-    --background-color: #f9f9f9;
-    --hover-color: #e64a19;
-    --border-color: #ddd;
-    --light-text-color: #666666;
+    --background-color: #f4f4f4; /* Light grey background */
+    --hover-color: #ff4a3d; /* Slightly darker hover color */
+    --border-color: #e0e0e0; /* Softer border color */
+    --light-text-color: #888888; /* Light grey for secondary text */
 }
 
-/* Thiết lập chung */
+/* Global Styles */
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--background-color);
@@ -21,16 +21,20 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 20px;
 }
 
-/* Header */
+/* Header Styles */
 .site-header {
     background-color: var(--secondary-color);
     padding: 15px 0;
     display: flex;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Softer shadow */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo-container {
@@ -39,40 +43,38 @@ body {
 }
 
 .logo {
-    width: 50px;
-    margin-right: 10px;
+    width: 45px;
+    margin-right: 12px;
 }
 
 .site-title {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 600;
     color: var(--primary-color);
 }
 
 .site-nav {
     display: flex;
-    gap: 30px;
-    margin-left: auto;
+    gap: 25px;
 }
 
 .site-nav a {
     color: var(--text-color);
     font-weight: 500;
-    text-decoration: none;
     font-size: 16px;
-    position: relative;
     padding: 5px 0;
+    position: relative;
     transition: color 0.3s ease;
 }
 
 .site-nav a::after {
     content: '';
     position: absolute;
-    width: 0%;
+    left: 0;
+    bottom: -4px;
+    width: 0;
     height: 2px;
     background-color: var(--primary-color);
-    left: 0;
-    bottom: -5px;
     transition: width 0.3s ease;
 }
 
@@ -84,48 +86,47 @@ body {
     width: 100%;
 }
 
-/* Menu di động */
+/* Mobile Menu */
 .menu-toggle {
     display: none;
     flex-direction: column;
     cursor: pointer;
-    margin-left: auto;
 }
 
 .bar {
     width: 25px;
     height: 3px;
     background-color: var(--text-color);
-    margin: 4px 0;
+    margin: 5px 0;
     transition: 0.4s;
 }
 
 /* Booking History */
 .booking-history {
-    padding: 40px 0;
+    padding: 60px 0;
 }
 
 .header {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .search-bar {
     flex: 1;
-    padding: 12px 15px;
+    padding: 12px 20px;
     border: 1px solid var(--border-color);
     border-radius: 5px 0 0 5px;
     font-size: 16px;
     outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .search-btn {
-    padding: 12px 20px;
+    padding: 12px 25px;
     border: none;
     background-color: var(--primary-color);
     color: var(--secondary-color);
-    cursor: pointer;
     border-radius: 0 5px 5px 0;
     font-size: 18px;
     transition: background-color 0.3s ease;
@@ -138,12 +139,12 @@ body {
 .tabs {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 12px;
+    margin-bottom: 40px;
 }
 
 .tab {
-    padding: 10px 20px;
+    padding: 12px 25px;
     background-color: var(--secondary-color);
     border: 1px solid var(--border-color);
     border-radius: 20px;
@@ -160,9 +161,9 @@ body {
 
 .booking-list {
     background-color: var(--secondary-color);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05); /* Soft shadow */
 }
 
 .booking-item {
@@ -188,7 +189,7 @@ body {
 }
 
 .booking-status {
-    padding: 5px 15px;
+    padding: 6px 15px;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 500;
@@ -196,25 +197,26 @@ body {
 }
 
 .booking-status.awaiting-confirmation {
-    background-color: #ff9800;
+    background-color: #ffb74d; /* Softer orange */
 }
 
 .booking-status.awaiting-checkin {
-    background-color: #2196f3;
+    background-color: #64b5f6; /* Softer blue */
 }
 
 .booking-status.checked-in {
-    background-color: #4caf50;
+    background-color: #81c784; /* Softer green */
 }
 
 .booking-status.completed {
-    background-color: #9c27b0;
+    background-color: #ba68c8; /* Softer purple */
 }
 
 .booking-status.canceled {
-    background-color: #f44336;
+    background-color: #e57373; /* Softer red */
 }
 
+/* Booking Details */
 .booking-details {
     display: flex;
     flex-wrap: wrap;
@@ -228,11 +230,12 @@ body {
 }
 
 .room-image {
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     border-radius: 10px;
-    margin-right: 20px;
+    margin-right: 25px;
     object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .room-description {
@@ -248,7 +251,7 @@ body {
 }
 
 .room-description .room-type {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
 }
 
@@ -257,11 +260,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 10px;
+    gap: 12px;
 }
 
 .action-button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border: 1px solid var(--primary-color);
     border-radius: 5px;
     background-color: var(--secondary-color);
@@ -299,7 +302,8 @@ body {
 }
 
 .booking-price .price {
-    font-size: 24px;
+    font-size: 26px;
+    color: var(--primary-color);
 }
 
 @media (max-width: 992px) {

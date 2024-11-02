@@ -10,6 +10,14 @@
 </head>
 <body>
 
+  <!-- Modal Structure -->
+  <div id="messageModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <p id="modalMessage"></p>
+    </div>
+  </div>
+
   <div class="form">
     <div class="form-panel two">
       <div class="form-header">
@@ -19,10 +27,8 @@
         <form id="signupForm">
           <div class="form-group">
             <label for="reg-phone">Phone Number</label>
-            <input type="tel" id="reg-phone" name="phone" required 
-                   pattern="^\+?[1-9]\d{1,14}$" 
-                   title="Please enter a valid phone number (including country code).">
-          </div>
+            <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}" title="Please enter a valid phone number with 10-15 digits.">
+          </div>   
           <div class="form-group">
             <label for="reg-username">Username</label>
             <input type="text" id="reg-username" name="username" required>
@@ -53,6 +59,26 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script>
+    // Modal script
+    function showModal(message) {
+      var modal = document.getElementById("messageModal");
+      var modalMessage = document.getElementById("modalMessage");
+      var closeModalBtn = document.getElementById("closeModal");
+
+      modalMessage.textContent = message;
+      modal.style.display = "block";
+
+      closeModalBtn.onclick = function() {
+        modal.style.display = "none";
+      };
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       const signupForm = document.getElementById('signupForm');
     
@@ -67,7 +93,7 @@
 
         // Password validation
         if (password !== confirmPassword) {
-          alert('Passwords do not match.');
+          showModal('Passwords do not match.');
           return; // Stop the form from submitting
         }
     
@@ -96,10 +122,10 @@
             try {
               const errorDetails = responseText ? JSON.parse(responseText) : {};
               console.error(`Signup failed with status ${response.status}`, errorDetails);
-              alert(`Signup failed: ${errorDetails.message || 'Unknown error'}`);
+              showModal(`Signup failed: ${errorDetails.message || 'Unknown error'}`);
             } catch (parseError) {
               console.error('Failed to parse error response:', parseError);
-              alert('Signup failed: An unknown error occurred.');
+              showModal('Signup failed: An unknown error occurred.');
             }
             return;
           }
@@ -110,15 +136,15 @@
     
           // Check if the data object exists to confirm success
           if (result.data) {
-            alert('Registration successful! You can now login.');
+            showModal('Registration successful! You can now login.');
             window.location.href = 'login.html';
           } else {
-            alert('Registration failed. Please try again.');
+            showModal('Registration failed. Please try again.');
           }
     
         } catch (error) {
           console.error('Error signing up:', error);
-          alert('An error occurred while trying to sign up. Please try again later.');
+          showModal('An error occurred while trying to sign up. Please try again later.');
         }
       });
     });

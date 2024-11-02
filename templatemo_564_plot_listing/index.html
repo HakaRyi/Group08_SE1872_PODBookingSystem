@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -21,8 +21,8 @@
   <link rel="stylesheet" href="assets/css/templatemo-plot-listing.css">
   <link rel="stylesheet" href="assets/css/animated.css">
   <link rel="stylesheet" href="assets/css/owl.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
 
 </head>
 
@@ -51,12 +51,21 @@
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
               <li><a href="index.html" class="active">Home</a></li>
-              <li><a href="category.html">Category</a></li>
+              <li><a href="aboutus.html">About Us</a></li>
               <li><a href="listing.html">Listing</a></li>
               <li><a href="contact.html">Contact Us</a></li>
-              <li>
-                <div class="main-white-button"><a href="login.html"><i class="fa fa-plus"></i> Sign in </a></div>
-              </li>
+
+              <ul>
+                <li id="loginButtonContainer">
+                  <div class="main-white-button"><a href="login.html"><i class="fa fa-plus"></i> Log in</a></div>
+                
+            
+      </li>
+                <li id="usernameContainer" style="display: none;">
+                  <a href="profile.html" id="loggedInUsername" style="text-decoration: none; color: inherit;"></a>
+                  <div class="main-white-button"><a href="#" id="logoutButton"><i class="fa fa-sign-out"></i> Log out</a></div>
+                </li>
+              </ul>
             </ul>
             <a class='menu-trigger'>
               <span>Menu</span>
@@ -67,6 +76,36 @@
       </div>
     </div>
   </header>
+              
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+    const username = localStorage.getItem('username');
+    const loginButtonContainer = document.getElementById('loginButtonContainer');
+    const usernameContainer = document.getElementById('usernameContainer');
+    const loggedInUsername = document.getElementById('loggedInUsername');
+    const logoutButton = document.getElementById('logoutButton');
+
+    // Check if a valid username is stored in localStorage
+    if (username) {
+        loggedInUsername.textContent = `Chào mừng, ${username}`;
+        loginButtonContainer.style.display = 'none';  // Hide the login button
+        usernameContainer.style.display = 'block';    // Show username and logout button
+    } else {
+        console.log("Username không tồn tại trong localStorage.");  // Log if no username found
+        loginButtonContainer.style.display = 'block';  // Ensure login button is visible if not logged in
+        usernameContainer.style.display = 'none';      // Hide the username container if not logged in
+    }
+
+    // Handle the logout button click
+    logoutButton.addEventListener('click', function () {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('username');
+        window.location.href = 'index.html';  // Redirect to homepage after logout
+    });
+});
+</script>
+              
+          
   <!-- ***** Header Area End ***** -->
 
   <div class="main-banner">
@@ -83,37 +122,34 @@
             <div class="row">
               <div class="col-lg-3 align-self-center">
                 <fieldset>
-                  <button type="button" class="btn btn-primary" id="chooseCategory" onclick="handleAreaSelection()">
-                    <i class="fas fa-map-marker-alt"></i> Booking
-                  </button>
+                  <div class="main-white-button"><a href="listing.html"><i class="fa fa-eye"
+                        onclick="handleAreaSelection"></i>Booking</a>
+                  </div>
                 </fieldset>
-              </div>  
+              </div>
               <div class="col-lg-3 align-self-center">
                 <fieldset>
-                  <select name="area" class="form-select" aria-label="Area" id="chooseCategory"
-                    onchange="this.form.click()">
+                  <select name="area" class="form-select" aria-label="Area" id="chooseArea">
                     <option selected>Location</option>
-                    <option value="Thu Duc">Thu Duc</option>
-                    <option value="Ditrict 1">Ditrict 1 </option>
-                    <option value="Binh Thanh Ditrict">Binh Thanh Ditrict</option>
+                    <option value="Ho Chi Minh City">Ho Chi Minh City</option>
+                    <option value="Hanoi">Hanoi</option>
                   </select>
                 </fieldset>
               </div>
               <div class="col-lg-3 align-self-center">
                 <fieldset>
-                  <select name="price" class="form-select" aria-label="Default select example" id="chooseCategory"
-                    onchange="this.form.click()">
+                  <select name="space" class="form-select" aria-label="Default select example" id="Room-Space">
                     <option selected>Workspace type</option>
                     <option value="MT">Meeting Room</option>
                     <option value="PR">Public Room</option>
                     <option value="PrR">Private Room</option>
-                    <option value="LC">Large Conference </option>
+                    <option value="LC">Large Conference</option>
                   </select>
                 </fieldset>
               </div>
               <div class="col-lg-3">
                 <fieldset>
-                  <button class="main-button"><i class="fa fa-search"></i> Search Now</button>
+                  <button class="main-button" id="searchButton"><i class="fa fa-search"></i> Search Now</button>
                 </fieldset>
               </div>
             </div>
@@ -123,70 +159,90 @@
     </div>
   </div>
 
-  <script>
-    // Function này sẽ gọi API khi người dùng bấm vào nút "Search Now"
-    document.getElementById('search-form').addEventListener('submit', function (event) {
-      event.preventDefault(); // Ngăn form reload lại trang
-  
-      // Lấy giá trị từ form
-      const area = document.querySelector('select[name="area"]').value;
-      const workspaceType = document.querySelector('select[name="price"]').value;
-  
-      // Gửi request đến API backend
-      axios.get('http://14.225.206.250:8080/POD_BookingSystem/v3/api-docs', {
-        params: {
-          area: area, // Đối tượng bạn muốn gửi đến backend
-          workspaceType: workspaceType
-        }
-      })
-      .then(function (response) {
-        // Xử lý kết quả trả về từ API
-        console.log(response.data);
-  
-        // Cập nhật giao diện với dữ liệu từ backend (nếu có)
-        const bookingDataDiv = document.createElement('div');
-        bookingDataDiv.innerHTML = `<pre>${JSON.stringify(response.data, null, 2)}</pre>`;
-        document.body.appendChild(bookingDataDiv);
-      })
-      .catch(function (error) {
-        // Xử lý lỗi (nếu có)
-        console.error('Error fetching data:', error);
-      });
-    });
-  
-    // Function này sử dụng API Geolocation và Google Places như hướng dẫn trước đó
-    function handleAreaSelection() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showMapAndNearbyPlaces, showError);
-      } else {
-        alert("Geolocation không được hỗ trợ trên trình duyệt này.");
-      }
-    }
-  
-    function showMapAndNearbyPlaces(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      // Chỗ này bạn có thể tích hợp Google Maps API để hiển thị vị trí
-      console.log(`Latitude: ${lat}, Longitude: ${lng}`);
-    }
-  
-    function showError(error) {
-      alert(`Error in getting location: ${error.message}`);
-    }
 
-    function handleAreaSelection() {
-  // Thay vì dùng Geolocation API, có thể thực hiện gọi API axios tương tự như phần Search Now ở đây
-  axios.get('http://14.225.206.250:8080/POD_BookingSystem/v3/api-docs')
-    .then(function (response) {
-      console.log(response.data);
-      // Xử lý dữ liệu và hiển thị trên giao diện
-    })
-    .catch(function (error) {
-      console.error('Error fetching data:', error);
+
+  <script type="module">
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBb4O_rxVQu5590kRl46VQhx9EzIcY0_WA",
+      authDomain: "pod-booking-system-437803.firebaseapp.com",
+      projectId: "pod-booking-system-437803",
+      storageBucket: "pod-booking-system-437803.appspot.com",
+      messagingSenderId: "627345452977",
+      appId: "1:627345452977:web:6a6ff675728bcdd5161790",
+      measurementId: "G-8Y8FVDJY6K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchButton = document.getElementById('searchButton');
+      const chooseArea = document.getElementById('chooseArea'); // Lấy trường dropdown location
+
+      if (searchButton) {
+        searchButton.addEventListener('click', async function (event) {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+
+          try {
+            // Tạo URL API để lấy tất cả các building
+            const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/buildings';
+
+            // Gọi API
+            const response = await fetch(apiUrl);
+            const result = await response.json(); // Lưu trữ dữ liệu vào biến
+
+            // Kiểm tra mã trả về trước khi lưu
+            if (result.code === 1000) {
+              let buildings = result.data;
+
+              // Lấy giá trị location mà người dùng đã chọn
+              const selectedLocation = chooseArea.value.trim().toLowerCase();
+
+              // Nếu người dùng chọn location (không phải 'Location')
+              if (selectedLocation !== 'location') {
+                // Lọc các building có location khớp với lựa chọn
+                buildings = buildings.filter(building =>
+                  building.location.trim().toLowerCase() === selectedLocation
+                );
+              }
+
+              // Lấy dữ liệu hình ảnh từ Firebase Storage
+              for (const building of buildings) {
+                const imageName = building.imageName; // Thay thế bằng tên tệp hình ảnh thực tế
+                const imageRef = ref(storage, `buildings/${imageName}`); // Thay đổi đường dẫn nếu cần
+
+                try {
+                  const url = await getDownloadURL(imageRef);
+                  console.log('Image URL:', url);
+                  // Bạn có thể lưu URL hình ảnh vào dữ liệu của building nếu cần
+                  building.imageUrl = url; // Thêm URL hình ảnh vào đối tượng building
+                } catch (error) {
+                  console.error('Error getting image URL:', error);
+                }
+              }
+
+              // Lưu lại các building đã cập nhật với hình ảnh
+              localStorage.setItem('buildingsWithImages', JSON.stringify(buildings));
+
+            } else {
+              console.error('API Error:', result.message);
+            }
+
+            // Chuyển hướng đến trang hiển thị kết quả
+            window.location.href = 'category.html';
+          } catch (error) {
+            console.error('Error fetching buildings:', error);
+          }
+        });
+      } else {
+        console.error("Không tìm thấy nút 'Search Now'");
+      }
     });
-}
   </script>
-  
+
 
   <!--Begin Popular Category-->
 
@@ -251,7 +307,8 @@
                                 <h4>Meeting Room</h4>
                                 <p>Dedicated meeting room, ideal for small group meetings and client meetings.
                                   Fully equipped to support effective meetings.</p>
-                                <div class="main-white-button"><a href="#"><i class="fa fa-eye"></i>Booking Now!</a>
+                                <div class="main-white-button"><a href="listing.html"><i class="fa fa-eye"></i>Booking
+                                    Now!</a>
                                 </div>
                               </div>
                             </div>
@@ -346,7 +403,7 @@
                             </div>
                             <div class="col-lg-7 align-self-center">
                               <div class="right-image">
-                                <img src="assets/images/tabs-image-05.jpg" alt="Traveling Beach">
+                                <img src="assets/images/Applications_Medium_sizedRooms_2.jpg" alt="">
                               </div>
                             </div>
                           </div>
@@ -698,11 +755,11 @@
         <div class="col-lg-4">
           <div class="about">
             <div class="logo">
-              <img src="assets/images/black-logo.png" alt="Plot Listing">
+              <img src="assets/images/logoBD.jpg" alt="BD platform">
             </div>
-            <p>If you consider that <a rel="nofollow" href="https://templatemo.com/tm-564-plot-listing"
-                target="_parent">Plot Listing template</a> is useful for your website, please <a rel="nofollow"
-                href="https://www.paypal.me/templatemo" target="_blank">support us</a> a little via PayPal.</p>
+            <p>If you consider that <a rel="nofollow" href="index.html" target="_parent">BD.com</a> is useful for your
+              website, please <a rel="nofollow" href="index.html" target="_blank">support us</a> a little via PayPal.
+            </p>
           </div>
         </div>
         <div class="col-lg-4">
@@ -719,7 +776,7 @@
               </div>
               <div class="col-lg-6">
                 <ul>
-                  <li><a href="#">About Us</a></li>
+                  <li><a href="aboutus.html">About Us</a></li>
                   <li><a href="#">Awards</a></li>
                   <li><a href="#">Useful Sites</a></li>
                   <li><a href="#">Privacy Policy</a></li>
@@ -742,14 +799,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-12">
-          <div class="sub-footer">
-            <p>Copyright © 2021 Plot Listing Co., Ltd. All Rights Reserved.
-              <br>
-              Design: <a rel="nofollow" href="https://templatemo.com" title="CSS Templates">TemplateMo</a>
-            </p>
-          </div>
-        </div>
+
       </div>
     </div>
   </footer>
