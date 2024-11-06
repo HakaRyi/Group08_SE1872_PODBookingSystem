@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.Service;
 
+import com.example.POD_BookingSystem.DTO.Request.Booking.ConfirmRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
 import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
 import com.example.POD_BookingSystem.DTO.Response.*;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -182,35 +184,6 @@ public class BookingService {
         return bookingInformationResponse;
     }
 
-//     CREATE BOOKING
-//    public Booking createBooking (String userName){
-//
-//        Booking booking = Booking.builder()
-//                .booking_id(GenerateId())
-//                .user(userRepository.f)
-//                .booking_date(LocalDate.now())
-//                .status("PENDING")
-//                .build();
-//        bookingRepository.save(booking);
-//        return booking;
-//    }
-public BookingResponse createBooking (String userName){
-    User user = userRepository.findByUsername(userName)
-            .orElseThrow(() -> new RuntimeException("User does not exist"));
-    Booking booking = Booking.builder()
-            .booking_id(GenerateId())
-            .user(user)
-            .booking_date(LocalDate.now())
-            .status("PENDING")
-            .build();
-    bookingRepository.save(booking);
-
-    return BookingResponse.builder()
-            .booking_id(booking.getBooking_id())
-            .booking_date(booking.getBooking_date().toString())
-            .build();
-}
-
     //CANCEL PAYMENT
     public void cancelPayment(int amount, String bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
@@ -220,16 +193,26 @@ public BookingResponse createBooking (String userName){
     }
 
     // CREATE BOOKING DETAIL
-    public BookingDetailResponse createBookingDetail(String bookingId, String roomName, CreateBookingDetailRequest request) {
+    public BookingDetailResponse createBookingDetail(String userName, String roomName, CreateBookingDetailRequest request) {
         Room room = roomRepository.findByName(roomName);
         if (room == null) throw new RuntimeException("Room does not Exist");
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
 
+        //CREATE NEW BOOKING
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+        Booking booking = Booking.builder()
+                .booking_id(GenerateId())
+                .user(user)
+                .booking_date(LocalDate.now())
+                .status("PENDING")
+                .build();
+        bookingRepository.save(booking);
+
+        var bookingId = booking.getBooking_id();
         String version = GenerateDetailVesion(bookingId);
         double versionPrice = 0;
 
         //Lay Thoi Gian Thue Phong
-
         List<Slot> slots = new ArrayList<>();
 
         int numberOfSlot = 0;
@@ -291,16 +274,15 @@ public BookingResponse createBooking (String userName){
         Map<String, Integer> service = new HashMap<>();
 
         // Tao Booking Detail cho List Service
-        int number = Integer.parseInt(GenerateDetailId().substring(3));
+
         for(Map.Entry<String, Integer> entry : request.getService().entrySet()){
             String serviceName = entry.getKey(); // Lấy service name
             Integer Quantity = entry.getValue();
-            String id = String.format("BD-%02d", number);
 
             com.example.POD_BookingSystem.Entity.Service bookedService = serviceRepository.findByName(serviceName);
             if(bookedService == null) throw  new RuntimeException("Service does not exist");
             BookingDetail serviceBookingDetail = BookingDetail.builder()
-                    .booking_detail_id(id)
+                    .booking_detail_id(GenerateDetailId())
                     .room(room)
                     .booking_type("SERVICE")
                     .service_id(bookedService.getService_id())
@@ -336,7 +318,7 @@ public BookingResponse createBooking (String userName){
                 .build();
     }
 
-    public void confirmBooking(String bookingId, String bookingDate){
+    public void confirmBooking(String bookingId, ConfirmRequest request){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
         String bookingVersion = bookingDetailRepository.findLastVersion(bookingId);
 
@@ -350,7 +332,6 @@ public BookingResponse createBooking (String userName){
         }
 
         List<RoomSlot> roomSlotList = new ArrayList<>();
-        int numberOfSlot = 0;
         if (bookingSlot != null && !bookingSlot.isEmpty()) {
             for (Map.Entry<String, List<LocalDate>> entry : bookingSlot.entrySet()) {
                     for (LocalDate date : entry.getValue()) {
@@ -440,11 +421,12 @@ public BookingResponse createBooking (String userName){
 //        booking.setBookingServices(null);
 
         //SEND EMAIL
+        User user = userRepository.findById(booking.getUser().getUserid_id()).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
         if(room.getAvailability().equals("AVAILABLE")) {
             String userName = userRepository.findById(booking.getUser().getName()).
                     orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)).getName();
             String address = room.getBuilding().getAddress();
-            mailService.sendMail("khanghxse180105@fpt.edu.vn", "XÁC NHẬN ĐẶT PHÒNG",
+            mailService.sendMail(user.getEmail(), "XÁC NHẬN ĐẶT PHÒNG",
                     userName, room.getName(), booking.getBooking_date().toString(), address);
 
             room.setAvailability("BOOKED");
@@ -452,43 +434,45 @@ public BookingResponse createBooking (String userName){
         bookingRepository.resetBookingDate(bookingId);
         bookingRepository.resetBookingService(bookingId);
 
-        paymentService.createPayment(booking);
-        log.info("go to createPaymentDetail");
-
-        paymentService.createPaymentDetail(booking);
-        log.info("go to Transaction");
-        transactionService.createTransaction(booking,booking.getUser());
-        log.info("go to TransactionDetail");
-        transactionService.createTransactionDetail(booking);
 
         roomRepository.save(room);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        LocalDateTime dateTime = LocalDateTime.parse(bookingDate, formatter);
+        LocalDate date;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            LocalDateTime dateTime = LocalDateTime.parse(request.getBookingDate(), formatter);
+            date = dateTime.toLocalDate();
+            log.info(booking.getBooking_date().toString());
+            if(booking.getStatus().equals("PENDING")){
+                booking.setBooking_date(date);
+            }
 
-        LocalDate date = dateTime.toLocalDate();
+        } catch (DateTimeParseException e) {
+            log.error("Failed to parse bookingDate: " + request.getBookingDate(), e);
+            throw new RuntimeException("Invalid booking date format.");
+        }
 
-        booking.setBooking_date(date);
+        if(booking.getTxnRef()==null){
+            booking.setTxnRef(request.getCode());
+        }
         bookingRepository.save(booking);
+
+        paymentService.createPayment(booking);
+
+        paymentService.createPaymentDetail(booking);
+        transactionService.createTransaction(booking,booking.getUser());
+        transactionService.createTransactionDetail(booking);
 
     }
 
-    //Tao ra 1 Id tang dan dua tren Id da co
+    //Tao ra 1 Booking Id tang dan dua tren Id da co
     private String GenerateId(){
-        String id = bookingRepository.findLastId();
-        if(!(id == null)){
-            int number = Integer.parseInt(id.substring(3))+1;
-            return String.format("Bo-%02d", number);
-        }
-        return "Bo-01";
+        int number = bookingRepository.findAll().size()+1;
+        return "Bo-" + number;
     }
 
     private String GenerateDetailId(){
-        String id = bookingDetailRepository.findLastId();
-        if(!(id == null)){
-            int number = Integer.parseInt(id.substring(3))+1;
-            return String.format("BD-%02d", number);
-        }
-        return "BD-01";
+        int number = bookingDetailRepository.findAll().size()+1;
+        return "BD-" + number;
     }
 
     //Tao ra 1 Version moi, tang dan dua tren version da co

@@ -48,7 +48,7 @@ public class OtpService {
         tokenRepository.save(verificationToken);
 
         // Tạo liên kết xác thực
-        String verificationUrl = "http://localhost:8080/POD_BookingSystem/api/sms/verify?token=" + token;
+        String verificationUrl = "http://14.225.206.250:8080/POD_BookingSystem/api/sms/verify?token=" + token;
         Context context = new Context();
         context.setVariable("verificationUrl", verificationUrl);
 

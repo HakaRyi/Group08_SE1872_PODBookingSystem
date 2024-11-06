@@ -1,4 +1,4 @@
-package com.example.POD_BookingSystem.DTO.Request.VNPay;
+package com.example.POD_BookingSystem.DTO.Request.Booking;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class VNPayRequest {
-    long amount;
-    String bankCode;
+public class ConfirmRequest {
+    String bookingDate;
+    String code;
 }

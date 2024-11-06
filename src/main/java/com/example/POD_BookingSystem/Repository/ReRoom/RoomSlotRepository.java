@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RoomSlotRepository extends JpaRepository<RoomSlot, String> {
     @Query(value = "Select uId from Room_slot order by uId DESC LIMIT 1;", nativeQuery = true)
@@ -14,4 +16,6 @@ public interface RoomSlotRepository extends JpaRepository<RoomSlot, String> {
     @Query(value = "SELECT * FROM Room_slot WHERE slot_id = :slotId and room_id = :roomId", nativeQuery = true)
     RoomSlot findRoomSlotByRoomAndSlot(@Param("slotId") String slotId, @Param("roomId") String roomId);
 
+    @Query(value = "SELECT slot_id, booking_date FROM Room_slot WHERE room_id = :roomId", nativeQuery = true)
+    List<Object[]> findBookedSlot(@Param("roomId") String roomId);
 }

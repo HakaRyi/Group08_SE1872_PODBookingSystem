@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -92,6 +94,14 @@ public class RoomController {
     ApiResponse<List<RoomResponse>> getRoomByStatus(){
         return ApiResponse.<List<RoomResponse>>builder()
                 .data(roomService.getRoomByStatus())
+                .build();
+    }
+
+    //Get booked Slot
+    @GetMapping("/{roomName}/booked-slot")
+    ApiResponse<Map<String, List<LocalDate>>> getBookedSlot(@PathVariable String roomName){
+        return ApiResponse.<Map<String, List<LocalDate>>>builder()
+                .data(roomService.getBookedSlot(roomName))
                 .build();
     }
 }

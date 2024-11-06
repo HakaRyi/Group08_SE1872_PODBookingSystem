@@ -1,6 +1,7 @@
 package com.example.POD_BookingSystem.Controller;
 
 import com.example.POD_BookingSystem.DTO.Request.Booking.CancelPaymentRequest;
+import com.example.POD_BookingSystem.DTO.Request.Booking.ConfirmRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
@@ -49,19 +50,15 @@ public class BookingController {
                 .build();
     }
 
-    @PostMapping("/book")
-    BookingResponse createBooking (HttpServletRequest request) throws ParseException, JOSEException {
-        //Lay username tu JWT token
-        String token = request.getHeader("Authorization").substring(7); // Bỏ qua "Bearer " trong token
-        String username = authenticationService.getUsernameFromToken(token);
-        return bookingService.createBooking(username);
-    }
-
-    @PostMapping("/{bookingId}/{roomName}/bookingdetails")
+    @PostMapping("/{roomName}/bookingdetails")
     ApiResponse<BookingDetailResponse> createBookingDetail
-            (@PathVariable String bookingId, @PathVariable String roomName, @RequestBody CreateBookingDetailRequest request){
+            (@PathVariable String roomName,
+             @RequestBody CreateBookingDetailRequest request,
+              HttpServletRequest req  ) throws ParseException, JOSEException {
+        String token = req.getHeader("Authorization").substring(7); // Bỏ qua "Bearer " trong token
+        String username = authenticationService.getUsernameFromToken(token);
         return ApiResponse.<BookingDetailResponse>builder()
-                .data(bookingService.createBookingDetail(bookingId,roomName,request))
+                .data(bookingService.createBookingDetail(username,roomName,request))
                 .build();
     }
 
@@ -73,9 +70,9 @@ public class BookingController {
                 .build();
     }
 
-    @PostMapping("/{bookingId}/{bookingDate}/confirm")
-    ApiResponse<Void> confirmBooking(@PathVariable String bookingId, @PathVariable String bookingDate){
-        bookingService.confirmBooking(bookingId, bookingDate);
+    @PostMapping("/{bookingId}/confirm")
+    ApiResponse<Void> confirmBooking(@PathVariable String bookingId, @RequestBody ConfirmRequest request){
+        bookingService.confirmBooking(bookingId, request);
         return ApiResponse.<Void>builder().message("Book SuccessFully !!!").build();
     }
 
@@ -86,12 +83,7 @@ public class BookingController {
                 .message("Cancel Successfully")
                 .build();
     }
-//    @PostMapping({"/{}/booking"})
-//    public ResponseEntity<BookingDetail> createBookingDetail(@PathVariable String roomName,
-//                                                             @RequestBody CreateBookingDetailRequest request){
-//
-//
-//    }
+
 @PostMapping("/request-checkin/{bookingId}")
 ApiResponse<String> requestCheckin(@PathVariable String bookingId) {
     bookingService.requestCheckin(bookingId);

@@ -37,16 +37,6 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
 
-
-  mail:
-    host: smtp.example.com
-    port: 587
-    username: your-email@example.com
-    password: your-email-password
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
-
 twilio:
   account_sid: ACb64fbab279b730b3ccf1980937c6db19
   auth_token: 4246a8f66efb5b11ba5358d528a827c8

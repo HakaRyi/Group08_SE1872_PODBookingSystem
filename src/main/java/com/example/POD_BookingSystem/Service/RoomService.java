@@ -15,15 +15,16 @@ import com.example.POD_BookingSystem.Mapper.RoomMapper;
 import com.example.POD_BookingSystem.Mapper.ServiceMapper;
 import com.example.POD_BookingSystem.Repository.BuildingRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomRepository;
+import com.example.POD_BookingSystem.Repository.ReRoom.RoomSlotRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomTypeRepository;
 import com.example.POD_BookingSystem.Repository.RoomServiceRepository;
 import com.example.POD_BookingSystem.Repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +43,8 @@ public class RoomService {
     RoomServiceRepository roomServiceRepository;
     @Autowired
     ServiceMapper serviceMapper;
+    @Autowired
+    RoomSlotRepository roomSlotRepository;
 
     // Tao Ra 1 Room MOI
     public RoomResponse createRoom(CreateRoomRequest request) {
@@ -181,5 +184,21 @@ public class RoomService {
             return String.format("RS-%02d", number);
         }
         return "RS-01";
+    }
+
+    public Map<String, List<LocalDate>> getBookedSlot(String roomName){
+        Map<String, List<LocalDate>> map = new HashMap<>();
+        Room room = roomRepository.findByName(roomName);
+        if(room!=null){
+            List<Object[]> results = roomSlotRepository.findBookedSlot(room.getRoom_id());
+            for (Object[] result : results) {
+                String slotId = (String) result[0];
+                LocalDate bookingDate = ((Date) result[1]).toLocalDate();
+
+                // Sử dụng computeIfAbsent để tạo danh sách nếu chưa có, rồi thêm bookingDate vào danh sách
+                map.computeIfAbsent(slotId, k -> new ArrayList<>()).add(bookingDate);
+            }
+        }
+        return map;
     }
 }
