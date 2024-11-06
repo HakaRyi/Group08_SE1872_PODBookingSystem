@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <title>ACheckin - Lịch làm việc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </link>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-1/5 bg-white h-screen shadow-md">
+            <div class="p-4 bg-green-600 text-white text-lg font-bold">
+                ACheckin
+            </div>
+            <ul class="mt-4">
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Trang chủ</li>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Quản lý nhân sự</li>
+                <ul class="ml-4">
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Nhân viên</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Công ty</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer bg-gray-200">Lịch làm việc</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Báo cáo chấm công</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Báo nghỉ làm thêm</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Cây nhân sự</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Thiết lập lời chào</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Kiểm duyệt đăng nhập</li>
+                    <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Duyệt checkin</li>
+                </ul>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Quản lý tài nguyên</li>
+                <li class="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">Workplace</li>
+            </ul>
+        </div>
+        <!-- Main Content -->
+        <div class="w-4/5 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Danh sách khung giờ làm</h1>
+                <button class="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+                    <i class="fas fa-plus mr-2"></i> Thêm
+                </button>
+            </div>
+            <div class="bg-white shadow-md rounded p-4">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">Mã</th>
+                            <th class="py-2 px-4 border-b">Trạng thái</th>
+                            <th class="py-2 px-4 border-b">Ngày đặt</th>
+                            <th class="py-2 px-4 border-b">Tổng tiền</th>
+                            <th class="py-2 px-4 border-b"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="content">
+
+                    </tbody>
+                </table>
+                <div class="flex justify-between items-center mt-4">
+                    <span>Tổng số: 67</span>
+                    <div class="flex items-center">
+                        <button class="px-3 py-1 border rounded-l">1</button>
+                        <button class="px-3 py-1 border">2</button>
+                        <button class="px-3 py-1 border">3</button>
+                        <button class="px-3 py-1 border">4</button>
+                        <button class="px-3 py-1 border">5</button>
+                        <button class="px-3 py-1 border">...</button>
+                        <button class="px-3 py-1 border rounded-r">14</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/checkin`;
+        fetch(apiUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                const roomsListContainer = document.getElementById("content");
+                if (data && data.data.length > 0) {
+                    let roomElement = '';
+                    data.data.forEach((room) => {
+                        roomElement += `
+                    <tr>
+                        <td class="py-2 px-4 border-b">${room.booking_id}</td>
+                        <td class="py-2 px-4 border-b"><span class="bg-blue-500 text-white px-2 py-1 rounded">${room.status}</span></td>
+                        <td class="py-2 px-4 border-b">${room.booking_date}</td>
+                        <td class="py-2 px-4 border-b">${room.total}</td>
+                        <td class="py-2 px-4 border-b">
+                        <button class="bg-yellow-500 text-white px-2 py-1 rounded mr-2" onclick="approve_checkin('${room.booking_id}')">Request checkin</button>
+                        </td>
+                    </tr>
+                    `;
+                    });
+
+                    roomsListContainer.innerHTML += roomElement;
+                } else {
+                    roomsListContainer.innerHTML = "<p>No rooms found for this building.</p>";
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+                document.getElementById("rooms-list").innerHTML = "<p>Error loading rooms.</p>";
+            });
+
+        function approve_checkin(booking_id) {
+            const url = `http://14.225.206.250:8080/POD_BookingSystem/approve-checkin/${booking_id}`;
+            const bodyData = {
+
+            };
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodyData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code == 1000) {
+                        alert("Check thành công")
+                        window.location.reload();
+                    } else {
+                        alert("Thất bại")
+                        throw new Error("Invalid booking details response");
+                    }
+                })
+                .catch(error => {
+
+                });
+        }
+
+    </script>
+</body>
+
+</html>

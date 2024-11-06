@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Booking</title>
+
+
+    <!-- FontAwesome for icons -->
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Room Booking Details</h1>
+    </header>
+
+    <!-- Room Details Section -->
+    <div id="room-details" class="room-details-container">
+        <!-- Room details will be populated here by JavaScript -->
+    </div>
+
+    <!-- JavaScript to Fetch and Display Room Details -->
+    <script type="module">
+        // Get the room_id from the query string
+        const params = new URLSearchParams(window.location.search);
+        const roomId = params.get('room_id'); // Khai báo roomId
+
+        // Kiểm tra URL hiện tại và roomId
+        console.log("Current URL:", window.location.href);
+        console.log("Room ID:", roomId);
+
+        if (roomId) {
+            const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/rooms/${roomId}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log("Response Status:", response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Data Received:", data);
+                    const roomDetailsContainer = document.getElementById('room-details');
+                    if (data && data.data && data.data.length > 0) {
+                        const room = data.data[0]; // Lấy chi tiết phòng
+                        roomDetailsContainer.innerHTML = `
+                            <div class="listing-item-custom">
+                                <div class="left-image-custom">
+                                    <img src="assets/images/listing-01.jpg" alt="Room Image">
+                                </div>
+                                <div class="right-content-custom align-self-center">
+                                    <h4>${room.name}</h4>
+                                    <span class="price-custom">${room.price} VND / month</span>
+                                    <span class="details-custom"><strong>Room ID:</strong> ${room.room_id}</span>
+                                    <span class="details-custom"><strong>Capacity:</strong> ${room.capacity} people</span>
+                                    <span class="details-custom"><strong>Availability:</strong> ${room.availability}</span>
+                                    <span class="details-custom"><strong>Type:</strong> ${room.type_name || 'Unknown Type'}</span>
+                                    <span class="details-custom"><strong>Description:</strong> ${room.description}</span>
+                                    <span class="details-custom"><strong>Available Date:</strong> ${room.available_Date}</span>
+                                    <div class="contact-button-custom">
+                                        <a href="contact.html"><i class="fa fa-envelope"></i> Contact Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        roomDetailsContainer.innerHTML = '<p>Room details not found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching room details:', error);
+                    document.getElementById('room-details').innerHTML = '<p>Error loading room details.</p>';
+                });
+        } else {
+            document.getElementById('room-details').innerHTML = '<p>No room selected.</p>';
+        }
+    </script>
+
+
+
+</body>
+
+</html>

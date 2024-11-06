@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Form</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+
+<body>
+
+    <!-- Load the Google Platform Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Modal Structure -->
+    <div id="messageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+    <div class="form">
+        <div class="form-panel one">
+            <div class="form-header">
+                <h1>Account Login</h1>
+            </div>
+            <div class="form-content">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" aria-label="Log In" id="loginButton">Log In</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Google Sign-In Button -->
+            <div id="googleSignInButton"></div>
+
+            <div class="form-footer">
+                <p>Don't have an account? <a href="signup.html" id="signup-link">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script>
+        // Initialize Google API with client ID
+        function handleCredentialResponse(response) {
+            // Handle the credential response from Google
+            const user = jwt_decode(response.credential);
+            console.log('Logged in user:', user);
+
+            // Save user info to local storage if needed, then navigate to the main page
+            localStorage.setItem('username', user.name);  // Save name or any other required info
+            window.location.href = 'index.html';  // Redirect after login
+        }
+
+        // Render the Google Sign-In button
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: '627345452977-jtvcdro2eoj7tae0oibvnarsuak7c8dk.apps.googleusercontent.com', // Replace with your Google Client ID
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInButton"),
+                { theme: "outline", size: "large" }  // Customize the button style
+            );
+            google.accounts.id.prompt(); // Show the One Tap prompt
+        };
+    </script>
+
+    <script>
+        // Modal Script
+        function showModal(message) {
+            var modal = document.getElementById("messageModal");
+            var modalMessage = document.getElementById("modalMessage");
+            var closeModalBtn = document.getElementById("closeModal");
+
+            modalMessage.textContent = message;
+            modal.style.display = "block";
+
+            closeModalBtn.onclick = function () {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+        }
+
+        // Event listener for login button
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginButton = document.getElementById('loginButton');
+
+            loginButton.addEventListener('click', async function (event) {
+                event.preventDefault(); // Prevent the form from auto-submitting
+
+                const phone = document.getElementById('reg-phone').value;
+                const password = document.getElementById('password').value;
+
+                try {
+                    const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in';
+                    const requestData = { phone, password };
+
+                    // Make a POST request to the login API
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    if (!response.ok) {
+                        const errorMessage = `Login failed with status code ${response.status}`;
+                        console.error(errorMessage);
+                        showModal(errorMessage);
+                        return;
+                    }
+
+                    const result = await response.json();
+                    console.log('API Response:', result);  // Log API response for debugging
+
+                    if (result.data && result.data.token) {
+                        // Store the token and username from the response in localStorage
+                        localStorage.setItem('authToken', result.data.token);
+
+                        if (result.data.username) {
+                            localStorage.setItem('username', result.data.username);
+                            console.log("Username stored:", result.data.username);
+                        }
+
+                        // Redirect to index page upon successful login
+                        window.location.href = 'index.html';
+                    } else {
+                        // Display error message if login fails
+                        const failMessage = result.message || 'Login failed: Incorrect information or server error.';
+                        console.error(failMessage);
+                        showModal(failMessage);
+                    }
+
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    showModal('An error occurred during login. Please try again later.');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
