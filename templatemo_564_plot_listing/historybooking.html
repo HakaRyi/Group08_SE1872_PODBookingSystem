@@ -136,56 +136,57 @@
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/custom.js"></script>
     <script>
-        async function fetchBookings() {
-            const userName = document.getElementById('usernameInput').value;  // Get username from input field
-            
-            if (!userName) {
-                alert("Please enter a username.");
-                return;
-            }
+       async function fetchBookings() {
+    const userName = document.getElementById('usernameInput').value; // Get username from input field
+    
+    if (!userName) {
+        alert("Please enter a username.");
+        return;
+    }
 
-            try {
-                const response = await fetch(`http://14.225.206.250:8080/POD_BookingSystem/booking/getBookingByUserName?username=${userName}`);
-                const result = await response.json();
-                
-                if (response.ok && result.data.length > 0) {
-                    const bookingContainer = document.querySelector('.booking-list');
-                    bookingContainer.innerHTML = ''; // Clear any existing content
+    try {
+        // Modify the API endpoint to match the correct one
+        const response = await fetch(`http://14.225.206.250:8080/POD_BookingSystem/api/booking?username=${userName}`);
+        const result = await response.json();
 
-                    result.data.forEach(booking => {
-                        const bookingHTML = `
-                            <div class="booking-item">
-                                <div class="booking-header">
-                                    <div class="hotel-name">${booking.hotel_name || 'Unknown Hotel'}</div>
-                                    <div class="booking-status ${booking.status.toLowerCase().replace(/\s+/g, '-')}">${booking.status}</div>
-                                </div>
-                                <div class="booking-details row">
-                                    <div class="col-lg-4">
-                                        <img src="assets/images/room-placeholder.jpg" alt="Room" class="room-image img-fluid">
-                                    </div>
-                                    <div class="col-lg-5">
-                                        <p class="room-type">Deluxe Room - Sea View</p>
-                                        <p class="checkin-date"><i class="fas fa-calendar-alt"></i> Check-in Date: ${new Date(booking.booking_date).toLocaleDateString()}</p>
-                                        <p class="guests"><i class="fas fa-user-friends"></i> Guests: 2 Adults</p>
-                                    </div>
-                                    <div class="col-lg-3 text-end">
-                                        <p class="price">Total Price: ${booking.total} VND</p>
-                                        <button class="btn btn-primary">Book Again</button>
-                                        <button class="btn btn-secondary">View Details</button>
-                                    </div>
-                                </div>
-                            </div>`;
-                        bookingContainer.innerHTML += bookingHTML;
-                    });
-                } else {
-                    alert("No bookings available at the moment.");
-                }
-            } catch (error) {
-                console.error("Error fetching booking data: ", error);
-            }
+        if (response.ok && result.data && result.data.length > 0) {
+            const bookingContainer = document.querySelector('.booking-list');
+            bookingContainer.innerHTML = ''; // Clear any existing content
+
+            result.data.forEach(booking => {
+                const bookingHTML = `
+                    <div class="booking-item">
+                        <div class="booking-header">
+                            <div class="hotel-name">${booking.hotel_name || 'Unknown Hotel'}</div>
+                            <div class="booking-status ${booking.status.toLowerCase().replace(/\s+/g, '-')}">${booking.status}</div>
+                        </div>
+                        <div class="booking-details row">
+                            <div class="col-lg-4">
+                                <img src="assets/images/room-placeholder.jpg" alt="Room" class="room-image img-fluid">
+                            </div>
+                            <div class="col-lg-5">
+                                <p class="room-type">Deluxe Room - Sea View</p>
+                                <p class="checkin-date"><i class="fas fa-calendar-alt"></i> Check-in Date: ${new Date(booking.booking_date).toLocaleDateString()}</p>
+                                <p class="guests"><i class="fas fa-user-friends"></i> Guests: 2 Adults</p>
+                            </div>
+                            <div class="col-lg-3 text-end">
+                                <p class="price">Total Price: ${booking.total} VND</p>
+                                <button class="btn btn-primary">Book Again</button>
+                                <button class="btn btn-secondary">View Details</button>
+                            </div>
+                        </div>
+                    </div>`;
+                bookingContainer.innerHTML += bookingHTML;
+            });
+        } else {
+            alert("No bookings available at the moment.");
         }
+    } catch (error) {
+        console.error("Error fetching booking data: ", error);
+        alert("An error occurred while fetching bookings. Please try again later.");
+    }
+}
 
-        window.onload = fetchBookings;
     </script>
     
 </body>
