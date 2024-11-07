@@ -82,38 +82,38 @@ public class BookingService {
 
     @Autowired
     TransactionService transactionService;
+
     //GET BOOKING BY USERNAME
-    public List<BookingResponse> getBookingByUsername(String username){
+    public List<BookingResponse> getBookingByUsername(String username) {
         String userId = userRepository.findByUsername(username).
                 orElseThrow(() -> new RuntimeException("User does not Exist")).getUserid_id();
-        List<Booking> listBooking  = bookingRepository.getBookingByUser(userId);
+        List<Booking> listBooking = bookingRepository.getBookingByUser(userId);
         List<BookingResponse> result = new ArrayList<>();
-        if(listBooking != null){
-            for(Booking booking : listBooking){
+        if (listBooking != null) {
+            for (Booking booking : listBooking) {
                 result.add(bookingMapper.toBookingResponse(booking));
             }
-        }else{
+        } else {
             throw new RuntimeException("You have not book any office");
         }
         return result;
     }
 
 
-
     //ADD MORE SERVICE
-    public BookingDetailResponse addServiceToBooking (AddServiceToBookingRequest request, String bookingId, String roomName){
+    public BookingDetailResponse addServiceToBooking(AddServiceToBookingRequest request, String bookingId, String roomName) {
 
         String bookingVersion = GenerateDetailVesion(bookingId);
 
         Room room = roomRepository.findByName(roomName);
-        if(room == null) throw new AppException(ErrorCode.NAME_NOT_FOUND);
+        if (room == null) throw new AppException(ErrorCode.NAME_NOT_FOUND);
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
         double versionPrice = 0;
 
-        for(Map.Entry<String,Integer> entry : request.getServices().entrySet()) {
+        for (Map.Entry<String, Integer> entry : request.getServices().entrySet()) {
             com.example.POD_BookingSystem.Entity.Service bookedService = serviceRepository.findByName(entry.getKey());
-            if(bookedService == null) throw new AppException(ErrorCode.NAME_NOT_FOUND);
+            if (bookedService == null) throw new AppException(ErrorCode.NAME_NOT_FOUND);
 
             BookingDetail serviceBookingDetail = BookingDetail.builder()
                     .booking_detail_id(GenerateDetailId())
@@ -131,7 +131,7 @@ public class BookingService {
             bookingDetailRepository.save(serviceBookingDetail);
         }
         booking.setBookedService(request.getServices());
-        booking.setTotal(booking.getTotal()+versionPrice);
+        booking.setTotal(booking.getTotal() + versionPrice);
         bookingRepository.save(booking);
 
         return BookingDetailResponse.builder()
@@ -143,51 +143,49 @@ public class BookingService {
     }
 
     //GET BOOKING INFORMATION
-    public BookingInformationResponse getBookingInformation(String bookingId){
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
+    public BookingInformationResponse getBookingInformation(String bookingId) {
         BookingInformationResponse bookingInformationResponse = new BookingInformationResponse();
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
 
         List<BookingDetail> listBookingDetail = booking.getBookingDetails();
 
-        Set<Room> roomSet = new HashSet<>();
+        Room room = listBookingDetail.getFirst().getRoom();
+        log.info(room.getName());
 
-        for (BookingDetail bookingDetail : listBookingDetail){
-            roomSet.add(bookingDetail.getRoom());
+        log.info("at service");
+        List<com.example.POD_BookingSystem.Entity.Service> listServices = new ArrayList<>();
+        for (String serviceId : serviceRepository.getServiceByRoom(bookingId, room.getRoom_id())) {
+            listServices.add(serviceRepository.findById(serviceId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
         }
-        List<RoomInformationResponse> roomInformationResponses = new ArrayList<>();
-        List<ServiceResponse> services = new ArrayList<>();
 
-        for(Room room : roomSet){
-            List<com.example.POD_BookingSystem.Entity.Service> listServices = new ArrayList<>();
-            for(String serviceId : serviceRepository.getServiceByRoom(bookingId, room.getRoom_id())){
-                listServices.add(serviceRepository.findById(serviceId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
-            }
-
-            List<Slot> listSlots = new ArrayList<>();
-            for(String slotId : slotRepository.getSlotsInRoom(bookingId,room.getRoom_id())){
-                listSlots.add(slotRepository.findById(slotId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
-            }
-
-            roomInformationResponses.add(RoomInformationResponse.builder()
-                            .roomName(room.getName())
-                            .amount(bookingDetailRepository.getRoomTotalAmount(room.getRoom_id()))
-                            .endTime(bookingDetailRepository.getRoomEndTime(room.getRoom_id()))
-                            .services(listServices.stream().map(service -> serviceMapper.toServiceResponse(service)).toList())
-                            .startTime(bookingDetailRepository.getRoomStartTime(room.getRoom_id()))
-                            .slots(listSlots.stream().map(slot -> slotMapper.toSlotResponse(slot)).toList())
-                            .build());
+        List<Slot> listSlots = new ArrayList<>();
+        for (String slotId : slotRepository.getSlotsInRoom(bookingId, room.getRoom_id())) {
+            listSlots.add(slotRepository.findById(slotId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
         }
-        bookingInformationResponse.setRoomInfo(roomInformationResponses);
+
+        RoomInformationResponse response = RoomInformationResponse.builder()
+                .roomName(room.getName())
+                .amount(bookingDetailRepository.getRoomTotalAmount(room.getRoom_id(), bookingId))
+                .endTime(bookingDetailRepository.getRoomEndTime(room.getRoom_id(), bookingId))
+                .services(listServices.stream().map(service -> serviceMapper.toServiceResponse(service)).toList())
+                .startTime(bookingDetailRepository.getRoomStartTime(room.getRoom_id(), bookingId))
+                .slots(listSlots.stream().map(slot -> slotMapper.toSlotResponse(slot)).toList())
+                .build();
+
+        bookingInformationResponse.setRoomInfo(response);
         bookingInformationResponse.setAmount(booking.getTotal());
         bookingInformationResponse.setStatus(booking.getStatus());
+
+        log.info(bookingInformationResponse.toString());
 
         return bookingInformationResponse;
     }
 
     //CANCEL PAYMENT
-    public void cancelPayment(int amount, String bookingId){
+    public void cancelPayment(int amount, String bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
-        booking.setTotal(booking.getTotal()-amount);
+        booking.setTotal(booking.getTotal() - amount);
         bookingDetailRepository.resetBookingDetail(bookingId);
         bookingRepository.save(booking);
     }
@@ -216,8 +214,8 @@ public class BookingService {
         List<Slot> slots = new ArrayList<>();
 
         int numberOfSlot = 0;
-        for(Map.Entry<String, List<LocalDate>> entry : request.getSlots().entrySet()){
-            for(LocalDate date : entry.getValue()) {
+        for (Map.Entry<String, List<LocalDate>> entry : request.getSlots().entrySet()) {
+            for (LocalDate date : entry.getValue()) {
                 Slot slot = slotRepository.findById(entry.getKey()).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
                 slots.add(slot);
                 numberOfSlot += 1;
@@ -225,27 +223,27 @@ public class BookingService {
         }
         long timeBooking = 0;
         double bookingPrice = 0;
-        if(slots.getFirst().getSlot_id().equals("Day")){
-            timeBooking = ChronoUnit.DAYS.between(request.getStart_time(), request.getEnd_time() );
-            if(timeBooking == 0){
-                bookingPrice = ((room.getPrice()*12)* 1) - ((room.getPrice()*12)* 10 / 100);
-            }else{
-                bookingPrice = ((room.getPrice()*12)* (timeBooking+1)) - ((room.getPrice()*12)* 10 / 100);
+        if (slots.getFirst().getSlot_id().equals("Day")) {
+            timeBooking = ChronoUnit.DAYS.between(request.getStart_time(), request.getEnd_time());
+            if (timeBooking == 0) {
+                bookingPrice = ((room.getPrice() * 12) * 1) - ((room.getPrice() * 12) * 10 / 100);
+            } else {
+                bookingPrice = ((room.getPrice() * 12) * (timeBooking + 1)) - ((room.getPrice() * 12) * 10 / 100);
             }
 
         } else if (slots.getFirst().getSlot_id().equals("Month")) {
-            timeBooking = ChronoUnit.DAYS.between(request.getStart_time(), request.getEnd_time())/30;
-            bookingPrice = ((room.getPrice()*12)* timeBooking) - ((room.getPrice()*12)* timeBooking * 10 / 100);
+            timeBooking = ChronoUnit.DAYS.between(request.getStart_time(), request.getEnd_time()) / 30;
+            bookingPrice = ((room.getPrice() * 12) * timeBooking) - ((room.getPrice() * 12) * timeBooking * 10 / 100);
         } else {
             timeBooking = numberOfSlot;
-            bookingPrice = room.getPrice()*timeBooking;
+            bookingPrice = room.getPrice() * timeBooking;
         }
 
         versionPrice += bookingPrice;
 
         //Lay Slot Thue Cho Booking Detail
         List<String> slotDescription = new ArrayList<>();
-        for(Slot slot : slots){
+        for (Slot slot : slots) {
             slotDescription.add(slot.getDescription());
         }
 
@@ -275,12 +273,12 @@ public class BookingService {
 
         // Tao Booking Detail cho List Service
 
-        for(Map.Entry<String, Integer> entry : request.getService().entrySet()){
+        for (Map.Entry<String, Integer> entry : request.getService().entrySet()) {
             String serviceName = entry.getKey(); // Lấy service name
             Integer Quantity = entry.getValue();
 
             com.example.POD_BookingSystem.Entity.Service bookedService = serviceRepository.findByName(serviceName);
-            if(bookedService == null) throw  new RuntimeException("Service does not exist");
+            if (bookedService == null) throw new RuntimeException("Service does not exist");
             BookingDetail serviceBookingDetail = BookingDetail.builder()
                     .booking_detail_id(GenerateDetailId())
                     .room(room)
@@ -297,7 +295,7 @@ public class BookingService {
             versionPrice += (bookedService.getPrice() * Quantity);
             bookingDetails.add(serviceBookingDetail);
             bookingDetailRepository.save(serviceBookingDetail);
-            service.put(bookedService.getService_id(),Quantity);
+            service.put(bookedService.getService_id(), Quantity);
         }
         bookingTotalPrice += versionPrice;
         booking.setTotal(bookingTotalPrice);
@@ -318,38 +316,37 @@ public class BookingService {
                 .build();
     }
 
-    public void confirmBooking(String bookingId, ConfirmRequest request){
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
-        String bookingVersion = bookingDetailRepository.findLastVersion(bookingId);
+    public void confirmBooking(String bookingId, ConfirmRequest request) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking Not Found"));
+        List<BookingDetail> bookingDetails = booking.getBookingDetails();
 
         Map<String, List<LocalDate>> bookingSlot = booking.getBookingDate();
 
-        Room room = bookingDetailRepository.findDetailByVersion(bookingVersion).getFirst().getRoom();
+        Room room = bookingDetails.getFirst().getRoom();
 
-        List<BookingDetail> bookingDetails = bookingDetailRepository.findDetailByVersion(bookingVersion);
-        for(BookingDetail bookingDetail : bookingDetails){
+        for (BookingDetail bookingDetail : bookingDetails) {
             bookingDetail.setStatus("CONFIRM");
         }
 
         List<RoomSlot> roomSlotList = new ArrayList<>();
         if (bookingSlot != null && !bookingSlot.isEmpty()) {
             for (Map.Entry<String, List<LocalDate>> entry : bookingSlot.entrySet()) {
-                    for (LocalDate date : entry.getValue()) {
-                        RoomSlot roomSlot = RoomSlot.builder()
-                                .room(room)
-                                .uId(GenerateRoomSlotId())
-                                .booking(booking)
-                                .slot(slotRepository.findById(entry.getKey())
-                                        .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)))
-                                .booking_date(date)
-                                .build();
+                for (LocalDate date : entry.getValue()) {
+                    RoomSlot roomSlot = RoomSlot.builder()
+                            .room(room)
+                            .uId(GenerateRoomSlotId())
+                            .booking(booking)
+                            .slot(slotRepository.findById(entry.getKey())
+                                    .orElseThrow(() -> new RuntimeException("Slot not found")))
+                            .booking_date(date)
+                            .build();
 
-                        roomSlotList.add(roomSlot);
-                    }
+                    roomSlotList.add(roomSlot);
                 }
             }
+        }
 
-        for(RoomSlot roomSlot : roomSlotList){
+        for (RoomSlot roomSlot : roomSlotList) {
             roomSlotRepository.save(roomSlot);
         }
 
@@ -357,33 +354,32 @@ public class BookingService {
         List<RoomService> roomServices = room.getRoomServices();
         List<String> roomBookedService = new ArrayList<>();
 
-        if(booking.getBookedService()!=null) {
+        if (booking.getBookedService() != null) {
             for (Map.Entry<String, Integer> entry : booking.getBookedService().entrySet()) {
-                    log.info(entry.getValue().toString());
-                    int quantity = 0;
-                    //Tao Id cho BookingService
-                    BookingServiceId serviceId = new BookingServiceId();
-                    serviceId.setBooking_id(bookingId);
-                    serviceId.setService_id(serviceRepository.findByName(entry.getKey()).getService_id());
+                log.info(entry.getValue().toString());
+                int quantity = 0;
+                //Tao Id cho BookingService
+                BookingServiceId serviceId = new BookingServiceId();
+                serviceId.setBooking_id(bookingId);
+                serviceId.setService_id(serviceRepository.findByName(entry.getKey()).getService_id());
 
-                    Booking_service existService = bookingServiceRepository.findExistService
-                            (serviceRepository.findByName(entry.getKey()).getService_id(),bookingId);
-                    if(existService!=null)
-                {
+                Booking_service existService = bookingServiceRepository.findExistService
+                        (serviceRepository.findByName(entry.getKey()).getService_id(), bookingId);
+                if (existService != null) {
                     quantity = existService.getQuantity() + entry.getValue();
                 } else {
-                        quantity = entry.getValue();
-                    }
-                    Booking_service bookingService = Booking_service.builder()
-                            .id(serviceId)
-                            .booking(booking) // đối tượng Booking
-                            .service(serviceRepository.findByName(entry.getKey())) // đối tượng Service
-                            .quantity(quantity)
-                            .status("INTACT")
-                            .build();
+                    quantity = entry.getValue();
+                }
+                Booking_service bookingService = Booking_service.builder()
+                        .id(serviceId)
+                        .booking(booking) // đối tượng Booking
+                        .service(serviceRepository.findByName(entry.getKey())) // đối tượng Service
+                        .quantity(quantity)
+                        .status("INTACT")
+                        .build();
 
                 for (RoomService roomService : roomServices) {
-                    if(roomService.getService().getService_id().equals(bookingService.getService().getService_id())){
+                    if (roomService.getService().getService_id().equals(bookingService.getService().getService_id())) {
                         bookingService.setQuantity(bookingService.getQuantity() + roomService.getQuantity());
                     }
                 }
@@ -391,29 +387,28 @@ public class BookingService {
                 roomBookedService.add(bookingService.getService().getService_id());
                 bookingServiceRepository.save(bookingService);
             }
-        }else {
+        } else {
             throw new RuntimeException("Service is not exist");
         }
 
-       for(RoomService roomService : roomServices){
-           if(!roomBookedService.contains(roomService.getService().getService_id())){
+        for (RoomService roomService : roomServices) {
+            if (!roomBookedService.contains(roomService.getService().getService_id())) {
 
-               Booking_service service = Booking_service.builder()
-                       .id(BookingServiceId.builder()
-                               .booking_id(bookingId)
-                               .service_id(roomService.getService().getService_id())
-                               .build())
-                       .service(roomService.getService())
-                       .quantity(roomService.getQuantity())
-                       .status("INTACT")
-                       .booking(booking)
-                       .build();
+                Booking_service service = Booking_service.builder()
+                        .id(BookingServiceId.builder()
+                                .booking_id(bookingId)
+                                .service_id(roomService.getService().getService_id())
+                                .build())
+                        .service(roomService.getService())
+                        .quantity(roomService.getQuantity())
+                        .status("INTACT")
+                        .booking(booking)
+                        .build();
 
 
-               bookingServiceRepository.save(service);
-           }
-       }
-
+                bookingServiceRepository.save(service);
+            }
+        }
 
 
         booking.setStatus("CONFIRM");
@@ -421,16 +416,14 @@ public class BookingService {
 //        booking.setBookingServices(null);
 
         //SEND EMAIL
-        User user = userRepository.findById(booking.getUser().getUserid_id()).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
-        if(room.getAvailability().equals("AVAILABLE")) {
-            String userName = userRepository.findById(booking.getUser().getName()).
-                    orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)).getName();
-            String address = room.getBuilding().getAddress();
-            mailService.sendMail(user.getEmail(), "XÁC NHẬN ĐẶT PHÒNG",
-                    userName, room.getName(), booking.getBooking_date().toString(), address);
+        User user = booking.getUser();
+        log.info("User EMail:" + user.getEmail());
+        String userName = user.getName();
+        String address = room.getBuilding().getAddress();
+        mailService.sendMail(user.getEmail(), "XÁC NHẬN ĐẶT PHÒNG",
+                userName, room.getName(), booking.getBooking_date().toString(), address);
 
-            room.setAvailability("BOOKED");
-        }
+        room.setAvailability("BOOKED");
         bookingRepository.resetBookingDate(bookingId);
         bookingRepository.resetBookingService(bookingId);
 
@@ -442,7 +435,7 @@ public class BookingService {
             LocalDateTime dateTime = LocalDateTime.parse(request.getBookingDate(), formatter);
             date = dateTime.toLocalDate();
             log.info(booking.getBooking_date().toString());
-            if(booking.getStatus().equals("PENDING")){
+            if (booking.getStatus().equals("PENDING")) {
                 booking.setBooking_date(date);
             }
 
@@ -451,7 +444,7 @@ public class BookingService {
             throw new RuntimeException("Invalid booking date format.");
         }
 
-        if(booking.getTxnRef()==null){
+        if (booking.getTxnRef() == null) {
             booking.setTxnRef(request.getCode());
         }
         bookingRepository.save(booking);
@@ -459,27 +452,27 @@ public class BookingService {
         paymentService.createPayment(booking);
 
         paymentService.createPaymentDetail(booking);
-        transactionService.createTransaction(booking,booking.getUser());
+        transactionService.createTransaction(booking, booking.getUser());
         transactionService.createTransactionDetail(booking);
 
     }
 
     //Tao ra 1 Booking Id tang dan dua tren Id da co
-    private String GenerateId(){
-        int number = bookingRepository.findAll().size()+1;
+    private String GenerateId() {
+        int number = bookingRepository.findAll().size() + 1;
         return "Bo-" + number;
     }
 
-    private String GenerateDetailId(){
-        int number = bookingDetailRepository.findAll().size()+1;
+    private String GenerateDetailId() {
+        int number = bookingDetailRepository.findAll().size() + 1;
         return "BD-" + number;
     }
 
     //Tao ra 1 Version moi, tang dan dua tren version da co
-    private String GenerateDetailVesion(String bookingId){
+    private String GenerateDetailVesion(String bookingId) {
         String version = bookingDetailRepository.findLastVersion(bookingId);
-        if(!(version == null)){
-            int number = Integer.parseInt(version.substring(8))+1;
+        if (!(version == null)) {
+            int number = Integer.parseInt(version.substring(8)) + 1;
             return String.format("bookingV%02d", number);
         }
         return "bookingV01";
@@ -490,19 +483,20 @@ public class BookingService {
     }
 
     //CHECKIN
-    public void requestCheckin(String bookingId){
+    public void requestCheckin(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        if(!"CONFIRM".equals(booking.getStatus())){
+        if (!"CONFIRM".equals(booking.getStatus())) {
             throw new RuntimeException("Request check in can only be made for booking with status 'CONFIRM'");
         }
         booking.setStatus("CHECK_IN_REQUEST");
         bookingRepository.save(booking);
     }
-    public void approveCheckin(String bookingId){
+
+    public void approveCheckin(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        if(!"CHECK_IN_REQUEST".equals(booking.getStatus())){
+        if (!"CHECK_IN_REQUEST".equals(booking.getStatus())) {
             throw new RuntimeException("Check in can only be approved for booking with status 'CHECK_IN_REQUEST'");
         }
         booking.setStatus("CHECK_IN");
@@ -517,10 +511,11 @@ public class BookingService {
         }
         transactionService.createTransactionDetail(booking);
     }
-    public void rejectCheckin(String bookingId){
+
+    public void rejectCheckin(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        if(!"CHECK_IN_REQUEST".equals(booking.getStatus())){
+        if (!"CHECK_IN_REQUEST".equals(booking.getStatus())) {
             throw new RuntimeException("Reject check in can only be rejected for booking with status 'CHECK_IN_REQUEST'");
         }
         booking.setStatus("CONFIRM");
@@ -529,20 +524,21 @@ public class BookingService {
 
 
     //CHECK OUT
-    public void requestCheckout(String bookingId){
+    public void requestCheckout(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        if(!"CHECK_IN".equals(booking.getStatus())){
+        if (!"CHECK_IN".equals(booking.getStatus())) {
             throw new RuntimeException("Request check out can only be made for booking with status 'CHECK_IN'");
         }
 
         booking.setStatus("CHECK_OUT_REQUEST");
         bookingRepository.save(booking);
     }
-    public void approveCheckout(String bookingId){
+
+    public void approveCheckout(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        if(!"CHECK_OUT_REQUEST".equals(booking.getStatus())){
+        if (!"CHECK_OUT_REQUEST".equals(booking.getStatus())) {
             throw new RuntimeException("Check out can only be approved for booking with status 'CHECK_OUT_REQUEST'");
         }
 
@@ -558,10 +554,11 @@ public class BookingService {
         }
         transactionService.createTransactionDetail(booking);
     }
-    public void rejectCheckout(String bookingId){
+
+    public void rejectCheckout(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        if(!"CHECK_OUT_REQUEST".equals(booking.getStatus())){
+        if (!"CHECK_OUT_REQUEST".equals(booking.getStatus())) {
             throw new RuntimeException("Reject check out can only be rejected for booking with status 'CHECK_OUT_REQUEST'");
         }
         booking.setStatus("CHECK_IN");

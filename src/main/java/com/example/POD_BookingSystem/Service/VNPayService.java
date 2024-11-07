@@ -58,7 +58,7 @@ public class VNPayService {
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_BankCode", vnPayRequest.getBankCode());
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Pay:" +booking_id+" TransactionCode:"+ vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", booking_id);
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
