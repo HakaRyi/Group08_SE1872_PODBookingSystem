@@ -1,6 +1,7 @@
 package com.example.POD_BookingSystem.Entity;
 
 import com.example.POD_BookingSystem.Entity.EBooking.Booking;
+import com.example.POD_BookingSystem.Entity.EBooking.MonthBooking;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,6 +32,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Booking> bookings;
+
+    @OneToMany(mappedBy = "user")
+    private List<MonthBooking> monthBookings;
 
     String VIP;
 }

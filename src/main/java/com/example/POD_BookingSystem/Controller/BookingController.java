@@ -1,14 +1,8 @@
 package com.example.POD_BookingSystem.Controller;
 
-import com.example.POD_BookingSystem.DTO.Request.Booking.CancelPaymentRequest;
-import com.example.POD_BookingSystem.DTO.Request.Booking.ConfirmRequest;
-import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
-import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingRequest;
+import com.example.POD_BookingSystem.DTO.Request.Booking.*;
 import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
-import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
-import com.example.POD_BookingSystem.DTO.Response.BookingDetailResponse;
-import com.example.POD_BookingSystem.DTO.Response.BookingInformationResponse;
-import com.example.POD_BookingSystem.DTO.Response.BookingResponse;
+import com.example.POD_BookingSystem.DTO.Response.*;
 import com.example.POD_BookingSystem.Entity.EBooking.Booking;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomRepository;
@@ -132,6 +126,14 @@ ApiResponse<String> requestCheckin(@PathVariable String bookingId) {
                 .data("Check-out rejected successfully")
                 .build();
 
+    }
+
+    @PostMapping("book/by-month")
+    ApiResponse<MonthBookingResponse> createBookingByMonth(@RequestBody CreateMonthBookingRequest request){
+        return ApiResponse.<MonthBookingResponse>builder()
+                .data(bookingService.createMonthBookingDetail(request))
+                .message("Booking SuccessFull")
+                .build();
     }
 
 }

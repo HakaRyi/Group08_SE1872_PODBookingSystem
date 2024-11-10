@@ -2,12 +2,10 @@ package com.example.POD_BookingSystem.Service;
 
 import com.example.POD_BookingSystem.DTO.Request.Booking.ConfirmRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
+import com.example.POD_BookingSystem.DTO.Request.Booking.CreateMonthBookingRequest;
 import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
 import com.example.POD_BookingSystem.DTO.Response.*;
-import com.example.POD_BookingSystem.Entity.EBooking.Booking;
-import com.example.POD_BookingSystem.Entity.EBooking.BookingDetail;
-import com.example.POD_BookingSystem.Entity.EBooking.BookingServiceId;
-import com.example.POD_BookingSystem.Entity.EBooking.Booking_service;
+import com.example.POD_BookingSystem.Entity.EBooking.*;
 import com.example.POD_BookingSystem.Entity.ERoom.Room;
 import com.example.POD_BookingSystem.Entity.ERoom.RoomService;
 import com.example.POD_BookingSystem.Entity.ERoom.RoomSlot;
@@ -21,6 +19,7 @@ import com.example.POD_BookingSystem.Mapper.SlotMapper;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingDetailRepository;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingRepository;
 import com.example.POD_BookingSystem.Repository.ReBooking.BookingServiceRepository;
+import com.example.POD_BookingSystem.Repository.ReBooking.MonthBookingRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomRepository;
 import com.example.POD_BookingSystem.Repository.ReRoom.RoomSlotRepository;
 import com.example.POD_BookingSystem.Repository.ServiceRepository;
@@ -31,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -83,6 +84,9 @@ public class BookingService {
     @Autowired
     TransactionService transactionService;
 
+    @Autowired
+    MonthBookingRepository monthBookingRepository;
+
     //GET BOOKING BY USERNAME
     public List<BookingResponse> getBookingByUsername(String username) {
         String userId = userRepository.findByUsername(username).
@@ -127,7 +131,7 @@ public class BookingService {
                     .bookingVersion(bookingVersion)
                     .booking(booking)
                     .build();
-            versionPrice += serviceBookingDetail.getTotal_price();
+            versionPrice += (serviceBookingDetail.getTotal_price());
             bookingDetailRepository.save(serviceBookingDetail);
         }
         booking.setBookedService(request.getServices());
@@ -292,7 +296,7 @@ public class BookingService {
                     .booking(booking)
                     .build();
 
-            versionPrice += (bookedService.getPrice() * Quantity);
+            versionPrice += bookedService.getPrice() * Quantity;
             bookingDetails.add(serviceBookingDetail);
             bookingDetailRepository.save(serviceBookingDetail);
             service.put(bookedService.getService_id(), Quantity);
@@ -323,13 +327,18 @@ public class BookingService {
         Map<String, List<LocalDate>> bookingSlot = booking.getBookingDate();
 
         Room room = bookingDetails.getFirst().getRoom();
+        MonthBooking roomBookedByMonth = monthBookingRepository.isBookingByMonth(bookingId);
+        if(roomBookedByMonth != null){
+            roomBookedByMonth.setStatus("CONFIRM");
+            monthBookingRepository.save(roomBookedByMonth);
+        }
 
         for (BookingDetail bookingDetail : bookingDetails) {
             bookingDetail.setStatus("CONFIRM");
         }
 
-        List<RoomSlot> roomSlotList = new ArrayList<>();
         if (bookingSlot != null && !bookingSlot.isEmpty()) {
+            List<RoomSlot> roomSlotList = new ArrayList<>();
             for (Map.Entry<String, List<LocalDate>> entry : bookingSlot.entrySet()) {
                 for (LocalDate date : entry.getValue()) {
                     RoomSlot roomSlot = RoomSlot.builder()
@@ -344,10 +353,9 @@ public class BookingService {
                     roomSlotList.add(roomSlot);
                 }
             }
-        }
-
-        for (RoomSlot roomSlot : roomSlotList) {
-            roomSlotRepository.save(roomSlot);
+            for (RoomSlot roomSlot : roomSlotList) {
+                roomSlotRepository.save(roomSlot);
+            }
         }
 
         //Kiem Tra Service Co san
@@ -409,8 +417,6 @@ public class BookingService {
                 bookingServiceRepository.save(service);
             }
         }
-
-
         booking.setStatus("CONFIRM");
         booking.setBookingDate(null);
 //        booking.setBookingServices(null);
@@ -422,8 +428,6 @@ public class BookingService {
         String address = room.getBuilding().getAddress();
         mailService.sendMail(user.getEmail(), "XÁC NHẬN ĐẶT PHÒNG",
                 userName, room.getName(), booking.getBooking_date().toString(), address);
-
-        room.setAvailability("BOOKED");
         bookingRepository.resetBookingDate(bookingId);
         bookingRepository.resetBookingService(bookingId);
 
@@ -563,5 +567,109 @@ public class BookingService {
         }
         booking.setStatus("CHECK_IN");
         bookingRepository.save(booking);
+    }
+
+    // CREATE MONTH BOOKING DETAIL
+    public MonthBookingResponse createMonthBookingDetail(CreateMonthBookingRequest request) {
+        Room room = roomRepository.findByName(request.getRoomName());
+        if (room == null) throw new RuntimeException("Room does not Exist");
+
+        //CREATE NEW BOOKING
+        User user = userRepository.findByPhone(request.getPhone()).
+                orElseThrow(() -> new RuntimeException("User does not exist or phone is not register"));
+        String id = GenerateId();
+        Booking booking = Booking.builder()
+                .booking_id(id)
+                .user(user)
+                .booking_date(LocalDate.now())
+                .status("PENDING")
+                .build();
+        bookingRepository.save(booking);
+
+        MonthBooking monthBooking = MonthBooking.builder()
+                .booking_id(id)
+                .status("PENDING")
+                .booking_date(LocalDate.now())
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .user(user)
+                .build();
+        int numberOfMonth = request.getNumberOfMonth();
+
+        double bookingPrice = (((room.getPrice() * 12) * 30 * numberOfMonth) - ((room.getPrice() * 12) * 30 * numberOfMonth * 18 / 100));
+
+        var bookingId = booking.getBooking_id();
+        String version = GenerateDetailVesion(bookingId);
+        double versionPrice = 0;
+
+        versionPrice += bookingPrice;
+
+        List<BookingDetail> bookingDetails = new ArrayList<>();
+
+        double bookingTotalPrice = booking.getTotal();
+
+        BookingDetail roomBookingDetail = BookingDetail.builder()
+                .booking_detail_id(GenerateDetailId())
+                .room(room)
+                .booking_type("ROOM")
+                .quantity(1)
+                .total_price(bookingPrice)
+                .timestamp(LocalDateTime.now())
+                .status("PENDING")
+                .start_time(request.getStartTime())
+                .end_time(request.getEndTime())
+                .bookingVersion(version)
+                .booking(booking)
+                .build();
+
+        bookingDetails.add(roomBookingDetail);
+        bookingDetailRepository.save(roomBookingDetail);
+
+        Map<String, Integer> service = new HashMap<>();
+
+        // Tao Booking Detail cho List Service
+
+        for (Map.Entry<String, Integer> entry : request.getService().entrySet()) {
+            String serviceName = entry.getKey(); // Lấy service name
+            Integer Quantity = entry.getValue();
+
+            com.example.POD_BookingSystem.Entity.Service bookedService = serviceRepository.findByName(serviceName);
+            if (bookedService == null) throw new RuntimeException("Service does not exist");
+            BookingDetail serviceBookingDetail = BookingDetail.builder()
+                    .booking_detail_id(GenerateDetailId())
+                    .room(room)
+                    .booking_type("SERVICE")
+                    .service_id(bookedService.getService_id())
+                    .quantity(Quantity)
+                    .total_price(bookedService.getPrice() * Quantity)
+                    .timestamp(LocalDateTime.now())
+                    .status("PENDING")
+                    .bookingVersion(version)
+                    .booking(booking)
+                    .build();
+
+            versionPrice += (bookedService.getPrice() * Quantity);
+            bookingDetails.add(serviceBookingDetail);
+            bookingDetailRepository.save(serviceBookingDetail);
+            service.put(bookedService.getService_id(), Quantity);
+        }
+        bookingTotalPrice += versionPrice;
+        booking.setTotal(bookingTotalPrice);
+        booking.setBookingDetails(bookingDetails);
+        booking.setBookedService(request.getService());
+
+        bookingRepository.save(booking);
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String formattedCurrency = currencyFormat.format(versionPrice);
+
+        return MonthBookingResponse.builder()
+                .total(formattedCurrency)
+                .phoneNumber(request.getPhone())
+                .userName(user.getName())
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .booking_date(LocalDate.now())
+                .booking_id(bookingId)
+                .build();
     }
 }
