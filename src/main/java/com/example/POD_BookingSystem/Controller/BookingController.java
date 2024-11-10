@@ -44,13 +44,13 @@ public class BookingController {
                 .build();
     }
 
-    @PostMapping("/{roomName}/bookingdetails")
+    @PostMapping("/bookingdetails")
     ApiResponse<BookingDetailResponse> createBookingDetail
-            (@PathVariable String roomName,
-             @RequestBody CreateBookingDetailRequest request,
+            (@RequestBody CreateBookingDetailRequest request,
               HttpServletRequest req  ) throws ParseException, JOSEException {
         String token = req.getHeader("Authorization").substring(7); // Bỏ qua "Bearer " trong token
         String username = authenticationService.getUsernameFromToken(token);
+        String roomName = request.getRoomName();
         return ApiResponse.<BookingDetailResponse>builder()
                 .data(bookingService.createBookingDetail(username,roomName,request))
                 .build();

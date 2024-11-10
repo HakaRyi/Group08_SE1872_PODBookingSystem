@@ -32,7 +32,7 @@ public class Booking {
     Map<String, Integer> bookedService;
 
     @ElementCollection
-    Map<String, List<LocalDate>> bookingDate;
+    Map<String, List<String>> bookingDate;
 
     @ManyToMany
     @JoinTable(

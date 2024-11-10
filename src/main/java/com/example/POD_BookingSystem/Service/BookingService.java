@@ -218,8 +218,8 @@ public class BookingService {
         List<Slot> slots = new ArrayList<>();
 
         int numberOfSlot = 0;
-        for (Map.Entry<String, List<LocalDate>> entry : request.getSlots().entrySet()) {
-            for (LocalDate date : entry.getValue()) {
+        for (Map.Entry<String, List<String>> entry : request.getSlots().entrySet()) {
+            for (String date : entry.getValue()) {
                 Slot slot = slotRepository.findById(entry.getKey()).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND));
                 slots.add(slot);
                 numberOfSlot += 1;
@@ -310,6 +310,7 @@ public class BookingService {
         bookingRepository.save(booking);
 
         return BookingDetailResponse.builder()
+                .bookingId(bookingId)
                 .roomName(room.getName())
                 .bookingVersion(version)
                 .slotDescription(slotDescription)
@@ -324,7 +325,7 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking Not Found"));
         List<BookingDetail> bookingDetails = booking.getBookingDetails();
 
-        Map<String, List<LocalDate>> bookingSlot = booking.getBookingDate();
+        Map<String, List<String>> bookingSlot = booking.getBookingDate();
 
         Room room = bookingDetails.getFirst().getRoom();
         MonthBooking roomBookedByMonth = monthBookingRepository.isBookingByMonth(bookingId);
@@ -339,18 +340,33 @@ public class BookingService {
 
         if (bookingSlot != null && !bookingSlot.isEmpty()) {
             List<RoomSlot> roomSlotList = new ArrayList<>();
-            for (Map.Entry<String, List<LocalDate>> entry : bookingSlot.entrySet()) {
-                for (LocalDate date : entry.getValue()) {
-                    RoomSlot roomSlot = RoomSlot.builder()
-                            .room(room)
-                            .uId(GenerateRoomSlotId())
-                            .booking(booking)
-                            .slot(slotRepository.findById(entry.getKey())
-                                    .orElseThrow(() -> new RuntimeException("Slot not found")))
-                            .booking_date(date)
-                            .build();
+            for (Map.Entry<String, List<String>> entry : bookingSlot.entrySet()) {
+                if(entry.getKey().equals("Day") || entry.getKey().equals("Month")) {
+                    for (String date : entry.getValue()) {
+                        RoomSlot roomSlot = RoomSlot.builder()
+                                .room(room)
+                                .uId(GenerateRoomSlotId())
+                                .booking(booking)
+                                .slot(slotRepository.findById(entry.getKey())
+                                        .orElseThrow(() -> new RuntimeException("Slot not found")))
+                                .booking_date(date)
+                                .build();
 
-                    roomSlotList.add(roomSlot);
+                        roomSlotList.add(roomSlot);
+                    }
+                }else {
+                    for (String date : entry.getValue()) {
+                        RoomSlot roomSlot = RoomSlot.builder()
+                                .room(room)
+                                .uId(GenerateRoomSlotId())
+                                .booking(booking)
+                                .slot(slotRepository.findById(entry.getKey())
+                                        .orElseThrow(() -> new RuntimeException("Slot not found")))
+                                .booking_date(bookingDetailRepository.getRoomStartTime(room.getRoom_id(), bookingId).toString())
+                                .build();
+
+                        roomSlotList.add(roomSlot);
+                    }
                 }
             }
             for (RoomSlot roomSlot : roomSlotList) {
