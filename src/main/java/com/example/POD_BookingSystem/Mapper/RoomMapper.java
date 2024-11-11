@@ -12,7 +12,7 @@ import org.mapstruct.MappingTarget;
 public interface RoomMapper {
     Room toRoom(CreateRoomRequest request);
 
-    @Mapping(source = "building.building_id", target = "building_id")
+    @Mapping(source = "building.name", target = "building_name")
     @Mapping(source = "roomType.name", target = "type_name")
     RoomResponse toRoomResponse(Room room);
 

@@ -13,7 +13,6 @@ import java.time.LocalDate;
 public class CreateBookingRequest {
     LocalDate booking_date;
     String user_id;
-
     String room_id;
     String booking_type;
     String service_id;

@@ -1,5 +1,6 @@
 package com.example.POD_BookingSystem.Configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,8 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
+    //@Autowired
+   // private OAuth2LoginHandler oAuth2LoginHandler;
     private final String[] AUTHORIZE_ENDPOINT = {"/api/users/customer" , "/api/auth/log-in", "/api/auth/introspect","/swagger-ui.html"};
     private final String[] AUTHORIZE_SWAGGER = {"/swagger-ui.html",
             "/swagger-ui/**",
@@ -44,10 +46,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
+
+
         httpSecurity.authorizeHttpRequests(
                 request -> request.
                         requestMatchers(AUTHORIZE_SWAGGER).permitAll()
                         .requestMatchers(HttpMethod.POST, AUTHORIZE_ENDPOINT).permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/auth/verifyEmail",
+//                                "/v3/api-docs",
+//                                "/v3/api-docs/**",
+//                                "/swagger-ui.html",
+//                                "/oauth2/**",
+//                                "/ws/**",
+//                                "/swagger-ui/**").permitAll()
+//                        .anyRequest().authenticated()
                         .requestMatchers(HttpMethod.GET, GET_ENDPOINT).permitAll()
                         .anyRequest().permitAll()
 
@@ -57,6 +69,15 @@ public class SecurityConfig {
                         jwtConfigurer.decoder(jwtDecoder()))
 
         );
+//        httpSecurity
+//                .formLogin(form -> form
+//                        .loginPage("/login")
+//                        .permitAll())
+//                .oauth2Login(oauth -> oauth
+//                        .loginPage("http://localhost:5173/login")
+//                        .successHandler(oAuth2LoginHandler)
+//                        .failureUrl("http://localhost:5173/login?error=true")
+//                );
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.cors(cors -> cors.configurationSource(corsFilter()));
 

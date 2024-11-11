@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #4A4A4A;
+            background-color: #F0F8FF;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #C0392B; /* Christmas red */
+        }
+        .message {
+            font-size: 16px;
+            margin: 20px 0;
+            color: #27AE60; /* Christmas green */
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #C0392B; /* Christmas red */
+            color: white; /* White text for contrast */
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s; /* Transition effect for hover */
+        }
+        .cta-button:hover {
+            background-color: #FFD700; /* Darker red on hover */
+        }
+        .footer {
+            font-size: 14px;
+            color: #A9A9A9;
+            margin-top: 20px;
+        }
+         a {
+            color: white; /* Set link color to white */
+            text-decoration: none; /* Remove underline for links */
+        }
+        .cta-button a {
+        color: white; /* Set link color to white inside the button */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">Welcome to BeyondDesk!</div>
+    <div class="message">
+        Thank you for signing up for BeyondDesk. Please verify your email address to activate your account.
+    </div>
+    <a th:href="${verificationUrl}" style="color: white !important;" class="cta-button">Verify Email</a>
+    <div class="footer">
+        If you did not request this email, please ignore it.
+    </div>
+</div>
+</body>
+</html>

@@ -14,13 +14,22 @@ spring:
       show-sql: true
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: haxuankhang194@gmail.com
+    password: riukttjkajzztrra
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
 jwt:
   signKey: "XyoNeBIfTwb3rCdDFFnzcXQHcyaX7G+y/nTn5loDeYWuf4hPFMsfwEfjsM5qGz+i"
-  valid-duration: 100
+  valid-duration: 3600
   refreshable-duration: 120
 
 logging:
@@ -41,3 +50,13 @@ springdoc:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+
+twilio:
+  account_sid: ACb64fbab279b730b3ccf1980937c6db19
+  auth_token: 4246a8f66efb5b11ba5358d528a827c8
+  verify_sid: VA3db9a978e959f96b9b8a9e4684675398
+  verified-number: "+84357732955"
+
+sms:
+  url : "https://api.speedsms.vn/index.php"
+  token: rey0QssUXchxOL9p3u3dkp1LVah8VVYP

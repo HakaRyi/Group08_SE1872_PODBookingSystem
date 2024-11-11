@@ -13,5 +13,5 @@ import java.util.List;
 public class BookingInformationResponse {
     String status;
     double amount;
-    List<RoomInformationResponse> roomInfo;
+    RoomInformationResponse roomInfo;
 }

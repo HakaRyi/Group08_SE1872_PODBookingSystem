@@ -13,8 +13,10 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class BookingDetailResponse {
+    String bookingId;
     Map<String, Integer> service;
     String  roomName;
+
     double total_price;
     LocalDate start_time;
     LocalDate end_time;

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(name = "Room_slot")
 public class RoomSlot {
-
     @Id
     private String uId;
 
@@ -37,5 +36,5 @@ public class RoomSlot {
     @JsonIgnore
     private Booking booking;
 
-    LocalDate booking_date;
+    String booking_date;
 }

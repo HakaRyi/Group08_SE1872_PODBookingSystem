@@ -28,5 +28,13 @@ public interface BookingRepository extends JpaRepository<Booking, String> {
 
     @Query(value = "SELECT * FROM booking WHERE user_id = :userId", nativeQuery = true)
     List<Booking> getBookingByUser(@Param("userId") String userId);
+    @Query(value = "SELECT * FROM booking WHERE status='CHECK_IN_REQUEST'", nativeQuery = true)
+    List<Booking> findByStatusCheckin();
+    @Query(value = "SELECT * FROM booking WHERE status='CHECK_OUT_REQUEST'", nativeQuery = true)
+    List<Booking> findByStatusCheckout();
+    @Query(value = "SELECT * FROM booking WHERE status='CONFIRM'", nativeQuery = true)
+    List<Booking> findByConfirm();
+    @Query(value = "SELECT * FROM booking", nativeQuery = true)
+    List<Booking> findAll();
 
 }

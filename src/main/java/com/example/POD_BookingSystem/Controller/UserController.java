@@ -48,6 +48,15 @@ public class UserController {
 
         return apiResponse;
     }
+    @PostMapping("/admin")
+    ApiResponse<UserResponse> createAdmin(@RequestBody @Valid UserCreationRequest request){
+
+        ApiResponse<UserResponse> apiResponse=new ApiResponse<>();
+
+        apiResponse.setData(userService.createAdmin(request));
+
+        return apiResponse;
+    }
     @PostMapping("/manager")
     ApiResponse<UserResponse> createManager(@RequestBody @Valid UserCreationRequest request){
 

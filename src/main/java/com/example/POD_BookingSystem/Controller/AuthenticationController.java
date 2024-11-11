@@ -53,5 +53,14 @@ public class AuthenticationController {
                 .data(result)
                 .build();
     }
+    @PostMapping("/get-role")
+    ApiResponse<String> getRoleFromToken(HttpServletRequest request) throws ParseException, JOSEException {
+        String token = request.getHeader("Authorization").substring(7);
+        String role = authenticationService.getRoleFromToken(token);
+        return ApiResponse.<String>builder()
+                .data(role)
+                .build();
+    }
+
 
 }

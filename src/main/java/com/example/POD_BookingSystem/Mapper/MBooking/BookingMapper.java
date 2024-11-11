@@ -12,6 +12,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BookingMapper {
-
+   // @Mapping(source = "user.userid_id", target = "user_id")
     BookingResponse toBookingResponse(Booking booking);
 }

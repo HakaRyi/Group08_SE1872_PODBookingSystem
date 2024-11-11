@@ -28,9 +28,11 @@ public class BookingDetail {
     LocalDate start_time;
     LocalDate end_time;
     String bookingVersion;
+
     @ManyToOne(fetch = FetchType.LAZY,  cascade = CascadeType.PERSIST)
     @JoinColumn(name = "room_id", nullable = false) // Liên kết với Room
     private Room room;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
     private Booking booking;

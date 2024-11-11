@@ -65,7 +65,7 @@ public class RoomService {
 
         roomRepository.save(room);
         RoomResponse result = roomMapper.toRoomResponse(room);
-        result.setBuilding_id(building.getBuilding_id());
+        result.setBuilding_name(building.getBuilding_id());
         result.setType_name(roomType.getName());
         return result;
     }

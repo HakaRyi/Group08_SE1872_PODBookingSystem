@@ -93,7 +93,7 @@ public class AuthenticationService {
                 .issuer("POD_Booking_system")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(7, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("Role", roleName) //chèn role vào token

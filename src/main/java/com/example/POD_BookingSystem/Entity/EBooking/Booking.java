@@ -21,18 +21,21 @@ import java.util.Map;
 public class Booking {
     @Id
     String booking_id;
+
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "userid_id")
     User user;
+
     LocalDate booking_date;
     double total;
     String status;
+    String TxnRef;
 
     @ElementCollection
     Map<String, Integer> bookedService;
 
     @ElementCollection
-    Map<String, List<LocalDate>> bookingDate;
+    Map<String, List<String>> bookingDate;
 
     @ManyToMany
     @JoinTable(

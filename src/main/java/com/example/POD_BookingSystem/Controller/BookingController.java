@@ -1,16 +1,18 @@
 package com.example.POD_BookingSystem.Controller;
 
+import com.example.POD_BookingSystem.DTO.Request.Booking.CancelPaymentRequest;
+import com.example.POD_BookingSystem.DTO.Request.Booking.ConfirmRequest;
 import com.example.POD_BookingSystem.DTO.Request.Booking.CreateBookingDetailRequest;
-import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
-import com.example.POD_BookingSystem.DTO.Response.BookingDetailResponse;
-import com.example.POD_BookingSystem.DTO.Response.BookingInformationResponse;
-import com.example.POD_BookingSystem.DTO.Response.BookingResponse;
+import com.example.POD_BookingSystem.DTO.Request.Booking.CreateMonthBookingRequest;
+import com.example.POD_BookingSystem.DTO.Request.Service.AddServiceToBookingRequest;
+import com.example.POD_BookingSystem.DTO.Response.*;
 import com.example.POD_BookingSystem.Entity.EBooking.Booking;
 import com.example.POD_BookingSystem.Service.AuthenticationService;
 import com.example.POD_BookingSystem.Service.BookingService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -41,6 +43,32 @@ public class BookingController {
         String username = authenticationService.getUsernameFromToken(token);
         return ApiResponse.<List<BookingResponse>>builder()
                 .data(bookingService.getBookingByUsername(username))
+                .build();
+    }
+    //@Scheduled(fixedRate = 30000)
+    @GetMapping("/checkin")
+    ApiResponse<List<BookingResponse>> getCheckin() throws ParseException, JOSEException {
+        return ApiResponse.<List<BookingResponse>>builder()
+                .data(bookingService.getCheckin())
+                .build();
+    }
+    //@Scheduled(fixedRate = 30000)
+    @GetMapping("/checkout")
+    ApiResponse<List<BookingResponse>> getCheckout() throws ParseException, JOSEException {
+        return ApiResponse.<List<BookingResponse>>builder()
+                .data(bookingService.getCheckout())
+                .build();
+    }
+    @GetMapping("/BookingConfirm")
+    ApiResponse<List<BookingResponse>> getBookByConfirmStatus() throws ParseException, JOSEException {
+        return ApiResponse.<List<BookingResponse>>builder()
+                .data(bookingService.getBookByConfirm())
+                .build();
+    }
+    @GetMapping("/BookingAll")
+    ApiResponse<List<BookingResponse>> getBookings() throws ParseException, JOSEException {
+        return ApiResponse.<List<BookingResponse>>builder()
+                .data(bookingService.getAllBook())
                 .build();
     }
 
@@ -121,10 +149,34 @@ public class BookingController {
                 .build();
     }
 
+
+    @PostMapping("/{bookingId}/{roomName}/addServices")
+    ApiResponse<BookingDetailResponse> addServices
+            (@PathVariable String bookingId, @PathVariable String roomName, @RequestBody AddServiceToBookingRequest request){
+        return ApiResponse.<BookingDetailResponse>builder()
+                .data(bookingService.addServiceToBooking(request,bookingId,roomName))
+                .build();
+    }
+
     @PostMapping("/{bookingId}/confirm")
-    ApiResponse<Void> confirmBooking(@PathVariable String bookingId){
-        bookingService.confirmBooking(bookingId);
+    ApiResponse<Void> confirmBooking(@PathVariable String bookingId, @RequestBody ConfirmRequest request){
+        bookingService.confirmBooking(bookingId,request);
         return ApiResponse.<Void>builder().message("Book SuccessFully !!!").build();
+    }
+
+    @PostMapping("/{bookingId}/cancelPayment")
+    ApiResponse<Void> cancelPayment(@RequestBody CancelPaymentRequest request, @PathVariable String bookingId){
+        bookingService.cancelPayment(request.getAmount(), bookingId);
+        return ApiResponse.<Void>builder()
+                .message("Cancel Successfully")
+                .build();
+    }
+    @PostMapping("book/by-month")
+    ApiResponse<MonthBookingResponse> createBookingByMonth(@RequestBody CreateMonthBookingRequest request){
+        return ApiResponse.<MonthBookingResponse>builder()
+                .data(bookingService.createMonthBookingDetail(request))
+                .message("Booking SuccessFull")
+                .build();
     }
 
 //    @PostMapping({"/{}/booking"})

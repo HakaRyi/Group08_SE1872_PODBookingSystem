@@ -31,14 +31,14 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(1001);
-        apiResponse.setMessage(exception.getMessage());
-        return ResponseEntity.badRequest().body(apiResponse);
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
+//
+//        ApiResponse apiResponse = new ApiResponse();
+//        apiResponse.setCode(1001);
+//        apiResponse.setMessage(exception.getMessage());
+//        return ResponseEntity.badRequest().body(apiResponse);
+//    }
 
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
@@ -85,17 +85,17 @@ public class GlobalException {
                         .build()
         );
     }
-//    @ExceptionHandler(RuntimeException.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException ex) {
-//        ApiResponse<String> response = ApiResponse.<String>builder()
-//                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-//                .message("An error occurred: " + ex.getMessage())
-//                .build();
-//
-//        // Trả về phản hồi với mã trạng thái 500
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//    }
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException ex) {
+        ApiResponse<String> response = ApiResponse.<String>builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("An error occurred: " + ex.getMessage())
+                .build();
+
+        // Trả về phản hồi với mã trạng thái 500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
 //
 //    private String mapAtribute(String message, Map<String, Object> attribute){
 //        String minValue = String.valueOf(attribute.get(MIN_ATTRIBUTE));
