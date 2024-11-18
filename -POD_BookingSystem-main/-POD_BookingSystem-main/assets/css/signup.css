@@ -1,0 +1,195 @@
+/* Variables */
+:root {
+    --black: #000000;
+    --dark-gray: rgba(0, 0, 0, 0.8);
+    --gray: rgba(0, 0, 0, 0.6);
+    --light-gray: rgba(0, 0, 0, 0.4);
+    --white: #FFFFFF;
+    --accent: #4285F4;
+    --base-font-family: 'Roboto', sans-serif;
+    --base-font-size: 14px;
+    --base-line-height: 1.6em;
+}
+
+/* Base styles */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: var(--base-font-family);
+    font-size: var(--base-font-size);
+    line-height: var(--base-line-height);
+    background: url('https://img6.thuthuatphanmem.vn/uploads/2022/03/16/background-phong-hop-hien-dai-cuc-dep_083825085.jpg') no-repeat center center/cover;
+
+    color: var(--gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Form Styles */
+.form {
+    background: var(--white);
+    width: 100%;
+    max-width: 600px;
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: visible;
+    padding: 60px;
+}
+
+.form-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+    padding: 10px 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--gray);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.form-group button {
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 12px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+}
+
+.form-remember {
+    font-size: 12px;
+}
+
+.form-recovery {
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 10% auto;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    width: 60%;
+    max-width: 500px;
+    text-align: center;
+    animation: modalFadeIn 0.5s ease-in-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close {
+    color: #555;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+    color: #e74c3c;
+    outline: none;
+}
+
+#modalMessage {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Button styles inside modal */
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .form {
+        width: 90%;
+        padding: 40px 20px;
+    }
+
+    .form-header h1 {
+        font-size: 18px;
+    }
+
+    .form-group input,
+    .form-group button {
+        padding: 10px;
+    }
+}

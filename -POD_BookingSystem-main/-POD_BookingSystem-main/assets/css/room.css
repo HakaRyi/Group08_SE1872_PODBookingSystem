@@ -1,0 +1,122 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container for building results */
+#results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Center-align and add padding for Rooms in Building title */
+.room-list-container h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #333;
+  padding-top: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Style for each listing item */
+.listing-item-custom {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.listing-item-custom:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for left side image */
+.left-image-custom {
+  width: 40%;
+  position: relative;
+}
+
+.left-image-custom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px 0 0 10px;
+}
+
+/* Right content styling */
+.right-content-custom {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Room title */
+.right-content-custom h4 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Agent information */
+.right-content-custom h6 {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+/* Room price */
+.price-custom {
+  font-size: 20px;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+/* Room details */
+.details-custom {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.details-custom strong {
+  color: #000;
+}
+
+/* New styles for Contact Now button */
+.contact-button-custom {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.contact-button-custom a {
+  background: #28a745;
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  transition: background 0.3s ease;
+}
+
+.contact-button-custom a:hover {
+  background: #218838;
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/adminManageService.css" />
+
+    <title>Admin Manage Services</title>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>Service Management</h1>
+      <div class="user-info">
+        <span>Welcome, Admin</span>
+        <button class="logout-button" id="logoutButton">Logout</button>
+      </div>
+    </header>
+    <div class="container">
+      <div id="sidebar" class="sidebar">
+        <nav>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/bookingManage.html">Booking</a>
+          <a href="/adminManageBuilding.html">Building Management ▼</a>
+          <a href="/adminManageRoom.html" id="roomsDropdownToggle">Rooms ▼</a>
+          <a
+            href="#"
+            id="serviceDropdownToggle"
+            onclick="toggleServiceDropdown()"
+            >Service Management ▼</a
+          >
+
+          <div id="serviceDropdown" class="sidebar-dropdown">
+            <a href="#" id="servicesDropdown">Manage Services</a>
+            <a href="#" onclick="openCreateServiceModal()">Create Service</a>
+          </div>
+        </nav>
+      </div>
+      <div class="main-content">
+        <div id="searchAndListContainer" class="search-and-list-container">
+          <div class="search-container">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search service by name"
+              oninput="searchService()"
+            />
+          </div>
+          <h2 class="service-list-heading">Danh Sách Dịch Vụ</h2>
+          <div id="rooms-list" class="rooms-list"></div>
+        </div>
+      </div>
+    </div>
+    <div id="createServiceModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" onclick="closeCreateServiceModal()">&times;</span>
+        <h2>Create New Service</h2>
+        <form id="createServiceForm">
+          <label for="serviceName">Name:</label>
+          <input type="text" id="serviceName" name="name" required />
+          <label for="serviceFee">Fee:</label>
+          <input type="number" id="serviceFee" name="fee" required />
+          <label for="serviceDescription">Description:</label>
+          <input type="text" id="serviceDescription" name="description" />
+          <label for="servicePrice">Price:</label>
+          <input type="number" id="servicePrice" name="price" required />
+          <button type="button" onclick="createService()">Create</button>
+        </form>
+      </div>
+    </div>
+    <div id="updateServiceModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" onclick="closeUpdateServiceModal()">&times;</span>
+        <h2>Update Service</h2>
+        <form id="updateServiceForm">
+          <label for="updateServiceName">Name:</label>
+          <input type="text" id="updateServiceName" name="name" required />
+          <label for="updateServiceFee">Fee:</label>
+          <input type="number" id="updateServiceFee" name="fee" required />
+          <label for="updateServiceDescription">Description:</label>
+          <input type="text" id="updateServiceDescription" name="description" />
+          <label for="updateServicePrice">Price:</label>
+          <input type="number" id="updateServicePrice" name="price" required />
+          <button type="button" onclick="updateService()">Update</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript code
+      const BASE_URL = "http://14.225.206.250:8080/POD_BookingSystem/services";
+      let allServices = [];
+
+      async function getServices() {
+        try {
+          const response = await fetch(BASE_URL, { method: "GET" });
+          const data = await response.json();
+
+          if (data.code === 1000 && Array.isArray(data.data)) {
+            allServices = data.data;
+            displayServices(allServices);
+          }
+        } catch (error) {
+          console.error("Failed to fetch services:", error);
+        }
+      }
+      let currentServiceId; // To store the service ID being edited
+
+      function openUpdateServiceModal(service) {
+        document.getElementById("updateServiceModal").style.display = "block";
+        document.getElementById("updateServiceName").value = service.name;
+        document.getElementById("updateServiceFee").value = service.fee;
+        document.getElementById("updateServiceDescription").value =
+          service.description;
+        document.getElementById("updateServicePrice").value = service.price;
+        currentServiceId = service.service_id; // Save the current service ID
+      }
+
+      function closeUpdateServiceModal() {
+        document.getElementById("updateServiceModal").style.display = "none";
+      }
+
+      function displayServices(services) {
+        const roomsList = document.getElementById("rooms-list");
+        roomsList.innerHTML = "";
+
+        services.forEach((service) => {
+          const serviceItem = document.createElement("div");
+          serviceItem.classList.add("room-item");
+
+          serviceItem.innerHTML = `
+            <h3>${service.name || "Unnamed Service"}</h3>
+            <p>Description: ${service.description || "No description"}</p>
+            <p>Price: ${service.price ? service.price + " VND" : "N/A"}</p>
+            <div class="button-group">
+                <button class="update-button">Edit</button>
+                <button class="delete-button">Delete</button>
+            </div>
+        `;
+          const editButton = serviceItem.querySelector(".update-button");
+          editButton.addEventListener("click", () =>
+            openUpdateServiceModal(service)
+          );
+          const deleteButton = serviceItem.querySelector(".delete-button");
+          deleteButton.addEventListener("click", () =>
+            deleteService(service.service_id)
+          );
+          roomsList.appendChild(serviceItem);
+        });
+      }
+      async function updateService() {
+        const name = document.getElementById("updateServiceName").value;
+        const fee = parseFloat(
+          document.getElementById("updateServiceFee").value
+        );
+        const description = document.getElementById(
+          "updateServiceDescription"
+        ).value;
+        const price = parseFloat(
+          document.getElementById("updateServicePrice").value
+        );
+
+        const updatedService = { name, fee, description, price };
+
+        const updateUrl = `${BASE_URL}/${currentServiceId}`;
+
+        try {
+          const response = await fetch(updateUrl, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedService),
+          });
+
+          if (response.ok) {
+            alert("Service updated successfully");
+            closeUpdateServiceModal();
+            getServices(); // Refresh the list after updating
+          } else {
+            alert("Failed to update service");
+          }
+        } catch (error) {
+          console.error("Error updating service:", error);
+          alert("An error occurred while updating the service");
+        }
+      }
+
+      async function deleteService(serviceId) {
+        const deleteUrl = `${BASE_URL}/${serviceId}`;
+        const confirmDelete = confirm(
+          "Are you sure you want to delete this service?"
+        );
+
+        if (confirmDelete) {
+          try {
+            const response = await fetch(deleteUrl, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (response.ok) {
+              alert("Service deleted successfully");
+              getServices(); // Refresh the list after deletion
+            } else {
+              console.error("Failed to delete service:", response.statusText);
+              alert("Failed to delete service");
+            }
+          } catch (error) {
+            console.error("Error deleting service:", error);
+            alert("An error occurred while deleting the service");
+          }
+        }
+      }
+      function searchService() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const filteredServices = allServices.filter((service) =>
+          service.name?.toLowerCase().includes(searchTerm)
+        );
+        displayServices(filteredServices);
+      }
+      function toggleServiceDropdown() {
+        const dropdown = document.getElementById("serviceDropdown");
+        dropdown.style.display =
+          dropdown.style.display === "none" ? "block" : "none";
+      }
+
+      function openCreateServiceModal() {
+        document.getElementById("createServiceModal").style.display = "block";
+      }
+
+      function closeCreateServiceModal() {
+        document.getElementById("createServiceModal").style.display = "none";
+      }
+
+      async function createService() {
+        const name = document.getElementById("serviceName").value;
+        const fee = parseFloat(document.getElementById("serviceFee").value);
+        const description = document.getElementById("serviceDescription").value;
+        const price = parseFloat(document.getElementById("servicePrice").value);
+
+        const newService = { name, fee, description, price };
+
+        try {
+          const response = await fetch(BASE_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newService),
+          });
+
+          if (response.ok) {
+            alert("Service created successfully");
+            closeCreateServiceModal();
+            getServices(); // Refresh the list after creating
+          } else {
+            alert("Failed to create service");
+          }
+        } catch (error) {
+          console.error("Error creating service:", error);
+          alert("An error occurred while creating the service");
+        }
+      }
+
+      window.onload = getServices;
+      function logout() {
+        // Xóa authToken khỏi localStorage
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("username"); // Xóa luôn username nếu có
+        // Chuyển hướng về trang đăng nhập
+        window.location.href = "login.html";
+      }
+
+      // Gán sự kiện cho nút logout
+      document.getElementById("logoutButton").addEventListener("click", logout);
+      function toggleServicesDropdown() {
+        document.getElementById("servicesDropdown").classList.toggle("active");
+      }
+
+      document
+        .getElementById("servicesDropdown")
+        .addEventListener("click", servicesDropdown);
+    </script>
+  </body>
+</html>

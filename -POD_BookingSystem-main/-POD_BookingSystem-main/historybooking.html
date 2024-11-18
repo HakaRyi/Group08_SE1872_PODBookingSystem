@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Booking History - BD Booking</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/templatemo-plot-listing.css" />
+    <link rel="stylesheet" href="assets/css/animated.css" />
+    <link rel="stylesheet" href="assets/css/owl.css" />
+    <link rel="stylesheet" href="assets/css/historybooking.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="assets/css/index.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <a href="index.html" class="logo"> </a>
+                        <ul class="nav">
+                            <li><a href="index.html" class="active">Home</a></li>
+                            <li><a href="category.html">category</a></li>
+                            <li><a href="service.html">Services</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                            <li><a href="about.html">About</a></li>
+                        </ul>
+                        <a class="menu-trigger">
+                            <span>Menu</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-search">
+        <div class="container SearchForHistory">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="top-text header-text">
+                        <h2 style="margin-bottom: 10px; margin-left: 100px; color: white">
+                            Booking History Search
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <!-- Search Bar -->
+                    <form id="search-form">
+                        <div class="row">
+                            <div class="col-lg-9 align-self-center">
+                                <input type="text" placeholder="Search bookings, room name..." class="form-control" />
+                            </div>
+                            <div class="col-lg-3 align-self-center">
+                                <button class="main-button">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking History Tabs -->
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active">All</button>
+            <button class="tab">Pending Confirmation</button>
+            <button class="tab">Awaiting Check-in</button>
+            <button class="tab">Check-out</button>
+            <button class="tab">Completed</button>
+            <button class="tab">Cancelled</button>
+        </div>
+
+        <!-- Booking List -->
+        <div id="booking-list" class="booking-list">
+
+        </div>
+    </div>
+
+    <div id="roomModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRoomModal()">&times;</span>
+            <div class="modal-container">
+                <div class="modal-main">
+                    <h2 id="modalRoomName"></h2>
+                    <p><strong>Status:</strong> <span id="modalRoomStatus"></span></p>
+                    <p><strong>Price:</strong> <span id="modalRoomPrice"></span></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="about">
+                        
+                        <p>BD Booking is a fast and convenient room booking platform.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="helpful-links">
+                        <h4>Helpful Links</h4>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="contact-us">
+                        <h4>Contact Us</h4>
+                        <p>Hotline: 0123 456 789</p>
+                        <p>Email: support@bd.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+    <script>
+        const token = localStorage.getItem("authToken");
+        fetch("http://14.225.206.250:8080/POD_BookingSystem/booking", {
+            method: "Get",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const roomsListContainer = document.getElementById("booking-list");
+                if (data && data.code === 1000) {
+                    data.data.forEach((room) => {
+                        const roomElement = document.createElement("div");
+                        roomElement.className = "booking-item";
+                        roomElement.innerHTML = `
+                            <div class="booking-header" >
+                            <div class="hotel-name">Sunset Resort</div>
+                            <div class="booking-status awaiting-checkin">Awaiting Check-in</div>
+
+                        </div>
+                        <div class="booking-details row" onclick=detail_booking("${room.booking_id}")>
+                            <div class="col-lg-4">
+                                <img src="assets/images/Public-Room.jpg" alt="Room" class="room-image img-fluid" />
+                            </div>
+                            <div class="col-lg-5">
+                                <p class="room-type">Deluxe Room - Sea View</p>
+                                <p class="checkin-date">
+                                    <i class="fas fa-calendar-alt"></i> Check-in Date: ${room.booking_date}
+                                </p>
+                                <p class="guests">
+                                    <i class="fas fa-user-friends"></i> Guests: 2 Adults
+                                </p>
+                            </div>
+                            <div class="col-lg-3 text-end">
+                                <p class="price">Total Price: ${room.total} VND</p>
+                                <button class="btn btn-primary" onclick= checkIn("${room.booking_id}")>Check In</button>
+                                <button class="btn btn-secondary" onclick= checkOut("${room.booking_id}")>Check Out</button>
+                            </div>
+                        </div>
+                        `;
+
+                        roomsListContainer.appendChild(roomElement);
+                    });
+
+                } else {
+                    console.error("Error creating booking:", data);
+                    alert("Failed to create booking.");
+                }
+            })
+            .catch((error) => {
+
+                alert("Failed to create booking.");
+            });
+
+        function detail_booking(booking_id) {
+            const token = localStorage.getItem("authToken");
+            const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/${booking_id}/bookingInfo`;
+
+
+            fetch(apiUrl, {
+                method: "Get",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data && data.code === 1000) {
+
+                        document.getElementById("modalRoomName").textContent = data.data.roomInfo.roomName || "Thông tin không có sẵn";
+                        document.getElementById("modalRoomPrice").textContent = data.data.amount;
+                        document.getElementById("modalRoomStatus").textContent = data.data.status;
+
+                        document.getElementById("roomModal").style.display = "block";
+                    } else {
+                        console.error("Error creating booking:", data);
+                        alert("Failed to create booking.");
+                    }
+                })
+                .catch((error) => {
+
+                    alert("Failed to create booking.");
+                });
+
+        }
+        function closeRoomModal() {
+            document.getElementById("roomModal").style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            const roomModal = document.getElementById("roomModal");
+            if (event.target == roomModal) {
+                closeRoomModal();
+            }
+        };
+        function checkIn(booking_id) {
+            const token = localStorage.getItem("authToken");
+            const url = `http://14.225.206.250:8080/POD_BookingSystem/request-checkin/${booking_id}`
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({}),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data && data.code === 1000) {
+                        alert("gửi thành công")
+                        window.location.reload();
+                    } else {
+                        console.error("Error creating booking:", data);
+                        alert("Checkin thất bại");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error creating booking:", error);
+                    alert("Failed to create booking.");
+                });
+        }
+
+        function checkOut(booking_id) {
+            const token = localStorage.getItem("authToken");
+            const url = `http://14.225.206.250:8080/POD_BookingSystem/request-checkout/${booking_id}`
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({}),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data && data.code === 1000) {
+                        alert("gửi thành công")
+                        window.location.reload();
+                    } else {
+                        console.error("Error creating booking:", data);
+                        alert("Checkout thất bại");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error creating booking:", error);
+                    alert("Failed to create booking.");
+                });
+        }
+    </script>
+
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+</body>
+
+</html>

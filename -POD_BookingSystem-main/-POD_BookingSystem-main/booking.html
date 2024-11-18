@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <title>Booking-BD.COM</title>
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/css/fontawesome.css" />
+    <link rel="stylesheet" href="assets/css/templatemo-plot-listing.css" />
+    <link rel="stylesheet" href="assets/css/animated.css" />
+    <link rel="stylesheet" href="assets/css/owl.css" />
+    <link rel="stylesheet" href="assets/css/index.css" />
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <link rel="stylesheet" href="assets/css/booking.css" />
+    <link rel="stylesheet" href="assets/css/index.css" />
+  </head>
+
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.html" class="logo"></a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li><a href="index.html" class="active">Home</a></li>
+              <li><a href="aboutus.html">About Us</a></li>
+              <li><a href="listing.html">Listing</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+
+              <!-- Login Button Placeholder (Add an actual button here) -->
+              <ul>
+                <li id="loginButtonContainer">
+                  <div class="main-white-button">
+                    <a href="login.html"><i class="fa fa-plus"></i> Log in</a>
+                  </div>
+                </li>
+                <li id="usernameContainer" style="display: none">
+                  <div class="nav-right-side">
+                    <button class="mode-switch">
+                      <svg class="sun" fill="none" stroke="#fbb046" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="feather feather-sun" viewBox="0 0 24 24">
+                        <defs />
+                        <circle cx="12" cy="12" r="5" />
+                        <path
+                          d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                      </svg>
+                      <svg class="moon" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="feather feather-moon" viewBox="0 0 24 24">
+                        <defs />
+                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                      </svg>
+                    </button>
+                    <button class="profile-btn" id="profileButton">
+                      <span id="loggedInUsername"></span>
+                      <img
+                        src="https://images.unsplash.com/photo-1492633397843-92adffad3d1c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2167&q=80"
+                        alt="profile picture" />
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </ul>
+            <a class="menu-trigger">
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Lấy authToken từ localStorage
+      const authToken = localStorage.getItem("authToken");
+      let username = null;
+
+      if (authToken) {
+        // Giải mã JWT để lấy username
+        try {
+          const decoded = jwt_decode(authToken); // Giải mã JWT
+          console.log("Decoded JWT:", decoded); // Kiểm tra JWT đã giải mã
+
+          // Lấy username từ thông tin trong JWT
+          username = decoded.sub; // 'sub' là thông thường là user ID hoặc username
+        } catch (error) {
+          console.error("Lỗi khi giải mã token:", error);
+        }
+      }
+
+      // Nếu không có username trong token, lấy từ localStorage
+      if (!username) {
+        username = localStorage.getItem("username");
+      }
+
+      console.log("Username từ localStorage hoặc JWT:", username); // Kiểm tra username
+
+      const loginButtonContainer = document.getElementById(
+        "loginButtonContainer"
+      );
+      const usernameContainer = document.getElementById("usernameContainer");
+      const loggedInUsername = document.getElementById("loggedInUsername");
+
+      if (username) {
+        // Nếu có username, hiển thị và ẩn phần tử login
+        loggedInUsername.textContent = `Chào mừng, ${username}`;
+        loginButtonContainer.style.display = "none";
+        usernameContainer.style.display = "block";
+      } else {
+        // Nếu không có username, hiển thị nút login và ẩn phần tử username
+        loginButtonContainer.style.display = "block";
+        usernameContainer.style.display = "none";
+      }
+    });
+  </script>
+
+  <script>
+    document
+      .getElementById("profileButton")
+      .addEventListener("click", function () {
+        window.location.href = "profile.html";
+      });
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Room Booking</title>
+</head>
+
+<body>
+  <div class="booking-container">
+    <h1>BOOKING</h1>
+    <div class="room-container">
+      <!-- Hình ảnh phòng bên trái -->
+      <div class="room-image">
+        <img src="assets/images/listing-01.jpg" alt="Room Image" />
+      </div>
+
+      <!-- Thông tin phòng bên phải -->
+      <div class="room-info" id="room-info">
+        <h2 class="title">Room 101</h2>
+        <p class="agent">by: Real ESTATE Agent</p>
+
+        <p class="price">400000 VND/H</p>
+
+        <div class="section">
+          <p><strong>Room ID:</strong> R-01</p>
+          <p><strong>Capacity:</strong> 10 people</p>
+          <p><strong>Availability:</strong> AVAILABLE</p>
+          <p><strong>Type:</strong> Meeting room</p>
+        </div>
+
+        <div class="section">
+          <p><strong>Description:</strong> The room 19m² on the 1st floor</p>
+        </div>
+
+        <div class="section">
+          <p><strong>Available Date:</strong> 2024-10-15</p>
+        </div>
+
+        <button class="contact-btn" onclick="window.location.href='contact.html'">
+          <i class="fa fa-eye"></i> Contact Now
+        </button>
+      </div>
+    </div>
+
+    <div class="time-slot">
+      <label for="time-option">Time slot:</label>
+      <select id="time-option" onchange="showBookingOption()">
+        <option value="hour">BOOK BY HOUR</option>
+        <option value="day">BOOK BY DATE</option>
+
+      </select>
+      <div id="booking-options"></div>
+    </div>
+
+    <div class="additional-services">
+      <p style="color: white">Add more services:</p>
+      <div id="services-list">
+        <label class="service-item">
+          <div class="service-name">
+            <span>Cafe - 15,000đ</span>
+          </div>
+          <div class="service-controls">
+            <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal(1)" />
+            <input type="checkbox" value="15000"
+              onchange="calculateTotal(document.querySelector('.quantity-input').value)" />
+          </div>
+        </label>
+
+        <label class="service-item">
+          <div class="service-name">
+            <span te>Printer - 20,000đ</span>
+          </div>
+          <div class="service-controls">
+            <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal()" />
+            <input type="checkbox" value="20000" onchange="calculateTotal()" />
+          </div>
+        </label>
+
+        <label class="service-item">
+          <div class="service-name">
+            <span>Tivi - 25,000đ</span>
+          </div>
+          <div class="service-controls">
+            <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal()" />
+            <input type="checkbox" value="25000" onchange="calculateTotal()" />
+          </div>
+        </label>
+
+        <!-- <label class="service-item">
+                    <div class="service-name">
+                        <span>Air Condition - 50,000đ</span>
+                    </div>
+                    <div class="service-controls">
+                        <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal()" />
+                        <input type="checkbox" value="50000" onchange="calculateTotal()" />
+                    </div>
+                </label>
+
+                <label class="service-item">
+                    <div class="service-name">
+                        <span>Projector - 100,000đ</span>
+                    </div>
+                    <div class="service-controls">
+                        <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal()" />
+                        <input type="checkbox" value="100000" onchange="calculateTotal()" />
+                    </div>
+                </label>
+
+                <label class="service-item">
+                    <div class="service-name">
+                        <span>Table - 30,000đ</span>
+                    </div>
+                    <div class="service-controls">
+                        <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal()" />
+                        <input type="checkbox" value="30000" onchange="calculateTotal()" />
+                    </div>
+                </label>
+
+                <label class="service-item">
+                    <div class="service-name">
+                        <span>Chair - 20,000đ</span>
+                    </div>
+                    <div class="service-controls">
+                        <input type="number" class="quantity-input" value="1" min="1" onchange="calculateTotal()" />
+                        <input type="checkbox" value="20000" onchange="calculateTotal()" />
+                    </div>
+                </label> -->
+      </div>
+    </div>
+    <div class="total-cost">
+      <p>
+        <strong style="color: red">Total:</strong>
+        <span id="total" style="color: red">0đ</span>
+      </p>
+    </div>
+
+    <button class="payment-btn" id="paymentButton">PAYMENT</button>
+  </div>
+  <div id="roomModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeRoomModal()">&times;</span>
+
+      <div class="modal-container">
+        <div class="modal-main">
+          <h2 id="modalRoomName"></h2>
+
+          <p><strong>Price:</strong> <span id="modalRoomPrice"></span></p>
+          <div class="modal-buttons">
+            <button id="bookNowButton" onclick="get_payment()">
+              Book Now
+            </button>
+            <button onclick="getElementById()">Cancle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const buildingId = params.get("vnp_Amount");
+    } catch (error) { }
+
+    // Function to display different booking options based on the selected time slot (hour, day, month)
+    function showBookingOption() {
+      const timeOption = document.getElementById("time-option").value;
+      const bookingOptions = document.getElementById("booking-options");
+
+      if (timeOption === "hour") {
+        bookingOptions.innerHTML = `
+                   <p style="color: white;">Select time slot:</p>
+                   <select multiple class="item_time"  style="color: white; background-color: #333; border: 1px solid #ccc; padding: 5px; border-radius: 5px; width: 100%;">
+                      <option value="SL-01">6:00 - 7:00</option>
+                      <option value="SL-02">7:00 - 8:00</option>
+                      <option value="SL-03">8:00 - 9:00</option>
+                      <option value="SL-04">9:00 - 10:00</option>
+                      <option value="SL-05">10:00 - 11:00</option>
+                       <option value="SL-06">11:00 - 12:00</option>
+                  <option value="SL-07">12:00 - 13:00</option>
+           <option value="SL-08">13:00 - 14:00</option>
+                      <option value="SL-09">14:00 - 15:00</option>
+                    <option value="SL-10">15:00 - 16:00</option>
+                    <option value="SL-11">16:00 - 17:00</option>
+                    <option value="SL-12">17:00 - 18:00</option>
+ 
+                  </select>
+                `;
+      } else if (timeOption === "day") {
+        bookingOptions.innerHTML = `
+                     <p style="color: white;">Select a date:</p>
+                     <input id="start_time" type="date" id="booking-date" style="color: white; background-color: #333; border: 1px solid #ccc; padding: 8px; border-radius: 5px; width: 50%;">
+                     <input id="end_time" type="date" id="booking-date" style="color: white; background-color: #333; border: 1px solid #ccc; padding: 8px; border-radius: 5px; width: 50%;">
+                     `;
+      } else if (timeOption === "month") {
+        bookingOptions.innerHTML = `
+                     <p style="color: white;">Select a starting month:</p>
+                     <input type="month" id="booking-month" style="color: white; background-color: #333; border: 1px solid #ccc; padding: 5px; border-radius: 5px;">
+        
+                     <p style="color: white;">Select number of months:</p>
+                     <input type="number" id="month-duration" value="1" min="1" onchange="updateEndMonth()" style="color: white; background-color: #333; border: 1px solid #ccc; padding: 5px; border-radius: 5px;text-align:center">
+        
+                    <p style="color: white;"><strong>End month:</strong> <span id="end-month"></span></p>
+                `;
+        updateEndMonth();
+      }
+    }
+
+    // Function to calculate the end month based on the starting month and number of months selected
+    function updateEndMonth() {
+      const startMonth = document.getElementById("booking-month").value;
+      const duration = parseInt(
+        document.getElementById("month-duration").value
+      );
+      const endMonthSpan = document.getElementById("end-month");
+
+      if (startMonth) {
+        const [year, month] = startMonth.split("-");
+        const startDate = new Date(year, month - 1); // Create a date object with the start month
+        startDate.setMonth(startDate.getMonth() + duration); // Add the duration in months
+        const endMonth = `${startDate.getFullYear()}-${String(
+          startDate.getMonth() + 1
+        ).padStart(2, "0")}`; // Format the end month
+        endMonthSpan.innerText = endMonth;
+      }
+    }
+
+    // Function to calculate the total cost based on selected services
+    function calculateTotal(number_input) {
+      let total = 0;
+      const serviceItems = document.querySelectorAll(".service-item");
+      let arr_name_checked = [];
+      let arr_qli_checked = [];
+      serviceItems.forEach((item) => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        const quantityInput = item.querySelector('input[type="number"]');
+        if (checkbox.checked) {
+          const spanText = item
+            .querySelector(".service-name span")
+            .textContent.split(" - ")[0];
+          const price = parseInt(checkbox.value, 10);
+          const quantity = parseInt(quantityInput.value, 10);
+
+          total += price * quantity;
+          arr_name_checked.push(spanText);
+          arr_qli_checked.push(quantity);
+        }
+      });
+      arr_name_service = arr_name_checked;
+      arr_qli_service = arr_qli_checked;
+      document.getElementById("total").innerText =
+        total.toLocaleString() + "đ";
+    }
+
+    //When the page loads, initiate the booking by calling /book and store the bookingId
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("/book", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}), // Replace with actual data if needed
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to initiate booking");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.booking_id) {
+            localStorage.setItem("bookingId", data.booking_id); // Store bookingId
+          } else {
+            throw new Error("No booking ID returned");
+          }
+        })
+        .catch((error) => {
+          console.error("Error during booking initiation:", error);
+        });
+    });
+
+    // When the Payment button is clicked, use the bookingId to call /bookingdetails
+    document.querySelector(".payment-btn").addEventListener("click", () => {
+      const bookingId = localStorage.getItem("bookingId");
+      const roomName = "101"; // Replace with actual room name
+
+      if (!bookingId) {
+        console.error("No booking ID found. Please try again.");
+        return;
+      }
+
+      fetch(`/bookingdetails/${bookingId}/${roomName}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          service: {
+            additionalProp1: 0, // Replace with actual service data
+            additionalProp2: 0,
+            additionalProp3: 0,
+          },
+          start_time: "2024-10-27", // Replace with actual start time
+          end_time: "2024-10-27", // Replace with actual end time
+          slots: {
+            additionalProp1: ["2024-10-27"], // Replace with actual data
+            additionalProp2: ["2024-10-27"],
+            additionalProp3: ["2024-10-27"],
+          },
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to retrieve booking details");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Booking details:", data);
+          // Handle payment success or redirect to confirmation
+        })
+        .catch((error) => {
+          console.error("Error during booking details retrieval:", error);
+        });
+    });
+  </script>
+
+  <div class="booking-container">
+    <h1>Booking Details</h1>
+    <p><strong>Booking ID:</strong> <span id="bookingId">Loading...</span></p>
+    <p><strong>Room Name:</strong> <span id="roomName">Loading...</span></p>
+    <p>
+      <strong>Total Price:</strong> <span id="totalPrice">Loading...</span>
+    </p>
+    <p><strong>Details:</strong></p>
+    <pre id="bookingDetails">Loading...</pre>
+
+    <button id="paymentButton">Proceed to Payment</button>
+  </div>
+
+  <script>
+    var arr_name_service = [];
+    var arr_qli_service = [];
+    const params = new URLSearchParams(window.location.search);
+    const buildingId = params.get("building_id");
+    const room_id = params.get("roomId");
+    const bookingId = params.get("bookingId");
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const result = params.get("vnp_OrderInfo");
+      const code = params.get("vnp_TxnRef");
+      const vpn_date = params.get("vnp_PayDate");
+      if (result != "") {
+        const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/${result}/bookingInfo`;
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            let html = `<h2 class="title">${data.data.roomInfo.roomName}</h2>
+                                <p class="price">${data.data.amount} VND/H</p>
+                                <div class="section">
+                                </div>
+                                <div class="section">
+                                    <p><strong>Start Date:</strong> ${data.data.roomInfo.startTime}</p>
+                                </div>
+                                <div class="section">
+                                    <p><strong>End Date:</strong> ${data.data.roomInfo.endTime}</p>
+                                </div>`;
+            document.getElementById("room-info").innerHTML = html;
+            alert("Thanh toán thành công");
+            //call api confirm
+            try {
+              const url = `http://14.225.206.250:8080/POD_BookingSystem/${result}/confirm`;
+              const bodyData = {
+                bookingDate: vpn_date,
+                code: code,
+              };
+              fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(bodyData),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.code == 1000) {
+                    console.log("confirm thành công");
+                  } else {
+                    throw new Error("Invalid booking details response");
+                  }
+                })
+                .catch((error) => { });
+            } catch (error) { }
+          })
+          .catch((error) => { });
+      }
+    } catch (error) { }
+    const roomImages = {
+      "R-01": "https://png.pngtree.com/thumb_back/fw800/background/20220314/pngtree-meeting-room-office-environment-image_1047939.jpg", // Đường dẫn đến ảnh của phòng R-01
+      "R-02": "https://tactic.au/static/meeting-room-design-2-7e3fc73a8a099c48a2d3f6f4c970c81b.jpg", // Đường dẫn đến ảnh của phòng R-02
+      "R-09": "https://images.squarespace-cdn.com/content/v1/5aadf482aa49a1d810879b88/1694102043523-XOUAK6W7QRZUSQEFAAN1/Mitek+6.jpg",
+      "R-10": "https://i.pinimg.com/originals/f9/02/1d/f9021d11ed0a950ddfd20f90149e44f2.jpg",
+
+    };
+
+    const roomImageElement = document.querySelector(".room-image img");
+
+    const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/rooms/building/${buildingId}`;
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        const roomsListContainer = document.getElementById("rooms-list");
+        if (data && data.data.length > 0) {
+          data.data.forEach((room) => {
+            if (room_id == room.room_id) {
+              // Kiểm tra roomId và gán ảnh thích hợp
+              const roomId = room.room_id; // Lấy roomId từ dữ liệu
+              if (roomImages[roomId]) {
+                roomImageElement.src = roomImages[roomId]; // Gán ảnh vào thẻ img
+                roomImageElement.alt = room.name; // Cập nhật mô tả ảnh
+              }
+
+              // Các thay đổi khác cho phòng như tên, giá...
+              const paragraph = document.querySelector(".section p");
+              if (paragraph && paragraph.childNodes.length > 1) {
+                paragraph.childNodes[1].nodeValue = room.description;
+              }
+              const title = document.querySelector(".title");
+              title.textContent = room.name;
+              const price = document.querySelector(".price");
+              price.textContent = room.price + " VND/H";
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching room data:", error);
+      });
+
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        bookingId: params.get("booking_id"),
+        roomName: params.get("room_name"),
+      };
+    }
+    function fetchBookingDetails(bookingId, roomName) {
+      const apiUrl = `http://14.225.206.250:8080/POD_BookingSystem/${bookingId}/${roomName}/bookingdetails`;
+      let hour_select = {
+        "SL-01": ["6h-7h"],
+        "SL-02": ["7h-8h"],
+        "SL-03": ["8h-9h"],
+        "SL-04": ["9h-10h"],
+        "SL-05": ["10h-11h"],
+        "SL-06": ["11h-12h"],
+        "SL-07": ["12h-13h"],
+        "SL-08": ["13h-14h"],
+        "SL-09": ["14h-15h"],
+        "SL-10": ["15h-16h"],
+        "SL-11": ["16h-17h"],
+        "SL-12": ["17h-18h"],
+      };
+      //service
+      const services = arr_name_service;
+      const result = {
+        service: services.reduce((acc, service, index) => {
+          acc[service] = arr_qli_service[index];
+          return acc;
+        }, {}),
+      };
+      //end server
+      console.log(result.service);
+      const selectElement = document.querySelector(".item_time");
+      let slots = [];
+      const bodyData = {
+        service: result.service,
+        start_time: null,
+        end_time: null,
+        slots: null,
+      };
+      if (selectElement && selectElement.selectedOptions.length > 0) {
+        //hour
+        const selectedValues = Array.from(selectElement.selectedOptions).map(
+          (option) => option.value
+        );
+        if (selectedValues.length > 0) {
+          slots = selectedValues.reduce((acc, value) => {
+            acc[value] = hour_select[value];
+            return acc;
+          }, {});
+        }
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().split("T")[0];
+        bodyData.start_time = formattedDate;
+        bodyData.end_time = formattedDate;
+        bodyData.slots = slots;
+      }
+      const startTimeInput = document.getElementById("start_time");
+      const endTimeInput = document.getElementById("end_time");
+      if (endTimeInput && endTimeInput.value) {
+        const dates = [];
+        const currentDate = new Date(startTimeInput.value);
+        while (currentDate <= new Date(endTimeInput.value)) {
+          dates.push(currentDate.toISOString().split("T")[0]);
+          currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+        }
+
+        const selectedDate = endTimeInput.value;
+        console.log("Selected date: " + selectedDate);
+        bodyData.start_time = startTimeInput.value;
+        bodyData.end_time = endTimeInput.value;
+        bodyData.slots = { Day: dates };
+
+      }
+      console.log(bodyData);
+
+      fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.code === 1000 && data.data) {
+            document.getElementById("bookingId").textContent = bookingId;
+            document.getElementById("roomName").textContent = roomName;
+            document.getElementById("totalPrice").textContent =
+              data.data.total_price + " VND";
+            document.getElementById("bookingDetails").textContent =
+              JSON.stringify(data.data, null, 2);
+
+            //add modal value
+            document.getElementById("modalRoomName").textContent = roomName;
+            document.getElementById("modalRoomPrice").textContent =
+              data.data.total_price + " VND/H";
+
+            document.getElementById("roomModal").style.display = "block";
+          } else {
+            throw new Error("Invalid booking details response");
+          }
+        })
+        .catch((error) => {
+          alert("chọn thời gian....")
+
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const { bookingId, roomName } = getQueryParams();
+      if (bookingId && roomName) {
+        fetchBookingDetails(bookingId, roomName);
+      } else {
+        alert("Missing booking information");
+      }
+    });
+
+    document.getElementById("paymentButton").onclick = () => {
+      // call api bookding detail
+      const params = new URLSearchParams(window.location.search);
+      const bookingId = params.get("bookingId");
+      const roomName = params.get("roomName");
+
+      fetchBookingDetails(bookingId, roomName);
+
+      // const vnpayApiUrl = "http://14.225.206.250:8080/POD_BookingSystem/vnpay-controller";
+      // window.location.href = vnpayApiUrl; // Redirect to the VNPAY payment page
+    };
+    function closeRoomModal() {
+      document.getElementById("roomModal").style.display = "none";
+    }
+    function get_payment() {
+      const vnpayApiUrl = `http://14.225.206.250:8080/POD_BookingSystem/${bookingId}/api/payment`;
+      const priceText = document.getElementById("modalRoomPrice").innerText;
+      const price = priceText.match(/\d+/g)[0];
+      const priceNumber = parseInt(price, 10);
+      const bodyData = {
+        amount: priceNumber,
+      };
+      fetch(vnpayApiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status == "OK") {
+            window.location.href = data.url;
+          } else {
+            throw new Error("Invalid booking details response");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching booking details:", error);
+          document.getElementById("bookingDetails").textContent =
+            "Error loading booking details.";
+        });
+      // window.location.href = vnpayApiUrl; // Redirect to the VNPAY payment page
+    }
+  </script>
+
+  <!-- Scripts -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/animation.js"></script>
+  <script src="assets/js/imagesloaded.js"></script>
+  <script src="assets/js/custom.js"></script>
+</body>
+
+</html>

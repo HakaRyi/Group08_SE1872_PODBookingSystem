@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/bookingManage.css" />
+    <title>Booking Management</title>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Booking Management</h1>
+      <div class="user-info">
+        <span>Welcome, Admin</span>
+        <button class="logout-button" id="logoutButton">Logout</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <div id="sidebar" class="sidebar">
+        <nav>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/bookingManage.html">Booking</a>
+          <a href="/adminManageBuilding.html">Building Management ▼</a>
+          <a href="/adminManageRoom.html">Rooms ▼</a>
+          <a href="/adminServiceManagement.html">Service Management ▼</a>
+        </nav>
+      </div>
+
+      <div class="main-content">
+        <div id="bookingListContainer" class="booking-list-container">
+          <h2>Danh Sách Booking</h2>
+
+          <!-- Date Filter -->
+          <label for="dateFilter">Select Date:</label>
+          <input type="date" id="dateFilter" onchange="filterByDate()" />
+
+          <div id="booking-list" class="booking-list"></div>
+          <div id="pagination" class="pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Detail Modal -->
+    <div id="bookingDetailModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" onclick="closeBookingDetailModal()">&times;</span>
+        <h2>Booking Details</h2>
+        <div id="bookingDetailContent">
+          <!-- Booking details will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const BASE_URL =
+        "http://14.225.206.250:8080/POD_BookingSystem/BookingAll";
+      const bookingsPerPage = 10;
+      let allBookings = [];
+      let filteredBookings = [];
+      let currentPage = 1;
+
+      // Function to format numbers as currency
+      function formatCurrency(value) {
+        return value.toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        });
+      }
+
+      // Function to fetch all bookings
+      async function getBookings() {
+        try {
+          const response = await fetch(BASE_URL, { method: "GET" });
+          const data = await response.json();
+
+          if (data.code === 1000 && Array.isArray(data.data)) {
+            allBookings = data.data.filter((booking) => booking.name); // Only keep bookings with a name
+            filteredBookings = allBookings; // Initialize filtered bookings
+            displayBookings();
+            displayPagination();
+          } else {
+            console.error("Failed to fetch bookings");
+          }
+        } catch (error) {
+          console.error("Error fetching bookings:", error);
+        }
+      }
+
+      // Function to display bookings based on the current page
+      function displayBookings() {
+        const bookingList = document.getElementById("booking-list");
+        bookingList.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * bookingsPerPage;
+        const endIndex = startIndex + bookingsPerPage;
+        const bookingsToShow = filteredBookings.slice(startIndex, endIndex);
+
+        bookingsToShow.forEach((booking) => {
+          const bookingItem = document.createElement("div");
+          bookingItem.classList.add("booking-item");
+
+          // Determine the CSS class for status based on the booking status
+          const statusClass =
+            booking.status === "PENDING" ? "status-pending" : "status-confirm";
+
+          bookingItem.innerHTML = `
+          <p><strong>ID:</strong> ${booking.booking_id}</p>
+          <p><strong>Status:</strong> <span class="${statusClass}">${
+            booking.status
+          }</span></p>
+          <p><strong>Name:</strong> ${booking.name}</p>
+          <p><strong>Booking Date:</strong> ${booking.booking_date}</p>
+          <p><strong>Total:</strong> ${formatCurrency(booking.total)}</p>
+        `;
+
+          // Add click event to open detail modal
+          bookingItem.addEventListener("click", () =>
+            openBookingDetailModal(booking.booking_id)
+          );
+
+          bookingList.appendChild(bookingItem);
+        });
+      }
+
+      // Function to display pagination controls with Next and Previous buttons
+      function displayPagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(filteredBookings.length / bookingsPerPage);
+
+        // Previous Button
+        const prevButton = document.createElement("button");
+        prevButton.textContent = "Previous";
+        prevButton.classList.add("page-button");
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            displayBookings();
+            displayPagination();
+          }
+        });
+        pagination.appendChild(prevButton);
+
+        // Page Number Buttons
+        for (let i = 1; i <= totalPages; i++) {
+          const pageButton = document.createElement("button");
+          pageButton.textContent = i;
+          pageButton.classList.add("page-button");
+          if (i === currentPage) {
+            pageButton.classList.add("active");
+          }
+          pageButton.addEventListener("click", () => {
+            currentPage = i;
+            displayBookings();
+            displayPagination();
+          });
+          pagination.appendChild(pageButton);
+        }
+
+        // Next Button
+        const nextButton = document.createElement("button");
+        nextButton.textContent = "Next";
+        nextButton.classList.add("page-button");
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener("click", () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            displayBookings();
+            displayPagination();
+          }
+        });
+        pagination.appendChild(nextButton);
+      }
+
+      // Function to filter bookings by selected date
+      function filterByDate() {
+        const selectedDate = document.getElementById("dateFilter").value;
+        if (selectedDate) {
+          filteredBookings = allBookings.filter(
+            (booking) => booking.booking_date === selectedDate
+          );
+        } else {
+          filteredBookings = allBookings; // Show all bookings if no date selected
+        }
+        currentPage = 1; // Reset to first page
+        displayBookings();
+        displayPagination();
+      }
+
+      // Function to open the booking detail modal
+      function openBookingDetailModal(bookingId) {
+        const detailUrl = `http://14.225.206.250:8080/POD_BookingSystem/${bookingId}/bookingInfo`;
+
+        fetch(detailUrl, { method: "GET" })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 1000 && data.data) {
+              const booking = data.data;
+              const roomInfo = booking.roomInfo;
+              const bookingDetailContent = document.getElementById(
+                "bookingDetailContent"
+              );
+
+              // Determine the CSS class for status based on the booking status
+              const statusClass =
+                booking.status === "PENDING"
+                  ? "status-pending"
+                  : "status-confirm";
+
+              bookingDetailContent.innerHTML = `
+              <p><strong>Status:</strong> <span class="${statusClass}">${
+                booking.status
+              }</span></p>
+              <p><strong>Total Amount:</strong> ${formatCurrency(
+                booking.amount
+              )}</p>
+              <h3>Room Information</h3>
+              <p><strong>Room Name:</strong> ${roomInfo.roomName}</p>
+              <p><strong>Room Amount:</strong> ${formatCurrency(
+                roomInfo.amount
+              )}</p>
+              <p><strong>Start Time:</strong> ${roomInfo.startTime}</p>
+              <p><strong>End Time:</strong> ${roomInfo.endTime}</p>
+              <h3>Services</h3>
+              <ul>
+                ${roomInfo.services
+                  .map(
+                    (service) => `
+                  <li>
+                    <p><strong>Service ID:</strong> ${service.service_id}</p>
+                    <p><strong>Name:</strong> ${service.name}</p>
+                    <p><strong>Description:</strong> ${service.description}</p>
+                    <p><strong>Fee:</strong> ${formatCurrency(service.fee)}</p>
+                    <p><strong>Price:</strong> ${formatCurrency(
+                      service.price
+                    )}</p>
+                    <p><strong>Enabled:</strong> ${
+                      service.enable ? "Yes" : "No"
+                    }</p>
+                  </li>
+                `
+                  )
+                  .join("")}
+              </ul>
+            `;
+
+              document.getElementById("bookingDetailModal").style.display =
+                "block";
+            } else {
+              alert("Failed to load booking details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching booking details:", error);
+            alert("An error occurred while fetching booking details.");
+          });
+      }
+
+      // Function to close the booking detail modal
+      function closeBookingDetailModal() {
+        document.getElementById("bookingDetailModal").style.display = "none";
+      }
+
+      // Logout function
+      function logout() {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+      }
+      document.getElementById("logoutButton").addEventListener("click", logout);
+
+      // Initialize page by fetching bookings
+      window.onload = getBookings;
+    </script>
+  </body>
+</html>

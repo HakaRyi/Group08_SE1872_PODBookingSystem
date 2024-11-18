@@ -1,0 +1,4614 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "POD_BookingSystem",
+        "description": "An online office booking support system. Providing diverse services and comfortable spaces for users to choose and book an effective working space.",
+        "version": "v1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://14.225.206.250:8080/POD_BookingSystem",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/slots/{id}": {
+            "get": {
+                "tags": [
+                    "slot-controller"
+                ],
+                "operationId": "getBuilding",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSlot"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "slot-controller"
+                ],
+                "operationId": "updateRoom",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSlotRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSlotResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "slot-controller"
+                ],
+                "operationId": "deleteSlot",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/services/{id}": {
+            "put": {
+                "tags": [
+                    "service-controller"
+                ],
+                "operationId": "updateService",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateServiceRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseServiceResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "service-controller"
+                ],
+                "operationId": "deleteService",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/{id}": {
+            "put": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "updateRoom_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateRoomRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "addServiceToRoom",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddServiceRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "deleteRoom_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/buildings/{id}": {
+            "put": {
+                "tags": [
+                    "building-controller"
+                ],
+                "operationId": "updateBuilding",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBuildingRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "building-controller"
+                ],
+                "operationId": "deleteBuilding",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{userId}": {
+            "get": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "getUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{bookingId}/{roomName}/bookingdetails": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "createBookingDetail",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "roomName",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateBookingDetailRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBookingDetailResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{bookingId}/{roomName}/addServices": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "addServices",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "roomName",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddServiceToBookingRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBookingDetailResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{bookingId}/confirm": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "confirmBooking",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ConfirmRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{bookingId}/cancelPayment": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "cancelPayment",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelPaymentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{bookingId}/api/payment": {
+            "post": {
+                "tags": [
+                    "vn-pay-controller"
+                ],
+                "operationId": "createPayment",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VNPayRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/staffBuilding": {
+            "get": {
+                "tags": [
+                    "staff-building-controller"
+                ],
+                "operationId": "getStaffBuildings",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListStaffBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "staff-building-controller"
+                ],
+                "operationId": "createStaffBuilding",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StaffBuildingRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseStaffBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/slots": {
+            "get": {
+                "tags": [
+                    "slot-controller"
+                ],
+                "operationId": "getBuildings",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListSlotResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "slot-controller"
+                ],
+                "operationId": "createSlot",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSlotRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseSlotResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/services": {
+            "get": {
+                "tags": [
+                    "service-controller"
+                ],
+                "operationId": "getServices",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListServiceResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "service-controller"
+                ],
+                "operationId": "createService",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateServiceRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseServiceResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms": {
+            "get": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "getRooms",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "createRoom",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateRoomRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/room-types": {
+            "get": {
+                "tags": [
+                    "room-type-controller"
+                ],
+                "operationId": "getAllRoomType",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListRoomTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "room-type-controller"
+                ],
+                "operationId": "createRoomType",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateRoomTypeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseRoomTypeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/request-checkout/{bookingId}": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "requestCheckout",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/request-checkin/{bookingId}": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "requestCheckin",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reject-checkout/{bookingId}": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "rejectCheckout",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reject-checkin/{bookingId}": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "rejectCheckin",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/refund": {
+            "post": {
+                "tags": [
+                    "vn-pay-controller"
+                ],
+                "operationId": "handleRefund",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefundRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback/{roomName}": {
+            "get": {
+                "tags": [
+                    "feedback-controller"
+                ],
+                "operationId": "getFeedbackByRoom",
+                "parameters": [],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListFeedbackResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "feedback-controller"
+                ],
+                "operationId": "createFeedback",
+                "parameters": [
+                    {
+                        "name": "roomName",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateFeedbackRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseFeedbackResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts/create": {
+            "post": {
+                "tags": [
+                    "contact-controller"
+                ],
+                "operationId": "createContact",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateContactRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseContactResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/buildings": {
+            "get": {
+                "tags": [
+                    "building-controller"
+                ],
+                "operationId": "getBuildings_1",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "building-controller"
+                ],
+                "operationId": "createBuilding",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateBuildingRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/book": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "createBooking",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/book/by-month": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "createBookingByMonth",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateMonthBookingRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseMonthBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/approve-checkout/{bookingId}": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "approveCheckout",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/approve-checkin/{bookingId}": {
+            "post": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "approveCheckin",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/staff": {
+            "post": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "createStaff",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCreationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/manager": {
+            "post": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "createManager",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCreationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/customer": {
+            "post": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "createUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCreationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/admin": {
+            "post": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "createAdmin",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserCreationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sms/request": {
+            "post": {
+                "tags": [
+                    "otp-controller"
+                ],
+                "operationId": "sendVerification",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmailVerificationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/roles": {
+            "post": {
+                "tags": [
+                    "role-controller"
+                ],
+                "operationId": "createUser_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoleRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseRole"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/log-out": {
+            "post": {
+                "tags": [
+                    "authentication-controller"
+                ],
+                "operationId": "authenticate",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/log-in": {
+            "post": {
+                "tags": [
+                    "authentication-controller"
+                ],
+                "operationId": "authenticate_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthenticationRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseAuthenticationResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/introspect": {
+            "post": {
+                "tags": [
+                    "authentication-controller"
+                ],
+                "operationId": "authenticate_2",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IntrospectRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseIntrospectResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/get-role": {
+            "post": {
+                "tags": [
+                    "authentication-controller"
+                ],
+                "operationId": "getRoleFromToken",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseString"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{bookingId}/bookingInfo": {
+            "get": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "getBookingInformation",
+                "parameters": [
+                    {
+                        "name": "bookingId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseBookingInformationResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/staffBuilding/building/{id}": {
+            "get": {
+                "tags": [
+                    "staff-building-controller"
+                ],
+                "operationId": "getRoomByBuilding",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListStaffBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/services/{name}": {
+            "get": {
+                "tags": [
+                    "service-controller"
+                ],
+                "operationId": "getService",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListServiceResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/{name}": {
+            "get": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "getRoom",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/{id}/service/get": {
+            "get": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "getServiceInRoom",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListServiceResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/type/{id}": {
+            "get": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "getRoomByType",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/status": {
+            "get": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "getRoomByStatus",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/building/{id}": {
+            "get": {
+                "tags": [
+                    "room-controller"
+                ],
+                "operationId": "getRoomByBuilding_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListRoomResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/refund-request": {
+            "get": {
+                "tags": [
+                    "vn-pay-controller"
+                ],
+                "operationId": "allRefundRequest",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Refund"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts": {
+            "get": {
+                "tags": [
+                    "contact-controller"
+                ],
+                "operationId": "getAllContact",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListContactResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkout": {
+            "get": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "getCheckout",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin": {
+            "get": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "getCheckin",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/buildings/{name}": {
+            "get": {
+                "tags": [
+                    "building-controller"
+                ],
+                "operationId": "getBuilding_1",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/buildings/location/{name}": {
+            "get": {
+                "tags": [
+                    "building-controller"
+                ],
+                "operationId": "getBuildingByLocation",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBuildingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/booking": {
+            "get": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "getBookingByUserName",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "getUsers",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/myinfo": {
+            "get": {
+                "tags": [
+                    "user-controller"
+                ],
+                "operationId": "getMyInfo",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseUserResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/BookingConfirm": {
+            "get": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "getBookByConfirmStatus",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/BookingAll": {
+            "get": {
+                "tags": [
+                    "booking-controller"
+                ],
+                "operationId": "getBookings",
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseListBookingResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/staffBuilding/{id}": {
+            "delete": {
+                "tags": [
+                    "staff-building-controller"
+                ],
+                "operationId": "deleteRoom",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseObject"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponseVoid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ApiResponseObject": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "object"
+                    }
+                }
+            },
+            "UpdateSlotRequest": {
+                "type": "object",
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseSlotResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/SlotResponse"
+                    }
+                }
+            },
+            "SlotResponse": {
+                "type": "object",
+                "properties": {
+                    "slot_id": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UpdateServiceRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "fee": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseServiceResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ServiceResponse"
+                    }
+                }
+            },
+            "ServiceResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "UpdateRoomRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "availability": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "available_Date": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ApiResponseRoomResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/RoomResponse"
+                    }
+                }
+            },
+            "RoomResponse": {
+                "type": "object",
+                "properties": {
+                    "room_id": {
+                        "type": "string"
+                    },
+                    "building_name": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "availability": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "type_name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "available_Date": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "UpdateBuildingRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseBuildingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BuildingResponse"
+                    }
+                }
+            },
+            "BuildingResponse": {
+                "type": "object",
+                "properties": {
+                    "building_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserUpdateRequest": {
+                "required": [
+                    "email",
+                    "name",
+                    "password"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "maxLength": 2147483647,
+                        "minLength": 8,
+                        "type": "string"
+                    },
+                    "phone": {
+                        "pattern": "0[0-9]{9}",
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseUserResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    }
+                }
+            },
+            "UserResponse": {
+                "type": "object",
+                "properties": {
+                    "userid_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateBookingDetailRequest": {
+                "type": "object",
+                "properties": {
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "service": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "slots": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "ApiResponseBookingDetailResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BookingDetailResponse"
+                    }
+                }
+            },
+            "BookingDetailResponse": {
+                "type": "object",
+                "properties": {
+                    "bookingId": {
+                        "type": "string"
+                    },
+                    "service": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "bookingVersion": {
+                        "type": "string"
+                    },
+                    "slotDescription": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "AddServiceToBookingRequest": {
+                "type": "object",
+                "properties": {
+                    "services": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
+            },
+            "ConfirmRequest": {
+                "type": "object",
+                "properties": {
+                    "bookingDate": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseVoid": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "object"
+                    }
+                }
+            },
+            "CancelPaymentRequest": {
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "VNPayRequest": {
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bankCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "StaffBuildingRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ApiResponseStaffBuildingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StaffBuildingResponse"
+                    }
+                }
+            },
+            "StaffBuildingResponse": {
+                "type": "object",
+                "properties": {
+                    "staff_building_id": {
+                        "type": "string"
+                    },
+                    "building_id": {
+                        "type": "string"
+                    },
+                    "userid_id": {
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "CreateSlotRequest": {
+                "type": "object",
+                "properties": {
+                    "slot_id": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateServiceRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "fee": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "CreateRoomRequest": {
+                "type": "object",
+                "properties": {
+                    "building_name": {
+                        "type": "string"
+                    },
+                    "room_name": {
+                        "type": "string"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "availability": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "type_name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "available_Date": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "AddServiceRequest": {
+                "type": "object",
+                "properties": {
+                    "services": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
+            },
+            "CreateRoomTypeRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseRoomTypeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/RoomTypeResponse"
+                    }
+                }
+            },
+            "RoomTypeResponse": {
+                "type": "object",
+                "properties": {
+                    "type_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseString": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RefundRequest": {
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "transactionDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "txnRef": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateFeedbackRequest": {
+                "type": "object",
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "ApiResponseFeedbackResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/FeedbackResponse"
+                    }
+                }
+            },
+            "FeedbackResponse": {
+                "type": "object",
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "CreateContactRequest": {
+                "type": "object",
+                "properties": {
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseContactResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ContactResponse"
+                    }
+                }
+            },
+            "ContactResponse": {
+                "type": "object",
+                "properties": {
+                    "buildingName": {
+                        "type": "string"
+                    },
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "customerName": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateBuildingRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseBookingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BookingResponse"
+                    }
+                }
+            },
+            "BookingResponse": {
+                "type": "object",
+                "properties": {
+                    "booking_id": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "booking_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "CreateMonthBookingRequest": {
+                "type": "object",
+                "properties": {
+                    "phone": {
+                        "type": "string"
+                    },
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "numberOfMonth": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "service": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
+            },
+            "ApiResponseMonthBookingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MonthBookingResponse"
+                    }
+                }
+            },
+            "MonthBookingResponse": {
+                "type": "object",
+                "properties": {
+                    "booking_id": {
+                        "type": "string"
+                    },
+                    "booking_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "total": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "userName": {
+                        "type": "string"
+                    },
+                    "phoneNumber": {
+                        "type": "string"
+                    }
+                }
+            },
+            "UserCreationRequest": {
+                "required": [
+                    "confirmPassword",
+                    "email",
+                    "name",
+                    "password",
+                    "phone",
+                    "username"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "maxLength": 2147483647,
+                        "minLength": 3,
+                        "type": "string"
+                    },
+                    "password": {
+                        "maxLength": 2147483647,
+                        "minLength": 8,
+                        "type": "string"
+                    },
+                    "confirmPassword": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "pattern": "0[0-9]{9}",
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "EmailVerificationRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RoleRequest": {
+                "type": "object",
+                "properties": {
+                    "roleName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseRole": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Role"
+                    }
+                }
+            },
+            "Booking": {
+                "type": "object",
+                "properties": {
+                    "booking_id": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "booking_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "bookedService": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    "bookingDate": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "slots": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Slot"
+                        }
+                    },
+                    "bookingDetails": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BookingDetail"
+                        }
+                    },
+                    "bookingServices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Booking_service"
+                        }
+                    },
+                    "roomSlots": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomSlot"
+                        }
+                    },
+                    "txnRef": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BookingDetail": {
+                "type": "object",
+                "properties": {
+                    "booking_detail_id": {
+                        "type": "string"
+                    },
+                    "booking_type": {
+                        "type": "string"
+                    },
+                    "service_id": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "bookingVersion": {
+                        "type": "string"
+                    },
+                    "room": {
+                        "$ref": "#/components/schemas/Room"
+                    },
+                    "booking": {
+                        "$ref": "#/components/schemas/Booking"
+                    }
+                }
+            },
+            "BookingServiceId": {
+                "type": "object",
+                "properties": {
+                    "booking_id": {
+                        "type": "string"
+                    },
+                    "service_id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Booking_service": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/BookingServiceId"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "booking": {
+                        "$ref": "#/components/schemas/Booking"
+                    },
+                    "service": {
+                        "$ref": "#/components/schemas/Service"
+                    }
+                }
+            },
+            "Building": {
+                "type": "object",
+                "properties": {
+                    "building_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "rooms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Room"
+                        }
+                    }
+                }
+            },
+            "FeedBack": {
+                "type": "object",
+                "properties": {
+                    "feedbackId": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "room": {
+                        "$ref": "#/components/schemas/Room"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "MonthBooking": {
+                "type": "object",
+                "properties": {
+                    "month_booking_id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "booking_id": {
+                        "type": "string"
+                    },
+                    "booking_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                }
+            },
+            "Role": {
+                "type": "object",
+                "properties": {
+                    "role_id": {
+                        "type": "string"
+                    },
+                    "roleName": {
+                        "type": "string"
+                    },
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/User"
+                        }
+                    }
+                }
+            },
+            "Room": {
+                "type": "object",
+                "properties": {
+                    "room_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "capacity": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "availability": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "available_Date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "building": {
+                        "$ref": "#/components/schemas/Building"
+                    },
+                    "roomType": {
+                        "$ref": "#/components/schemas/Room_Type"
+                    },
+                    "roomServices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomService"
+                        }
+                    },
+                    "bookingDetails": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BookingDetail"
+                        }
+                    },
+                    "roomSlots": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomSlot"
+                        }
+                    }
+                }
+            },
+            "RoomService": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/RoomServiceId"
+                    },
+                    "room": {
+                        "$ref": "#/components/schemas/Room"
+                    },
+                    "service": {
+                        "$ref": "#/components/schemas/Service"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "RoomServiceId": {
+                "type": "object",
+                "properties": {
+                    "roomId": {
+                        "type": "string"
+                    },
+                    "serviceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RoomSlot": {
+                "type": "object",
+                "properties": {
+                    "booking_date": {
+                        "type": "string"
+                    },
+                    "uid": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Room_Type": {
+                "type": "object",
+                "properties": {
+                    "type_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "rooms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Room"
+                        }
+                    }
+                }
+            },
+            "Service": {
+                "type": "object",
+                "properties": {
+                    "service_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "fee": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "rooms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Room"
+                        }
+                    },
+                    "bookingDetails": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BookingDetail"
+                        }
+                    },
+                    "bookingServices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Booking_service"
+                        }
+                    },
+                    "serviceRooms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomService"
+                        }
+                    }
+                }
+            },
+            "Slot": {
+                "type": "object",
+                "properties": {
+                    "slot_id": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "roomSlots": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomSlot"
+                        }
+                    },
+                    "bookings": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Booking"
+                        }
+                    }
+                }
+            },
+            "Transaction": {
+                "type": "object",
+                "properties": {
+                    "transaction_id": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "booking_id": {
+                        "$ref": "#/components/schemas/Booking"
+                    },
+                    "transactionDetails": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TransactionDetail"
+                        }
+                    }
+                }
+            },
+            "TransactionDetail": {
+                "type": "object",
+                "properties": {
+                    "transaction_detail_id": {
+                        "type": "string"
+                    },
+                    "transaction_id": {
+                        "$ref": "#/components/schemas/Transaction"
+                    },
+                    "transaction_type": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "bank_name": {
+                        "type": "string"
+                    },
+                    "bank_account_number": {
+                        "type": "string"
+                    },
+                    "payment_status": {
+                        "type": "string"
+                    },
+                    "transaction_date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "userid_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "role_id": {
+                        "$ref": "#/components/schemas/Role"
+                    },
+                    "transaction": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Transaction"
+                        }
+                    },
+                    "feedbacks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FeedBack"
+                        }
+                    },
+                    "bookings": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Booking"
+                        }
+                    },
+                    "monthBookings": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/MonthBooking"
+                        }
+                    },
+                    "vip": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthenticationRequest": {
+                "type": "object",
+                "properties": {
+                    "phone": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseAuthenticationResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/AuthenticationResponse"
+                    }
+                }
+            },
+            "AuthenticationResponse": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    },
+                    "authenticated": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "IntrospectRequest": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseIntrospectResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/IntrospectResponse"
+                    }
+                }
+            },
+            "IntrospectResponse": {
+                "type": "object",
+                "properties": {
+                    "valid": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ApiResponseBookingInformationResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/BookingInformationResponse"
+                    }
+                }
+            },
+            "BookingInformationResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "roomInfo": {
+                        "$ref": "#/components/schemas/RoomInformationResponse"
+                    }
+                }
+            },
+            "RoomInformationResponse": {
+                "type": "object",
+                "properties": {
+                    "roomName": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "slots": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SlotResponse"
+                        }
+                    },
+                    "services": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ServiceResponse"
+                        }
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "endTime": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "ApiResponseListStaffBuildingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StaffBuildingResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListSlotResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SlotResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseSlot": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Slot"
+                    }
+                }
+            },
+            "ApiResponseListServiceResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ServiceResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListRoomResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListRoomTypeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RoomTypeResponse"
+                        }
+                    }
+                }
+            },
+            "Refund": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "bookingDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "bookingId": {
+                        "type": "string"
+                    },
+                    "txnRef": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ApiResponseListFeedbackResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FeedbackResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListContactResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContactResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListBookingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BookingResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListBuildingResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BuildingResponse"
+                        }
+                    }
+                }
+            },
+            "ApiResponseListUserResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserResponse"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

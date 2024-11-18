@@ -1,0 +1,96 @@
+.results-container {
+    margin-top: 120px;
+    padding-top: 120px;
+    margin-bottom: 90px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+
+.results-container h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #2a2a2a;
+    font-weight: 700;
+    margin-bottom: 80px;
+}
+
+#results {
+    display: block; /* Thay đổi từ grid sang block để hiển thị dạng cột đơn */
+}
+
+.building {
+    background-color: #f7f7f7;
+    border-radius: 7px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+}
+.building img {
+    width: 250px; /* Điều chỉnh kích thước hình ảnh */
+    height: 300px;
+    border-radius: 10px 0 0 10px;
+}
+
+.building:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.building .content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.building h3 {
+    font-size: 20px;
+    color: #2a2a2a;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.building p {
+    font-size: 16px;
+    color: #8d99af;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.building p strong {
+    color: #2a2a2a;
+}
+
+.building span {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.building .info-section {
+    margin-top: 10px;
+}
+
+.building .info-section span {
+    font-size: 14px;
+    color: #555;
+}
+
+.building .info-section span strong {
+    font-weight: 600;
+}
+
+.no-buildings {
+    text-align: center;
+    font-size: 18px;
+    color: #999;
+
+}
+
+@media (max-width: 768px) {
+    #results {
+        grid-template-columns: 1fr; /* Adjust for single column on smaller screens */
+    }
+}

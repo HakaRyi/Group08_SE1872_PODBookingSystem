@@ -1,0 +1,48 @@
+/* Reset CSS */
+
+
+/* Header */
+
+
+
+
+
+
+/* Sidebar and Main Content Container */
+
+/* Sidebar styling */
+.sidebar {
+  background-color: #1f2937;
+  color: white;
+  width: 250px;
+  padding: 20px;
+  height: 100%; /* Ensure full height */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+  background-color: #374151;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding-top: 0;
+  }
+
+  
+
+}

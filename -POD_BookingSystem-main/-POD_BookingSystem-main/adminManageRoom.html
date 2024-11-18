@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/adminManageRoom.css" />
+
+    <title>Admin Manage Rooms</title>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>Room Management</h1>
+      <div class="user-info">
+        <span>Welcome, Admin</span>
+        <button class="logout-button" id="logoutButton">Logout</button>
+      </div>
+    </header>
+    <div class="container">
+      <div id="sidebar" class="sidebar">
+        <nav>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/bookingManage.html">Booking</a>
+          <a href="/adminManageBuilding.html">Building Management ▼</a>
+
+          <a href="#" id="roomsDropdownToggle">Rooms ▼</a>
+          <div id="roomsDropdown" class="sidebar-dropdown">
+            <a href="#" onclick="showAllRooms()">Lấy tất cả phòng</a>
+            <a href="#" onclick="showCreateRoomForm()">Tạo phòng mới</a>
+          </div>
+
+          <a href="/adminServiceManagement.html">Service Management ▼</a>
+        </nav>
+      </div>
+      <div class="main-content">
+        <!-- Filter Bar -->
+        <div class="filter-container">
+          <h2>Bộ lọc phòng</h2>
+          <label for="roomTypeFilter">Loại phòng</label>
+          <select id="roomTypeFilter" onchange="filterRooms()">
+            <option value="">Tất cả</option>
+            <option value="Large conference">Large conference</option>
+            <option value="Public Office">Public Office</option>
+            <option value="Private Office">Private Office</option>
+            <option value="Meeting Room">Meeting Room</option>
+          </select>
+
+          <label for="roomStatusFilter">Trạng thái</label>
+          <select id="roomStatusFilter" onchange="filterRooms()">
+            <option value="">Tất cả</option>
+            <option value="AVAILABLE">AVAILABLE</option>
+            <option value="BOOKED">BOOKED</option>
+          </select>
+
+          <label for="buildingFilter">Tên tòa nhà</label>
+          <select id="buildingFilter" onchange="filterRooms()">
+            <option value="">Tất cả</option>
+            <option value="Adventure">Adventure</option>
+            <option value="RESK">RESK</option>
+            <option value="MOMAN">MOMAN</option>
+            <option value="KLARA">KLARA</option>
+          </select>
+        </div>
+
+        <div id="searchAndListContainer" class="search-and-list-container">
+          <div class="search-container">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Tìm kiếm phòng theo tên"
+            />
+            <button onclick="searchRooms()">Tìm kiếm</button>
+          </div>
+          <div id="rooms-list"></div>
+        </div>
+        <div id="formContainer" class="form-container"></div>
+      </div>
+    </div>
+
+    <script>
+      const BASE_URL = "http://14.225.206.250:8080/POD_BookingSystem/rooms";
+      let rooms = [];
+
+      function toggleRoomsDropdown() {
+        document.getElementById("roomsDropdown").classList.toggle("active");
+      }
+
+      document
+        .getElementById("roomsDropdownToggle")
+        .addEventListener("click", toggleRoomsDropdown);
+
+      function getHeaders(method = "GET", body = null) {
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        const options = {
+          method: method,
+          headers: headers,
+        };
+
+        if (body) {
+          options.body = JSON.stringify(body);
+        }
+
+        return options;
+      }
+
+      async function getAllRooms() {
+        try {
+          const response = await fetch(BASE_URL, getHeaders());
+          const responseData = await response.json();
+          if (responseData.data && Array.isArray(responseData.data)) {
+            rooms = responseData.data;
+            displayRooms();
+          } else {
+            alert("Dữ liệu không hợp lệ hoặc không có phòng!");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function displayRooms(roomsToDisplay = rooms) {
+        const roomsList = document.getElementById("rooms-list");
+        roomsList.innerHTML = "<h2>Danh sách phòng</h2>";
+        roomsToDisplay.forEach((room, index) => {
+          const roomElement = document.createElement("div");
+          roomElement.className = "room-item";
+          roomElement.innerHTML = `
+            <div class="room-header">
+                <strong>${room.name}</strong>
+                <button onclick="toggleDropdown(${index})" class="dropdown-toggle">▼</button>
+            </div>
+            <div class="dropdown-content" id="dropdown-${index}" style="display: none;">
+                <button onclick="showUpdateRoomForm(${JSON.stringify(
+                  room
+                ).replace(
+                  /"/g,
+                  "&quot;"
+                )})" class="update-button">Cập nhật phòng</button>
+                <button onclick="deleteRoom('${
+                  room.room_id
+                }')" class="delete-button">Xóa phòng</button>
+            </div>
+            <div class="room-info">
+                <p>Loại phòng: ${room.type_name} | Tòa nhà: ${
+            room.building_name
+          }</p>
+                <p>Sức chứa: ${room.capacity} | Trạng thái: ${
+            room.availability
+          }</p>
+                <p>Giá: ${room.price} VND | Ngày có sẵn: ${
+            room.available_Date
+          }</p>
+                <p>Mô tả: ${room.description}</p>
+            </div>
+        `;
+          roomsList.appendChild(roomElement);
+        });
+      }
+
+      function toggleDropdown(index) {
+        const dropdown = document.getElementById(`dropdown-${index}`);
+        dropdown.style.display =
+          dropdown.style.display === "block" ? "none" : "block";
+      }
+
+      function filterRooms() {
+        const type = document
+          .getElementById("roomTypeFilter")
+          .value.toLowerCase();
+        const status = document
+          .getElementById("roomStatusFilter")
+          .value.toLowerCase();
+        const building = document
+          .getElementById("buildingFilter")
+          .value.toLowerCase();
+
+        const filteredRooms = rooms.filter((room) => {
+          const matchesType = type
+            ? room.type_name.toLowerCase() === type
+            : true;
+          const matchesStatus = status
+            ? room.availability.toLowerCase() === status
+            : true;
+          const matchesBuilding = building
+            ? room.building_name.toLowerCase() === building
+            : true;
+          return matchesType && matchesStatus && matchesBuilding;
+        });
+
+        displayRooms(filteredRooms);
+      }
+
+      async function getRoomsByType(id) {
+        try {
+          const response = await fetch(`${BASE_URL}/type/${id}`, getHeaders());
+          const data = await response.json();
+          console.log("Rooms by type:", data);
+          alert("Đã lấy phòng theo loại!");
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      async function getRoomStatus() {
+        try {
+          const response = await fetch(`${BASE_URL}/status`, getHeaders());
+          const data = await response.json();
+          console.log("Room status:", data);
+          alert("Đã lấy trạng thái phòng!");
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      async function getRoomsByBuilding(id) {
+        try {
+          const response = await fetch(
+            `${BASE_URL}/building/${id}`,
+            getHeaders()
+          );
+          const data = await response.json();
+          console.log("Rooms by building:", data);
+          alert("Đã lấy phòng theo tòa nhà!");
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      async function getRoomService(id) {
+        try {
+          const response = await fetch(
+            `${BASE_URL}/${id}/service/get`,
+            getHeaders()
+          );
+          const data = await response.json();
+          console.log("Room services:", data);
+          alert("Đã lấy dịch vụ của phòng!");
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function showAllRooms() {
+        document
+          .getElementById("searchAndListContainer")
+          .classList.remove("hidden");
+        document.getElementById("formContainer").classList.remove("visible");
+        getAllRooms();
+      }
+
+      function showCreateRoomForm() {
+        document
+          .getElementById("searchAndListContainer")
+          .classList.add("hidden");
+        const formContainer = document.getElementById("formContainer");
+        formContainer.classList.add("visible");
+        formContainer.innerHTML = `
+        <h2>Tạo Phòng Mới</h2>
+        <form id="createRoomForm" class="edit-form">
+            <label for="roomName">Tên phòng</label>
+            <input type="text" id="roomName" placeholder="Nhập tên phòng" required>
+
+            <label for="roomType">Loại phòng</label>
+            <input type="text" id="roomType" placeholder="Nhập loại phòng" required>
+
+            <label for="roomStatus">Trạng thái</label>
+            <input type="text" id="roomStatus" placeholder="Nhập trạng thái phòng" required>
+
+            <label for="buildingName">Tên tòa nhà</label>
+            <input type="text" id="buildingName" placeholder="Nhập tên tòa nhà" required>
+
+            <label for="capacity">Sức chứa</label>
+            <input type="number" id="capacity" placeholder="Nhập sức chứa" required>
+
+            <label for="price">Giá (VND)</label>
+            <input type="number" id="price" placeholder="Nhập giá phòng" required>
+
+            <label for="availableDate">Ngày có sẵn</label>
+            <input type="date" id="availableDate" required>
+
+            <label for="description">Mô tả</label>
+            <textarea id="description" rows="3" placeholder="Nhập mô tả" required></textarea>
+
+            <div class="button-group">
+                <button type="submit" class="primary-button">Tạo phòng</button>
+                <button type="button" class="secondary-button" onclick="showAllRooms()">Hủy</button>
+            </div>
+        </form>
+    `;
+        document
+          .getElementById("createRoomForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const roomData = {
+              building_name: document.getElementById("buildingName").value,
+              room_name: document.getElementById("roomName").value,
+              capacity: parseInt(document.getElementById("capacity").value),
+              availability: document.getElementById("roomStatus").value,
+              price: parseFloat(document.getElementById("price").value),
+              type_name: document.getElementById("roomType").value,
+              description: document.getElementById("description").value,
+              available_Date: document.getElementById("availableDate").value,
+            };
+            createRoom(roomData);
+          });
+      }
+
+      async function createRoom(roomData) {
+        try {
+          const response = await fetch(BASE_URL, getHeaders("POST", roomData));
+          const data = await response.json();
+          console.log("Room created:", data);
+          alert("Đã tạo phòng mới!");
+          showAllRooms();
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function showUpdateRoomForm(room) {
+        document
+          .getElementById("searchAndListContainer")
+          .classList.add("hidden");
+        const formContainer = document.getElementById("formContainer");
+        formContainer.classList.add("visible");
+        formContainer.innerHTML = `
+                <h2>Cập Nhật Phòng</h2>
+                <form id="updateRoomForm" class="edit-form">
+                <h2>Cập Nhật Phòng</h2>
+    
+                <label for="roomName">Tên phòng</label>
+                <input type="text" id="roomName" value="${room.name}" required>
+    
+                <label for="roomType">Loại phòng</label>
+                <input type="text" id="roomType" value="${room.type_name}" required>
+    
+                <label for="roomStatus">Trạng thái</label>
+                <input type="text" id="roomStatus" value="${room.availability}" required>
+    
+                <label for="buildingId">Tên tòa nhà</label>
+                <input type="text" id="buildingId" value="${room.building_name}" required>
+    
+                <label for="capacity">Sức chứa</label>
+                <input type="number" id="capacity" value="${room.capacity}" required>
+    
+                <label for="price">Giá (VND)</label>
+                <input type="number" id="price" value="${room.price}" required>
+    
+                <label for="availableDate">Ngày có sẵn</label>
+                <input type="date" id="availableDate" value="${room.available_Date}" required>
+    
+                <label for="description">Mô tả</label>
+                <textarea id="description" rows="3" required>${room.description}</textarea>
+    
+                <div class="button-group">
+                <button type="submit" class="primary-button">Cập nhật phòng</button>
+        <button type="button" class="secondary-button" onclick="showAllRooms()">Hủy</button>
+    </div>
+</form>
+
+            `;
+        document
+          .getElementById("updateRoomForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const updatedRoomData = {
+              name: document.getElementById("roomName").value,
+              type: parseInt(document.getElementById("roomType").value),
+              availability: document.getElementById("roomStatus").value,
+              building_id: parseInt(
+                document.getElementById("buildingId").value
+              ),
+              capacity: parseInt(document.getElementById("capacity").value),
+              price: parseFloat(document.getElementById("price").value),
+              available_Date: document.getElementById("availableDate").value,
+              description: document.getElementById("description").value,
+            };
+            updateRoom(room.room_id, updatedRoomData);
+          });
+      }
+
+      async function updateRoom(id, roomData) {
+        try {
+          const response = await fetch(
+            `${BASE_URL}/${id}`,
+            getHeaders("PUT", roomData)
+          );
+          const data = await response.json();
+          console.log("Room updated:", data);
+          alert("Đã cập nhật phòng!");
+          showAllRooms();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Lỗi khi cập nhật phòng. Vui lòng thử lại.");
+        }
+      }
+      async function deleteRoom(roomId) {
+        try {
+          const response = await fetch(
+            `${BASE_URL}/${roomId}`,
+            getHeaders("DELETE")
+          );
+
+          if (response.ok) {
+            alert("Phòng đã được xóa thành công!");
+            showAllRooms();
+          } else {
+            const errorData = await response.json();
+            if (errorData.message.includes("foreign key constraint fails")) {
+              alert(
+                "Không thể xóa phòng vì có dữ liệu liên quan trong các mục thanh toán."
+              );
+            } else {
+              alert(
+                "Lỗi: Không thể xóa phòng. " +
+                  (errorData.message || "Vui lòng thử lại sau.")
+              );
+            }
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Đã xảy ra lỗi khi xóa phòng.");
+        }
+      }
+
+      function searchRooms() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const filteredRooms = rooms.filter((room) =>
+          room.name.toLowerCase().includes(searchTerm)
+        );
+        displayRooms(filteredRooms);
+      }
+
+      // Initial load of rooms
+      showAllRooms();
+      function logout() {
+        // Xóa authToken khỏi localStorage
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("username"); // Xóa luôn username nếu có
+        // Chuyển hướng về trang đăng nhập
+        window.location.href = "login.html";
+      }
+
+      // Gán sự kiện cho nút logout
+      document.getElementById("logoutButton").addEventListener("click", logout);
+    </script>
+  </body>
+</html>

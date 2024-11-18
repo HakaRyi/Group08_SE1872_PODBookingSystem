@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>Building Results</title>
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Style css-->
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+   
+    <link rel="stylesheet" href="assets/css/animated.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/result.css">
+
+</head>
+
+<body>
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+          <span class="dot"></span>
+          <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+      <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <nav class="main-nav">
+                <!-- ***** Logo Start ***** -->
+                <a href="index.html" class="logo">
+                </a>
+                <!-- ***** Logo End ***** -->
+                <!-- ***** Menu Start ***** -->
+                <ul class="nav">
+                  <li><a href="index.html">Home</a></li>
+                  <li><a href="category.html">Category</a></li>
+                  <li><a href="listing.html" class="active">Listing</a></li>
+                  <li><a href="contact.html">Contact Us</a></li> 
+                  <li><div class="main-white-button"><a href="#"><i class="fa fa-plus"></i> Add Your Listing</a></div></li> 
+                </ul>        
+                <a class='menu-trigger'>
+                    <span>Menu</span>
+                </a>
+                <!-- ***** Menu End ***** -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="top-text header-text">
+            <h6>Check Out Our Listings</h6>
+            <h2>Building of Different Categories</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="results-container">
+        <h2>Available Buildings</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Lấy dữ liệu từ localStorage và hiển thị
+        const buildings = JSON.parse(localStorage.getItem('buildings'));
+        const resultsContainer = document.getElementById('results');
+
+        if (buildings && buildings.length > 0) {
+            buildings.forEach(building => {
+                const buildingElement = document.createElement('div');
+                buildingElement.className = 'building';
+                buildingElement.innerHTML = `
+                    <h3>${building.name}</h3>
+                    <p><strong>Building ID:</strong> ${building.building_id}</p>
+                    <p><strong>Address:</strong> ${building.address}</p>
+                    <p><strong>Location:</strong> ${building.location}</p>
+                    <p><strong>Description:</strong> ${building.description}</p>
+                `;
+                resultsContainer.appendChild(buildingElement);
+            });
+        } else {
+            resultsContainer.innerHTML = '<p class="no-buildings">No buildings found.</p>';
+        }
+    </script>
+</body>
+
+</html>
