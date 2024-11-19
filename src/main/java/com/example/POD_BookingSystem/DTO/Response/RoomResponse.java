@@ -21,4 +21,5 @@ public class RoomResponse {
     String type_name;
     String description;
     LocalDate available_Date;
+    Boolean enable;
 }

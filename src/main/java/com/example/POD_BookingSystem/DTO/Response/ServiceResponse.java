@@ -11,7 +11,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class ServiceResponse {
+    String service_id;
     String name;
     String description;
+    double fee;
     double price;
+    Boolean enable;
 }

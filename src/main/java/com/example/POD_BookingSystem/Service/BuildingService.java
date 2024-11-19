@@ -11,6 +11,7 @@ import com.example.POD_BookingSystem.Repository.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,7 @@ public class BuildingService {
                 .description(request.getDescription())
                 .address(request.getAddress())
                 .location(request.getLocation())
+                .enable(true)
                 .build();
         buildingRepository.save(building);
         return buildingMapper.toBuildingResponse(building);
@@ -50,19 +52,38 @@ public class BuildingService {
     //Get All Building
     public List<BuildingResponse> getAllBuildings(){
         List<Building> buildings = buildingRepository.findAll();
-        return  buildings.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
+        List<Building> result = new ArrayList<>();
+        for(Building building : buildings){
+            if(building.getEnable()){
+                result.add(building);
+            }
+        }
+
+        return  result.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
     }
 
     //Get Building By Name
     public List<BuildingResponse> getBuildings(String name){
         List<Building> buildings = buildingRepository.findAllBuildingByName(name);
-        return  buildings.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
+        List<Building> result = new ArrayList<>();
+        for(Building building : buildings){
+            if(building.getEnable()){
+                result.add(building);
+            }
+        }
+        return  result.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
     }
 
     //Get Building By Location
     public List<BuildingResponse> getBuildingsByLocation(String name){
         List<Building> buildings = buildingRepository.findAllByLocation(name);
-        return  buildings.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
+        List<Building> result = new ArrayList<>();
+        for(Building building : buildings){
+            if(building.getEnable()){
+                result.add(building);
+            }
+        }
+        return  result.stream().map(buildingMapper::toBuildingResponse).collect(Collectors.toList());
     }
 
     //Update Building
@@ -75,6 +96,6 @@ public class BuildingService {
 
     //Delete Building
     public void deleteBuilding(String id){
-        buildingRepository.deleteById(id);
+        buildingRepository.deleteBuilding(id);
     }
 }

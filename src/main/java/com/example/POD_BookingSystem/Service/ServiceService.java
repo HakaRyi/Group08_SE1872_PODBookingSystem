@@ -10,6 +10,7 @@ import com.example.POD_BookingSystem.Repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +33,8 @@ public class ServiceService {
                 .fee(request.getFee())
                 .description(request.getDescription())
                 .name(request.getName())
+                .enable(true)
                 .build();
-
         serviceRepository.save(service);
 
         return serviceMapper.toServiceResponse(service);
@@ -52,13 +53,26 @@ public class ServiceService {
     //Get All SERVICE
     public List<ServiceResponse> getAllService(){
         List<com.example.POD_BookingSystem.Entity.Service> services = serviceRepository.findAll();
-        return  services.stream().map(serviceMapper::toServiceResponse).collect(Collectors.toList());
+        List<com.example.POD_BookingSystem.Entity.Service> result = new ArrayList<>();
+        for(com.example.POD_BookingSystem.Entity.Service service : services){
+            if(service.getEnable()){
+                result.add(service);
+            }
+        }
+
+        return  result.stream().map(serviceMapper::toServiceResponse).collect(Collectors.toList());
     }
 
     //Get Service By Name
     public List<ServiceResponse> getServices(String name){
-        List<com.example.POD_BookingSystem.Entity.Service> Services = serviceRepository.findAllServiceByName(name);
-        return  Services.stream().map(serviceMapper::toServiceResponse).collect(Collectors.toList());
+        List<com.example.POD_BookingSystem.Entity.Service> services = serviceRepository.findAllServiceByName(name);
+        List<com.example.POD_BookingSystem.Entity.Service> result = new ArrayList<>();
+        for(com.example.POD_BookingSystem.Entity.Service service : services){
+            if(service.getEnable()){
+                result.add(service);
+            }
+        }
+        return  result.stream().map(serviceMapper::toServiceResponse).collect(Collectors.toList());
     }
 
     //Update Service
@@ -71,6 +85,6 @@ public class ServiceService {
 
     //Delete Service
     public void deleteService(String id){
-        serviceRepository.deleteById(id);
+        serviceRepository.deleteService(id);
     }
 }

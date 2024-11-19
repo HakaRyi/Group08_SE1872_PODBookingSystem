@@ -208,9 +208,7 @@ public class BookingService {
         List<BookingDetail> listBookingDetail = booking.getBookingDetails();
 
         Room room = listBookingDetail.getFirst().getRoom();
-        log.info(room.getName());
 
-        log.info("at service");
         List<com.example.POD_BookingSystem.Entity.Service> listServices = new ArrayList<>();
         for (String serviceId : serviceRepository.getServiceByRoom(bookingId, room.getRoom_id())) {
             listServices.add(serviceRepository.findById(serviceId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND)));
@@ -239,19 +237,6 @@ public class BookingService {
         return bookingInformationResponse;
     }
 
-    //     CREATE BOOKING
-//    public Booking createBooking (String userName){
-//        User user = userRepository.findByPhone(userName)
-//                .orElseThrow(() -> new RuntimeException("User does not exist"));
-//        Booking booking = Booking.builder()
-//                .booking_id(GenerateId())
-//                .user(user)
-//                .booking_date(LocalDate.now())
-//                .status("PENDING")
-//                .build();
-//        bookingRepository.save(booking);
-//        return booking;
-//    }
         public BookingResponse createBooking (String userName){
             User user = userRepository.findByUsername(userName)
                     .orElseThrow(() -> new RuntimeException("User does not exist"));
@@ -289,7 +274,6 @@ public class BookingService {
         double versionPrice = 0;
 
         //Lay Thoi Gian Thue Phong
-
         List<Slot> slots = new ArrayList<>();
 
         int numberOfSlot = 0;
@@ -309,11 +293,8 @@ public class BookingService {
             }else{
                 bookingPrice = ((room.getPrice()*12)* (timeBooking+1)) - ((room.getPrice()*12)* 10 / 100);
             }
-
-
         } else {
-            timeBooking = numberOfSlot;
-            bookingPrice = room.getPrice()*timeBooking;
+            bookingPrice = room.getPrice()*numberOfSlot;
         }
 
         versionPrice += bookingPrice;
@@ -323,7 +304,6 @@ public class BookingService {
         for(Slot slot : slots){
             slotDescription.add(slot.getDescription());
         }
-
         List<BookingDetail> bookingDetails = new ArrayList<>();
         int quantity = 1;
 
@@ -346,10 +326,7 @@ public class BookingService {
         bookingDetails.add(roomBookingDetail);
         bookingDetailRepository.save(roomBookingDetail);
 
-        Map<String, Integer> service = new HashMap<>();
-
         // Tao Booking Detail cho List Service
-
         for(Map.Entry<String, Integer> entry : request.getService().entrySet()){
             String serviceName = entry.getKey(); // Lấy service name
             Integer Quantity = entry.getValue();
@@ -373,7 +350,6 @@ public class BookingService {
             versionPrice += (bookedService.getPrice() * Quantity);
             bookingDetails.add(serviceBookingDetail);
             bookingDetailRepository.save(serviceBookingDetail);
-            service.put(bookedService.getService_id(),Quantity);
         }
         bookingTotalPrice += versionPrice;
         booking.setTotal(bookingTotalPrice);
@@ -384,6 +360,7 @@ public class BookingService {
         bookingRepository.save(booking);
 
         return BookingDetailResponse.builder()
+                .bookingId(bookingId)
                 .roomName(room.getName())
                 .bookingVersion(version)
                 .slotDescription(slotDescription)
@@ -398,7 +375,7 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking Not Found"));
         List<BookingDetail> bookingDetails = booking.getBookingDetails();
 
-        Map<String, List<String>> bookingSlot = booking.getBookingDate();
+
 
         Room room = bookingDetails.getFirst().getRoom();
         MonthBooking roomBookedByMonth = monthBookingRepository.isBookingByMonth(bookingId);
@@ -410,10 +387,12 @@ public class BookingService {
             bookingDetail.setStatus("CONFIRM");
         }
 
+        //Create Room Slot Information
+        Map<String, List<String>> bookingSlot = booking.getBookingDate();
         if (bookingSlot != null && !bookingSlot.isEmpty()) {
             List<RoomSlot> roomSlotList = new ArrayList<>();
             for (Map.Entry<String, List<String>> entry : bookingSlot.entrySet()) {
-                if(entry.getKey().equals("Day") || entry.getKey().equals("Month")) {
+                if(entry.getKey().equals("Day")) {
                     for (String date : entry.getValue()) {
                         RoomSlot roomSlot = RoomSlot.builder()
                                 .room(room)

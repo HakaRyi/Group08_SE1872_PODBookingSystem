@@ -26,6 +26,7 @@ public class Room {
     String description;
     @Column(name = "availeble_Date")
     LocalDate  available_Date;
+    Boolean enable;
 
     //Quan He 1 Nhieu Voi BUILDING
     @ManyToOne(fetch = FetchType.LAZY)

@@ -21,6 +21,7 @@ public class Building {
     String address;
     String description;
     String location;
+    Boolean enable;
 
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL)
     private List<Room> rooms;

@@ -61,6 +61,7 @@ public class RoomService {
                 .capacity(request.getCapacity())
                 .description(request.getDescription())
                 .roomType(roomType)
+                .enable(true)
                 .build();
 
         roomRepository.save(room);
@@ -83,25 +84,48 @@ public class RoomService {
     //Get All Room
     public List<RoomResponse> getAllRooms(){
         List<Room> rooms = roomRepository.findAll();
-
-        return rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+        List<Room> result = new ArrayList<>();
+        for (Room room : rooms){
+            if(room.getEnable() && room.getBuilding().getEnable()){
+                result.add(room);
+            }
+        }
+        return result.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
     }
 
     //Get Room By Name
     public List<RoomResponse> getRoom(String name){
         List<Room> rooms = roomRepository.findAllRoomByName(name);
-        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+        List<Room> result = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.getEnable()) {
+                result.add(room);
+            }
+        }
+        return  result.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
     }
     //Get Room By Building
     public List<RoomResponse> getRoomByBuilding(String building){
         List<Room> rooms = roomRepository.findRoomByBuilding(building);
-        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+        List<Room> result = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.getEnable()) {
+                result.add(room);
+            }
+        }
+        return  result.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
 
     }
     //Get Room By RoomType
     public List<RoomResponse> getRoomByType(String type){
         List<Room> rooms = roomRepository.findAllRoomByType(type);
-        return  rooms.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
+        List<Room> result = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.getEnable()) {
+                result.add(room);
+            }
+        }
+        return  result.stream().map(roomMapper::toRoomResponse).collect(Collectors.toList());
 
     }
     //Get Room By Status
@@ -122,7 +146,7 @@ public class RoomService {
 
     //Delete Room
     public void deleteRoom(String id){
-        roomRepository.deleteById(id);
+        roomRepository.deleteRoom(id);
     }
 
     //Get Service in Room

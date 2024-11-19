@@ -24,6 +24,7 @@ public class Service {
     double fee;
     String description;
     double price;
+    Boolean enable;
 
     @ManyToMany
     @JoinTable(

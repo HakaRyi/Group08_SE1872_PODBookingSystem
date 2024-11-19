@@ -14,4 +14,5 @@ public class BuildingResponse {
     String address;
     String description;
     String location;
+    Boolean enable;
 }

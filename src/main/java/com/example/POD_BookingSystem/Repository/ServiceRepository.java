@@ -3,9 +3,11 @@ package com.example.POD_BookingSystem.Repository;
 import com.example.POD_BookingSystem.Entity.Building;
 import com.example.POD_BookingSystem.Entity.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +18,9 @@ public interface ServiceRepository extends JpaRepository<Service, String> {
 
     @Query(value = "SELECT * FROM Service WHERE name LIKE %:name%", nativeQuery = true)
     List<Service> findAllServiceByName(@Param("name") String name);
+
+    @Query(value = "SELECT * FROM Service WHERE enable = true", nativeQuery = true)
+    List<Service> findAllActiveService();
 
     Service findByName(String name);
 
@@ -28,4 +33,9 @@ public interface ServiceRepository extends JpaRepository<Service, String> {
             "JOIN booking_service bs ON b.booking_id = bs.booking_id\n" +
             "WHERE b.booking_id = :bookingId and r.room_id = :roomId;", nativeQuery = true)
     List<String> getServiceByRoom(@Param("bookingId") String bookingId, @Param("roomId") String roomId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Service SET enable = false WHERE service_id = :serviceId", nativeQuery = true)
+    public void deleteService(@Param("serviceId") String serviceId);
 }

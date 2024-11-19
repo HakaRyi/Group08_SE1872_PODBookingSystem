@@ -2,9 +2,11 @@ package com.example.POD_BookingSystem.Repository;
 
 import com.example.POD_BookingSystem.Entity.Building;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +20,11 @@ public interface BuildingRepository  extends JpaRepository<Building, String> {
 
     @Query(value = "SELECT * FROM Building WHERE location LIKE %:location%", nativeQuery = true)
     List<Building> findAllByLocation(@Param("location") String name);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Building SET enable = false WHERE building_id = :buildingId", nativeQuery = true)
+    public void deleteBuilding(@Param("buildingId") String buildingId);
 
     Building findByName(String name);
 

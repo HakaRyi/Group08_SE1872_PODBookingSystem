@@ -5,6 +5,8 @@ import com.example.POD_BookingSystem.DTO.Request.Room.AddServiceRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.CreateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Request.Room.UpdateRoomRequest;
 import com.example.POD_BookingSystem.DTO.Request.Slot.CreateSlotRequest;
+import com.example.POD_BookingSystem.DTO.Request.Slot.GetBookedDayRequest;
+import com.example.POD_BookingSystem.DTO.Request.Slot.GetBookedSlotRequest;
 import com.example.POD_BookingSystem.DTO.Request.Slot.UpdateSlotRequest;
 import com.example.POD_BookingSystem.DTO.Response.ApiResponse;
 import com.example.POD_BookingSystem.DTO.Response.RoomResponse;
@@ -16,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -61,6 +65,20 @@ public class SlotController {
     ApiResponse<Void> deleteSlot(@PathVariable String id) {
         slotService.deleteSlot(id);
         return ApiResponse.<Void>builder().message("Delete Successfully !!!").build();
+    }
+
+    @GetMapping("/booked-slots")
+    ApiResponse<List<SlotResponse>> getBookedSlots(@RequestBody GetBookedSlotRequest request){
+        return ApiResponse.<List<SlotResponse>>builder()
+                .data(slotService.getBookedSlots(request))
+                .build();
+    }
+
+    @GetMapping("/booked-days")
+    ApiResponse<List<LocalDate>> getBookedDays(@RequestBody GetBookedDayRequest request){
+        return ApiResponse.<List<LocalDate>>builder()
+                .data(slotService.getBookedDay(request))
+                .build();
     }
 
 }
