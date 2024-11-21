@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Register Form</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/signup.css">
+</head>
+
+<body>
+    <!-- Modal Structure -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <div class="form">
+        <div class="form-panel two">
+            <div class="form-header">
+                <h1>Register Account</h1>
+            </div>
+            <div class="form-content">
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" name="phone" required pattern="[0-9]{10,15}"
+                            title="Please enter a valid phone number with 10-15 digits.">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" id="reg-username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-name">Name</label>
+                        <input type="text" id="reg-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" aria-label="Register">Register</button>
+                    </div>
+                </form>
+                <div class="form-group">
+                    <p>Already have an account? <a href="login.html">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Function to show the modal
+        function showModal(message) {
+            var modal = document.getElementById("messageModal");
+            var modalMessage = document.getElementById("modalMessage");
+            modalMessage.textContent = message;
+            modal.style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            var modal = document.getElementById("messageModal");
+            modal.style.display = "none";
+        }
+
+        // Close modal when clicking on close button or outside of modal
+        document.addEventListener('DOMContentLoaded', function () {
+            const signupForm = document.getElementById('signupForm');
+            const closeModalBtn = document.getElementById("closeModal");
+
+            closeModalBtn.onclick = closeModal;
+            window.onclick = function (event) {
+                var modal = document.getElementById("messageModal");
+                if (event.target == modal) {
+                    closeModal();
+                }
+            };
+
+            // Form submission handler
+            signupForm.addEventListener('submit', async function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const username = document.getElementById('reg-username').value;
+                const name = document.getElementById('reg-name').value;
+                const password = document.getElementById('reg-password').value.trim(); // Trim spaces
+                const confirmPassword = document.getElementById('confirm-password').value.trim(); // Trim spaces
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('reg-phone').value;
+
+                // Password validation
+                if (password !== confirmPassword) {
+                    showModal('Passwords do not match.');
+                    return; // Stop the form from submitting
+                }
+
+                try {
+                    const apiUrl = 'http://14.225.206.250:8080/POD_BookingSystem/api/users/customer';
+                    const requestData = { username, name, password, email, phone, confirmPassword };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    const responseText = await response.text();
+
+                    if (!response.ok) {
+                        try {
+                            const errorDetails = responseText ? JSON.parse(responseText) : {};
+                            showModal(`Signup failed: ${errorDetails.message || 'Unknown error'}`);
+                        } catch (parseError) {
+                            showModal('Signup failed: An unknown error occurred.');
+                        }
+                        return;
+                    }
+
+                    const result = JSON.parse(responseText);
+
+                    if (result.data) {
+                        // Store username and authToken in localStorage
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('authToken', result.data.authToken || '');
+
+                        showModal('Registration successful! Redirecting to login...');
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);  // Delay redirect for 2 seconds
+                    } else {
+                        showModal('Registration failed. Please try again.');
+                    }
+
+                } catch (error) {
+                    showModal('An error occurred while trying to sign up. Please try again later.');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

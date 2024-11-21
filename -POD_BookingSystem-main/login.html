@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Login Form</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/login.css" />
+  </head>
+
+  <body>
+    <!-- Load the Google Platform Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Modal Structure -->
+    <div id="messageModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <p id="modalMessage"></p>
+      </div>
+    </div>
+
+    <div class="form">
+      <div class="form-panel one">
+        <div class="form-header">
+          <h1>Account Login</h1>
+        </div>
+        <div class="form-content">
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="reg-phone">Phone Number</label>
+              <input
+                type="tel"
+                id="reg-phone"
+                name="phone"
+                required
+                pattern="[0-9]{10,15}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+            <div class="form-group">
+              <button type="submit" aria-label="Log In" id="loginButton">
+                Log In
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Google Sign-In Button -->
+        <div id="googleSignInButton"></div>
+
+        <div class="form-footer">
+          <p>
+            Don't have an account?
+            <a href="signup.html" id="signup-link">Create an account</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script>
+      // Modal Script
+      function showModal(message) {
+        var modal = document.getElementById("messageModal");
+        var modalMessage = document.getElementById("modalMessage");
+        var closeModalBtn = document.getElementById("closeModal");
+
+        modalMessage.textContent = message;
+        modal.style.display = "block";
+
+        closeModalBtn.onclick = function () {
+          modal.style.display = "none";
+        };
+
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        };
+      }
+      const loginButton = document.getElementById("loginButton");
+
+      loginButton.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const phone = document.getElementById("reg-phone").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          const loginUrl =
+            "http://14.225.206.250:8080/POD_BookingSystem/api/auth/log-in";
+          const requestData = { phone, password };
+
+          const response = await fetch(loginUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.data && result.data.token) {
+            // Save authToken to localStorage
+            localStorage.setItem("authToken", result.data.token);
+            console.log("authToken saved to localStorage:", result.data.token);
+
+            const token = localStorage.getItem("authToken");
+            if (token) {
+              const decoded = jwt_decode(token); // Decode the JWT
+              console.log("Decoded JWT:", decoded); // Check the decoded JWT
+
+              // Check if the decoded role is 'Staff', 'Admin', or 'Manager'
+              const role = decoded.Role; // Assuming 'Role' is the key in your decoded JWT
+
+              // Redirect based on the role
+              if (role === "Staff") {
+                window.location.href = "staff.html";
+              } else if (role === "Admin") {
+                window.location.href = "dashboard.html";
+              } else if (role === "Manager") {
+                window.location.href = "manager.html";
+              } else if (role === "Customer") {
+                window.location.href = "index.html";
+              } else {
+                showModal("Vai trò người dùng không hợp lệ.");
+              }
+            }
+          } else {
+            const failMessage =
+              result.message ||
+              "Đăng nhập thất bại: Thông tin sai hoặc lỗi máy chủ.";
+            showModal(failMessage);
+          }
+        } catch (error) {
+          showModal(
+            "Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại sau."
+          );
+        }
+      });
+
+      // Hàm lấy username từ API sau khi đăng nhập
+      async function fetchUsername() {
+        const authToken = localStorage.getItem("authToken");
+        if (!authToken) return;
+
+        try {
+          const userDetailsUrl =
+            "http://14.225.206.250:8080/POD_BookingSystem/api/users/details";
+          const response = await fetch(userDetailsUrl, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          const result = await response.json();
+          console.log("User details response:", result); // Log dữ liệu người dùng để kiểm tra
+
+          if (response.ok && result.data && result.data.username) {
+            // Lưu username vào localStorage
+            localStorage.setItem("username", result.data.username);
+            console.log(
+              "Username saved to localStorage:",
+              result.data.username
+            );
+          } else {
+            console.error("Không lấy được username.");
+            showModal(
+              "Không thể lấy thông tin người dùng. Vui lòng thử lại sau."
+            );
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người dùng:", error);
+        }
+      }
+      console.log(
+        "authToken in localStorage:",
+        localStorage.getItem("authToken")
+      );
+    </script>
+  </body>
+</html>

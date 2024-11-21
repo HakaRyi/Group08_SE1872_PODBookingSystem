@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/adminManageBuilding.css" />
+    <title>Admin Manage Buildings</title>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>Building Management</h1>
+      <div class="user-info">
+        <span>Welcome, Admin</span>
+        <button class="logout-button" id="logoutButton">Logout</button>
+      </div>
+    </header>
+    <div class="container">
+      <div id="sidebar" class="sidebar">
+        <nav>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/bookingManage.html">Booking</a>
+
+          <a href="#" id="buildingDropdownToggle">Building Management ▼</a>
+          <div id="buildingDropdown" class="sidebar-dropdown">
+            <a href="#" onclick="showAllBuildings()">Lấy tất cả tòa nhà</a>
+            <a href="#" onclick="showCreateBuildingForm()">Tạo tòa nhà mới</a>
+          </div>
+          <a href="/adminManageRoom.html" id="roomsDropdownToggle">Rooms ▼</a>
+          <div id="roomsDropdown" class="sidebar-dropdown">
+            <a href="#" onclick="showAllRooms()">Lấy tất cả phòng</a>
+            <a href="#" onclick="showCreateRoomForm()">Tạo phòng mới</a>
+          </div>
+          <a href="/adminServiceManagement.html">Service Management ▼</a>
+        </nav>
+      </div>
+      <div class="main-content">
+        <div class="filter-container">
+          <label for="locationFilter">Vị trí</label>
+          <select id="locationFilter" onchange="filterBuildings()">
+            <option value="">Tất cả</option>
+            <option value="Ho Chi Minh">Ho Chi Minh</option>
+            <option value="Ha Noi">Ha Noi</option>
+          </select>
+        </div>
+
+        <div id="searchAndListContainer" class="search-and-list-container">
+          <div class="search-container">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Tìm kiếm tòa nhà theo tên"
+            />
+            <button onclick="searchBuildings()">Tìm kiếm</button>
+          </div>
+          <div id="buildings-list"></div>
+        </div>
+        <div id="formContainer" class="form-container"></div>
+      </div>
+    </div>
+
+    <script>
+      const BASE_URL = "http://14.225.206.250:8080/POD_BookingSystem/buildings";
+      let buildings = [];
+
+      function toggleRoomsDropdown() {
+        document.getElementById("roomsDropdown").classList.toggle("active");
+      }
+      function toggleBuildingDropdown() {
+        document.getElementById("buildingDropdown").classList.toggle("active");
+      }
+
+      document
+        .getElementById("roomsDropdownToggle")
+        .addEventListener("click", toggleRoomsDropdown);
+      document
+        .getElementById("buildingDropdownToggle")
+        .addEventListener("click", toggleBuildingDropdown);
+
+      function getHeaders(method = "GET", body = null) {
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        const options = {
+          method: method,
+          headers: headers,
+        };
+
+        if (body) {
+          options.body = JSON.stringify(body);
+        }
+
+        return options;
+      }
+
+      async function getAllBuildings() {
+        try {
+          const response = await fetch(BASE_URL, getHeaders());
+          const responseData = await response.json();
+          if (responseData.data && Array.isArray(responseData.data)) {
+            buildings = responseData.data;
+            displayBuildings();
+          } else {
+            alert("Dữ liệu không hợp lệ hoặc không có tòa nhà!");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      function displayBuildings(buildingsToDisplay = buildings) {
+        const buildingsList = document.getElementById("buildings-list");
+        buildingsList.innerHTML = "<h2>Danh sách tòa nhà</h2>";
+        buildingsToDisplay.forEach((room, index) => {
+          const buildingElement = document.createElement("div");
+          buildingElement.className = "room-item";
+          buildingElement.innerHTML = `
+                    <div class="room-header">
+                        <strong>${room.name}</strong>
+                        <button onclick="toggleDropdown(${index})" class="dropdown-toggle">▼</button>
+                    </div>
+                    <div class="dropdown-content" id="dropdown-${index}" style="display: none;">
+                        <button onclick="showUpdateBuildingForm(${JSON.stringify(
+                          room
+                        ).replace(/"/g, "&quot;")})">Cập nhật tòa nhà</button>
+                        <button onclick="deleteBuilding('${
+                          room.building_id
+                        }')">Xóa tòa nhà</button>
+                    </div>
+                    <div class="room-info">
+                        <p>Tên tòa nhà: ${room.name}</p>
+                        <p>Địa chỉ: ${room.address}</p>
+                        <p>Vị trí: ${room.location}</p>
+                        <p>Mô tả: ${room.description}</p>
+                    </div>
+                `;
+          buildingsList.appendChild(buildingElement);
+        });
+      }
+
+      function toggleDropdown(index) {
+        const dropdown = document.getElementById(`dropdown-${index}`);
+        dropdown.style.display =
+          dropdown.style.display === "block" ? "none" : "block";
+      }
+
+      function filterBuildings() {
+        const location = document
+          .getElementById("locationFilter")
+          .value.toLowerCase();
+        const filteredBuildings = buildings.filter((room) => {
+          return location === "" || room.location.toLowerCase() === location;
+        });
+        displayBuildings(filteredBuildings);
+      }
+
+      function searchBuildings() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const filteredBuildings = buildings.filter((room) =>
+          room.name.toLowerCase().includes(searchTerm)
+        );
+        displayBuildings(filteredBuildings);
+      }
+
+      function showAllBuildings() {
+        document
+          .getElementById("searchAndListContainer")
+          .classList.remove("hidden");
+        document.getElementById("formContainer").classList.remove("visible");
+        getAllBuildings();
+      }
+
+      function showCreateBuildingForm() {
+        document
+          .getElementById("searchAndListContainer")
+          .classList.add("hidden");
+        const formContainer = document.getElementById("formContainer");
+        formContainer.classList.add("visible");
+        formContainer.innerHTML = `
+                <h2>Tạo Tòa Nhà Mới</h2>
+                <form id="createBuildingForm" class="edit-form">
+                    <label for="buildingName">Tên tòa nhà</label>
+                    <input type="text" id="buildingName" placeholder="Nhập tên tòa nhà" required>
+
+                    <label for="buildingAddress">Địa chỉ</label>
+                    <input type="text" id="buildingAddress" placeholder="Nhập địa chỉ" required>
+
+                    <label for="buildingLocation">Vị trí</label>
+                    <input type="text" id="buildingLocation" placeholder="Nhập vị trí" required>
+
+                    <label for="buildingDescription">Mô tả</label>
+                    <textarea id="buildingDescription" rows="3" placeholder="Nhập mô tả" required></textarea>
+
+                    <div class="button-group">
+                        <button type="submit" class="primary-button">Tạo tòa nhà</button>
+                        <button type="button" class="secondary-button" onclick="showAllBuildings()">Hủy</button>
+                    </div>
+                </form>
+            `;
+        document
+          .getElementById("createBuildingForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const buildingData = {
+              name: document.getElementById("buildingName").value,
+              address: document.getElementById("buildingAddress").value,
+              location: document.getElementById("buildingLocation").value,
+              description: document.getElementById("buildingDescription").value,
+            };
+            createBuilding(buildingData);
+          });
+      }
+
+      async function createBuilding(buildingData) {
+        try {
+          const response = await fetch(
+            BASE_URL,
+            getHeaders("POST", buildingData)
+          );
+          const data = await response.json();
+          console.log("Building created:", data);
+          alert("Đã tạo tòa nhà mới!");
+          showAllBuildings();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Lỗi khi tạo tòa nhà. Vui lòng thử lại.");
+        }
+      }
+
+      function showUpdateBuildingForm(room) {
+        document
+          .getElementById("searchAndListContainer")
+          .classList.add("hidden");
+        const formContainer = document.getElementById("formContainer");
+        formContainer.classList.add("visible");
+        formContainer.innerHTML = `
+                <h2>Cập Nhật Tòa Nhà</h2>
+                <form id="updateBuildingForm" class="edit-form">
+                    <input type="hidden" id="buildingId" value="${room.building_id}">
+                    <label for="buildingName">Tên tòa nhà</label>
+                    <input type="text" id="buildingName" value="${room.name}" required>
+
+                    <label for="buildingAddress">Địa chỉ</label>
+                    <input type="text" id="buildingAddress" value="${room.address}" required>
+
+                    <label for="buildingLocation">Vị trí</label>
+                    <input type="text" id="buildingLocation" value="${room.location}" required>
+
+                    <label for="buildingDescription">Mô tả</label>
+                    <textarea id="buildingDescription" rows="3" required>${room.description}</textarea>
+
+                    <div class="button-group">
+                        <button type="submit" class="primary-button">Cập nhật tòa nhà</button>
+                        <button type="button" class="secondary-button" onclick="showAllBuildings()">Hủy</button>
+                    </div>
+                </form>
+            `;
+        document
+          .getElementById("updateBuildingForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            const updatedBuildingData = {
+              name: document.getElementById("buildingName").value,
+              address: document.getElementById("buildingAddress").value,
+              location: document.getElementById("buildingLocation").value,
+              description: document.getElementById("buildingDescription").value,
+            };
+            updateBuilding(room.building_id, updatedBuildingData);
+          });
+      }
+
+      async function updateBuilding(id, buildingData) {
+        try {
+          const response = await fetch(
+            `${BASE_URL}/${id}`,
+            getHeaders("PUT", buildingData)
+          );
+          const data = await response.json();
+          console.log("Building updated:", data);
+          alert("Đã cập nhật tòa nhà!");
+          showAllBuildings();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Lỗi khi cập nhật tòa nhà. Vui lòng thử lại.");
+        }
+      }
+
+      async function deleteBuilding(buildingId) {
+        if (confirm("Bạn có chắc chắn muốn xóa tòa nhà này?")) {
+          try {
+            const response = await fetch(
+              `${BASE_URL}/${buildingId}`,
+              getHeaders("DELETE")
+            );
+            if (response.ok) {
+              alert("Tòa nhà đã được xóa thành công!");
+              showAllBuildings();
+            } else {
+              const errorData = await response.json();
+              alert(
+                "Lỗi: Không thể xóa tòa nhà. " +
+                  (errorData.message || "Vui lòng thử lại sau.")
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Đã xảy ra lỗi khi xóa tòa nhà.");
+          }
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+      }
+
+      document.getElementById("logoutButton").addEventListener("click", logout);
+
+      // Initial load of buildings
+      showAllBuildings();
+    </script>
+  </body>
+</html>

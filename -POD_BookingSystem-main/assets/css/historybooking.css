@@ -1,0 +1,175 @@
+/* Tabs Container */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Tab Styles */
+.tab {
+    background-color: #27ace9;
+    color: #fdfdfd;
+    padding: 10px 20px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Active Tab( nút All )*/
+.tab.active {
+    background-color: #333;
+    color: white;
+}
+
+/* Hover Effect di chuột */
+.tab:hover {
+    background-color: #ff4d4d;
+    color: white;
+    border-color: #ff4d4d;
+}
+
+
+
+
+/* Booking List */
+.booking-list {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.booking-item {
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.hotel-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #007bff;
+}
+
+.booking-status.awaiting-checkin {
+    color: #ff8800;
+    font-weight: bold;
+}
+
+.booking-details {
+    padding-top: 15px;
+}
+
+.room-image {
+    border-radius: 10px;
+}
+
+.room-type,
+.checkin-date,
+.guests {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* view details and book again */
+.col-lg-3.text-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    height: 100%;
+    padding-bottom: 15px;
+    margin-top: 100px;
+}
+
+
+.booking-status {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff8800;
+    margin-bottom: 10px;
+}
+
+
+/* Search  */
+#search-form .main-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#search-form .main-button i {
+    margin-right: 3px;
+}
+
+#search-form .form-control {
+    height: 30px;
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+.SearchForHistory {
+    padding: 10px 400px
+}
+
+.main-search {
+    background-image: url('https://ardeco.vn/hm_contents/uploads/mau-thiet-ke-phong-hop-dep-sang-trong-hien-dai.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding: 200px 0px 180px 0px;
+    position: relative;
+    overflow: hidden;
+    width: 98.895vw;
+    height: 60vh;
+    margin: 0;
+    box-sizing: border-box;
+}

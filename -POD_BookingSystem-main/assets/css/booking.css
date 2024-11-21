@@ -1,0 +1,233 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    /* background-image: url('https://wallpapercave.com/wp/wp8977295.jpg');  */
+    background-image: url('https://www.juliusbaer.com/fileadmin/_processed_/8/5/csm_Peoples_Square_306736932c.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #ffffff;
+
+}
+
+
+.booking-container {
+    background-color: rgba(34, 34, 34, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    width: 800px;
+    max-width: 90%;
+    color: #ffffff;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 100px;
+}
+
+
+.booking-container h1 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+
+.time-slot,
+.additional-services,
+.total-cost {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #444;
+    border-radius: 8px;
+}
+
+
+.room-info ul li {
+    font-weight: normal;
+    padding: 5px 0;
+    border-bottom: 1px solid #555;
+}
+
+.time-slot label,
+.additional-services p {
+    display: block;
+    font-weight: bold;
+    color: #b3b3b3;
+    margin-bottom: 5px;
+}
+
+#time-option {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #333;
+    color: #ffffff;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+
+
+.total-cost {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+
+}
+
+
+.payment-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.payment-btn:hover {
+    background-color: #d35400;
+}
+
+
+
+
+
+
+/* Container Room tổng */
+.room-container {
+    display: flex;
+    background-color: rgba(34, 34, 34, 0.9);
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+
+.room-image {
+    flex: 1;
+    margin-right: 0;
+}
+
+.room-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px 0 0 8px;
+}
+
+/* Định dạng cho thông tin phòng */
+.room-info {
+    flex: 1;
+    padding: 0 20px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 0px;
+}
+
+.room-info h2 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.room-info .agent {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.room-info .price {
+    font-size: 22px;
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.room-container h2 {
+    color: #ffffff;
+}
+
+.room-info p {
+    margin: 8px 0;
+    color: #fdfdfd;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.room-info p strong {
+    font-weight: bold;
+    color: #eee9e9;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-decoration: none;
+    gap: 95px
+}
+
+
+
+.additional-services {
+    color: white;
+}
+
+#services-list {
+    width: 100%;
+}
+
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.service-name {
+    flex: 1;
+    text-align: left;
+    margin-right: 10px;
+}
+
+.service-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    margin-right: 5px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.service-item input[type="checkbox"] {
+    transform: scale(1.2);
+    /* Tăng kích thước checkbox */
+}
